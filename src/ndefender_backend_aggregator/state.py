@@ -25,6 +25,8 @@ class StateStore:
             "services": [],
             "network": {},
             "audio": {},
+            "contacts": [],
+            "replay": {"active": False, "source": "none"},
         }
 
     async def update_section(self, name: str, data: dict[str, Any]) -> None:

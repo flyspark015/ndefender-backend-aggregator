@@ -20,6 +20,8 @@ class StatusSnapshot(BaseModel):
     services: list[dict[str, Any]] = Field(default_factory=list)
     network: dict[str, Any] = Field(default_factory=dict)
     audio: dict[str, Any] = Field(default_factory=dict)
+    contacts: list[dict[str, Any]] = Field(default_factory=list)
+    replay: dict[str, Any] = Field(default_factory=dict)
 
 
 class EventEnvelope(BaseModel):

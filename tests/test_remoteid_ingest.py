@@ -6,6 +6,7 @@ import pytest
 
 from ndefender_backend_aggregator.bus import EventBus
 from ndefender_backend_aggregator.config import get_config
+from ndefender_backend_aggregator.contacts import ContactStore
 from ndefender_backend_aggregator.ingest.remoteid_ingest import RemoteIdIngestor
 from ndefender_backend_aggregator.state import StateStore
 
@@ -30,7 +31,7 @@ async def test_remoteid_ingest_emits_event(tmp_path: Path):
 
     state_store = StateStore()
     event_bus = EventBus()
-    ingestor = RemoteIdIngestor(config, state_store, event_bus)
+    ingestor = RemoteIdIngestor(config, state_store, event_bus, ContactStore(state_store))
 
     queue = await event_bus.subscribe()
 

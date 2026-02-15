@@ -7,6 +7,7 @@ from collections.abc import Iterable
 
 from .bus import EventBus
 from .config import AppConfig
+from .contacts import ContactStore
 from .ingest import Ingestor
 from .integrations import (
     AntsdrIngestor,
@@ -49,12 +50,15 @@ def build_default_orchestrator(
     config: AppConfig,
     state_store: StateStore,
     event_bus: EventBus,
+    contact_store: ContactStore,
 ) -> RuntimeOrchestrator:
-    ingestors: list[Ingestor] = [SystemControllerIngestor(config, state_store, event_bus)]
+    ingestors: list[Ingestor] = [
+        SystemControllerIngestor(config, state_store, event_bus),
+    ]
     if config.features.enable_esp32:
-        ingestors.append(Esp32Ingestor(config, state_store, event_bus))
+        ingestors.append(Esp32Ingestor(config, state_store, event_bus, contact_store))
     if config.features.enable_antsdr:
-        ingestors.append(AntsdrIngestor(config, state_store, event_bus))
+        ingestors.append(AntsdrIngestor(config, state_store, event_bus, contact_store))
     if config.features.enable_remoteid:
-        ingestors.append(RemoteIdIngestor(config, state_store, event_bus))
+        ingestors.append(RemoteIdIngestor(config, state_store, event_bus, contact_store))
     return RuntimeOrchestrator(ingestors)

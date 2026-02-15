@@ -2,6 +2,7 @@ import asyncio
 
 from ndefender_backend_aggregator.bus import EventBus
 from ndefender_backend_aggregator.config import get_config
+from ndefender_backend_aggregator.contacts import ContactStore
 from ndefender_backend_aggregator.integrations import (
     AntsdrIngestor,
     Esp32Ingestor,
@@ -15,10 +16,11 @@ def test_integration_stubs_health():
     config = get_config()
     state_store = StateStore()
     event_bus = EventBus()
+    contact_store = ContactStore(state_store)
     ingestors = [
-        AntsdrIngestor(config, state_store, event_bus),
-        Esp32Ingestor(config, state_store, event_bus),
-        RemoteIdIngestor(config, state_store, event_bus),
+        AntsdrIngestor(config, state_store, event_bus, contact_store),
+        Esp32Ingestor(config, state_store, event_bus, contact_store),
+        RemoteIdIngestor(config, state_store, event_bus, contact_store),
         SystemControllerIngestor(config, state_store, event_bus),
     ]
 

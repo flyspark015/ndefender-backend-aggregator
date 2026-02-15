@@ -21,6 +21,8 @@ Why this exists: It defines the public surface consumed by the GUI and tooling, 
 - `GET /network`: Network status.
 - `GET /audio`: Audio status.
 
+The `GET /contacts` endpoint returns a merged list of RF, RemoteID, and FPV contacts sorted by severity and recency.
+
 ## Command Endpoints
 - `POST /vrx/tune`
 - `POST /scan/start`

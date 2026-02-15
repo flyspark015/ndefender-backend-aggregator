@@ -13,6 +13,8 @@ def test_status_snapshot_defaults():
         services=[],
         network={},
         audio={},
+        contacts=[],
+        replay={"active": False, "source": "none"},
     )
     assert snapshot.timestamp_ms == 1
 

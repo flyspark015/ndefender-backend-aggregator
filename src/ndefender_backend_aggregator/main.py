@@ -14,6 +14,7 @@ from .auth import api_key_auth
 from .bus import EventBus
 from .commands import CommandRequest, CommandRouter, Esp32CommandHandler
 from .config import get_config
+from .contacts import ContactStore
 from .integrations.esp32_serial import Esp32Ingestor
 from .logging import configure_logging
 from .models import StatusSnapshot
@@ -63,7 +64,8 @@ def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
 
     @app.get("/api/v1/contacts", dependencies=[Depends(api_key_auth), read_guard])
     async def contacts() -> dict[str, Any]:
-        return {"contacts": []}
+        snapshot = await state_store.snapshot()
+        return {"contacts": snapshot.contacts}
 
     @app.get("/api/v1/system", dependencies=[Depends(api_key_auth), read_guard])
     async def system() -> dict[str, Any]:
@@ -225,7 +227,8 @@ def create_app() -> FastAPI:
     state_store = StateStore()
     event_bus = EventBus()
     ws_manager = WebSocketManager(state_store)
-    orchestrator = build_default_orchestrator(config, state_store, event_bus)
+    contact_store = ContactStore(state_store)
+    orchestrator = build_default_orchestrator(config, state_store, event_bus, contact_store)
     command_router = CommandRouter()
     esp32_ingestor = next(
         (ingestor for ingestor in orchestrator.ingestors if isinstance(ingestor, Esp32Ingestor)),
@@ -250,6 +253,7 @@ def create_app() -> FastAPI:
     app.state.event_bus = event_bus
     app.state.ws_manager = ws_manager
     app.state.runtime = orchestrator
+    app.state.contact_store = contact_store
     app.state.command_router = command_router
 
     _register_routes(app, state_store, ws_manager, config, command_router)

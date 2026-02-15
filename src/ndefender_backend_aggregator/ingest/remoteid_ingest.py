@@ -9,6 +9,7 @@ from contextlib import suppress
 
 from ..bus import EventBus
 from ..config import AppConfig
+from ..contacts import ContactStore
 from ..ingest import Ingestor, IngestorMetadata
 from ..models import EventEnvelope
 from ..state import StateStore
@@ -20,10 +21,17 @@ class RemoteIdIngestor(Ingestor):
 
     metadata = IngestorMetadata(name="remoteid", source="remoteid")
 
-    def __init__(self, config: AppConfig, state_store: StateStore, event_bus: EventBus) -> None:
+    def __init__(
+        self,
+        config: AppConfig,
+        state_store: StateStore,
+        event_bus: EventBus,
+        contact_store: ContactStore | None = None,
+    ) -> None:
         self._config = config
         self._state_store = state_store
         self._event_bus = event_bus
+        self._contact_store = contact_store
         self._tailer = JsonlTailer(
             config.remoteid.jsonl_path,
             config.remoteid.tail_poll_interval_ms,
@@ -84,6 +92,12 @@ class RemoteIdIngestor(Ingestor):
                 "last_timestamp_ms": timestamp_ms,
             },
         )
+        if self._contact_store and event_type:
+            event_name = str(event_type)
+            if event_name in {"CONTACT_NEW", "CONTACT_UPDATE", "CONTACT_LOST"}:
+                await self._contact_store.update_remoteid(event_name, data, timestamp_ms)
+            if event_name == "REPLAY_STATE":
+                await self._contact_store.update_replay(data)
 
         envelope = EventEnvelope(
             type=str(event_type) if event_type else "TELEMETRY_UPDATE",

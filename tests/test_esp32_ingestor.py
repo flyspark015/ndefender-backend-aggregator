@@ -2,6 +2,7 @@ import asyncio
 
 from ndefender_backend_aggregator.bus import EventBus
 from ndefender_backend_aggregator.config import get_config
+from ndefender_backend_aggregator.contacts import ContactStore
 from ndefender_backend_aggregator.integrations.esp32_serial import Esp32Ingestor
 from ndefender_backend_aggregator.state import StateStore
 
@@ -11,7 +12,7 @@ def test_esp32_telemetry_updates_state():
     config = get_config()
     state_store = StateStore()
     event_bus = EventBus()
-    ingestor = Esp32Ingestor(config, state_store, event_bus)
+    ingestor = Esp32Ingestor(config, state_store, event_bus, ContactStore(state_store))
 
     telemetry = {
         "type": "telemetry",
@@ -39,7 +40,7 @@ def test_esp32_command_ack_resolves_future():
     config = get_config()
     state_store = StateStore()
     event_bus = EventBus()
-    ingestor = Esp32Ingestor(config, state_store, event_bus)
+    ingestor = Esp32Ingestor(config, state_store, event_bus, ContactStore(state_store))
 
     async def run() -> None:
         loop = asyncio.get_running_loop()

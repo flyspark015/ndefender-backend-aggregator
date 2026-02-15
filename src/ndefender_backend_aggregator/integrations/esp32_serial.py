@@ -17,6 +17,7 @@ import serial
 from ..bus import EventBus
 from ..commands.contracts import CommandResult
 from ..config import AppConfig
+from ..contacts import ContactStore
 from ..ingest import Ingestor, IngestorMetadata
 from ..models import EventEnvelope
 from ..state import StateStore
@@ -34,11 +35,13 @@ class Esp32Ingestor(Ingestor):
         config: AppConfig,
         state_store: StateStore,
         event_bus: EventBus,
+        contact_store: ContactStore | None = None,
         serial_factory: Callable[..., serial.Serial] | None = None,
     ) -> None:
         self._config = config
         self._state_store = state_store
         self._event_bus = event_bus
+        self._contact_store = contact_store
         self._serial_factory = serial_factory or serial.Serial
         self._serial: serial.Serial | None = None
         self._buffer = bytearray()
@@ -211,6 +214,8 @@ class Esp32Ingestor(Ingestor):
             )
             await self._state_store.update_section("video", payload.get("video", {}))
             self._last_telemetry_ms = timestamp_ms
+            if self._contact_store:
+                await self._contact_store.update_fpv(payload, timestamp_ms)
             await self._event_bus.publish(
                 EventEnvelope(
                     type="ESP32_TELEMETRY",

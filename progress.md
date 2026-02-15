@@ -15,17 +15,19 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 10: System Controller Integration — 🟢 complete
 - Step 11: ESP32 Serial Integration — 🟢 complete
 - Step 12: AntSDR JSONL Integration — 🟢 complete
+- Step 13: RemoteID JSONL Integration — 🟢 complete
 
-## Step 13 — RemoteID JSONL Integration
+## Step 14 — Contact Unification + Status Aggregation
 - Status: 🟢 complete
 - What built:
-  - RemoteID JSONL ingestion with timestamp normalization.
-  - Event emission for CONTACT_* / TELEMETRY_UPDATE / REPLAY_STATE.
-  - Tests for RemoteID ingestion.
-- Validation notes: RemoteID events propagate through the unified event bus.
+  - Unified contact store merging RF/RemoteID/FPV contacts.
+  - Contacts and replay fields added to status snapshot.
+  - Ingestors update unified contact list and replay state.
+  - Tests for contact sorting and API exposure.
+- Validation notes: Contacts are sorted by severity, distance (if present), then last seen.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `22 passed in 2.39s`
+- Verification: `.venv/bin/pytest` -> Output: `23 passed in 2.42s`
 
 ## Notes
-- Next: Contact unification + status aggregation.
+- Next: Review command routing for system controller and unsafe operations.
 

@@ -10,6 +10,7 @@ from typing import Any
 
 from ..bus import EventBus
 from ..config import AppConfig
+from ..contacts import ContactStore
 from ..ingest import Ingestor, IngestorMetadata
 from ..models import EventEnvelope
 from ..state import StateStore
@@ -21,10 +22,17 @@ class AntsdrIngestor(Ingestor):
 
     metadata = IngestorMetadata(name="antsdr", source="antsdr")
 
-    def __init__(self, config: AppConfig, state_store: StateStore, event_bus: EventBus) -> None:
+    def __init__(
+        self,
+        config: AppConfig,
+        state_store: StateStore,
+        event_bus: EventBus,
+        contact_store: ContactStore | None = None,
+    ) -> None:
         self._config = config
         self._state_store = state_store
         self._event_bus = event_bus
+        self._contact_store = contact_store
         self._tailer = JsonlTailer(
             config.antsdr.jsonl_path,
             config.antsdr.tail_poll_interval_ms,
@@ -80,6 +88,8 @@ class AntsdrIngestor(Ingestor):
             "rf",
             {"last_event_type": event_type, "last_event": data, "last_timestamp_ms": timestamp_ms},
         )
+        if self._contact_store and event_type:
+            await self._contact_store.update_rf(str(event_type), data, timestamp_ms)
         envelope = EventEnvelope(
             type=self._normalize_type(event_type),
             timestamp_ms=timestamp_ms,
