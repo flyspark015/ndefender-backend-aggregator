@@ -7,18 +7,18 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 2: Configuration Layer — 🟢 complete
 - Step 3: Application Foundation (Auth + CI) — 🟢 complete
 - Step 4: State Core + WebSocket Enhancements — 🟢 complete
+- Step 5: Internal Event Bus Scaffold — 🟢 complete
 
-## Step 5 — Internal Event Bus Scaffold
+## Step 6 — Ingestion Contracts (No Integrations)
 - Status: 🟢 complete
 - What built:
-  - Internal event bus with backpressure and drop-oldest behavior.
-  - App wiring for event bus placeholder.
-  - Architecture documentation updated.
-  - Tests validating publish/subscribe behavior.
-- Validation notes: Event bus guarantees non-blocking publish behavior with bounded queues.
+  - Ingestor base interface and metadata contract.
+  - Integration contracts documentation.
+  - Tests validating contract usage.
+- Validation notes: Contracts enforce consistent start/stop/health behavior and event normalization.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `8 passed in 1.27s`
+- Verification: `.venv/bin/pytest` -> Output: `9 passed in 1.31s`
 
 ## Notes
-- Next: Define ingestion interfaces and contracts without implementing integrations.
+- Next: Command routing interface scaffolding (no subsystem wiring).
 
