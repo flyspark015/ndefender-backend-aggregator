@@ -22,3 +22,8 @@ Why this exists: It defines the contract and routing expectations for command ex
 - `scan/start` → `START_SCAN`
 - `scan/stop` → `STOP_SCAN`
 - `video/select` → `VIDEO_SELECT`
+
+## System Controller Mappings
+- `system/reboot` → `POST /api/v1/system/reboot`
+- `system/shutdown` → `POST /api/v1/system/shutdown`
+- `services/restart` → `POST /api/v1/services/{name}/restart`

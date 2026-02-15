@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 
 from .auth import api_key_auth
 from .bus import EventBus
-from .commands import CommandRequest, CommandRouter, Esp32CommandHandler
+from .commands import CommandRequest, CommandRouter, Esp32CommandHandler, SystemCommandHandler
 from .config import get_config
 from .contacts import ContactStore
 from .integrations.esp32_serial import Esp32Ingestor
@@ -49,6 +49,11 @@ class CommandBody(BaseModel):
 
 
 COMMAND_BODY = Body(default_factory=CommandBody)
+
+
+def require_confirm(body: CommandBody) -> None:
+    if not body.confirm:
+        raise HTTPException(status_code=400, detail="confirm=true required")
 
 
 def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
@@ -170,13 +175,14 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
             Depends(dangerous_rate_limit),
         ],
     )
-    async def system_reboot(confirm: bool = False) -> dict[str, Any]:
-        if not confirm:
-            raise HTTPException(status_code=400, detail="confirm=true required")
+    async def system_reboot(
+        request: Request,
+        body: CommandBody = COMMAND_BODY,
+    ) -> dict[str, Any]:
+        require_confirm(body)
         if not config.safety.allow_unsafe_operations:
             raise HTTPException(status_code=403, detail="Unsafe operations disabled")
-        ack = CommandAck("system/reboot", accepted=False, detail="Not implemented")
-        raise HTTPException(status_code=501, detail=ack.model_dump())
+        return await dispatch_command("system/reboot", body, request)
 
     @app.post(
         "/api/v1/system/shutdown",
@@ -187,13 +193,14 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
             Depends(dangerous_rate_limit),
         ],
     )
-    async def system_shutdown(confirm: bool = False) -> dict[str, Any]:
-        if not confirm:
-            raise HTTPException(status_code=400, detail="confirm=true required")
+    async def system_shutdown(
+        request: Request,
+        body: CommandBody = COMMAND_BODY,
+    ) -> dict[str, Any]:
+        require_confirm(body)
         if not config.safety.allow_unsafe_operations:
             raise HTTPException(status_code=403, detail="Unsafe operations disabled")
-        ack = CommandAck("system/shutdown", accepted=False, detail="Not implemented")
-        raise HTTPException(status_code=501, detail=ack.model_dump())
+        return await dispatch_command("system/shutdown", body, request)
 
 
 def _register_ws_routes(app: FastAPI, ws_manager: WebSocketManager) -> None:
@@ -236,6 +243,7 @@ def create_app() -> FastAPI:
     )
     if esp32_ingestor:
         command_router.register(Esp32CommandHandler(esp32_ingestor))
+    command_router.register(SystemCommandHandler(config))
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):

@@ -16,18 +16,18 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 11: ESP32 Serial Integration — 🟢 complete
 - Step 12: AntSDR JSONL Integration — 🟢 complete
 - Step 13: RemoteID JSONL Integration — 🟢 complete
+- Step 14: Contact Unification + Status Aggregation — 🟢 complete
 
-## Step 14 — Contact Unification + Status Aggregation
+## Step 15 — System Controller Command Routing
 - Status: 🟢 complete
 - What built:
-  - Unified contact store merging RF/RemoteID/FPV contacts.
-  - Contacts and replay fields added to status snapshot.
-  - Ingestors update unified contact list and replay state.
-  - Tests for contact sorting and API exposure.
-- Validation notes: Contacts are sorted by severity, distance (if present), then last seen.
+  - Command handler for System Controller reboot/shutdown/service restart.
+  - Safety checks for confirm + unsafe toggle.
+  - Tests validating confirm requirements and unsafe gating.
+- Validation notes: Unsafe operations remain disabled unless explicitly enabled in config.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `23 passed in 2.42s`
+- Verification: `.venv/bin/pytest` -> Output: `25 passed in 2.39s`
 
 ## Notes
-- Next: Review command routing for system controller and unsafe operations.
+- Next: Final hardening (WS contract check tool + ops checklist).
 
