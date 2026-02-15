@@ -20,6 +20,7 @@ Why this exists: It documents how each subsystem is ingested and normalized so c
 ## RemoteID Engine
 - JSONL feed for RemoteID contact updates.
 - Timestamp normalization to `timestamp_ms` required.
+ - Events emitted as CONTACT_* / TELEMETRY_UPDATE / REPLAY_STATE.
 
 ## Contracts
 See `docs/INTEGRATION_CONTRACTS.md` for the ingestion interface and event envelope requirements.
