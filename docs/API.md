@@ -5,20 +5,38 @@ Why this exists: It defines the public surface consumed by the GUI and tooling, 
 ## Base
 - `/api/v1`
 
-## Endpoints (planned)
-- `GET /health`
-- `GET /status`
-- `GET /contacts`
-- `GET /system`
-- `GET /power`
-- `GET /rf`
-- `GET /video`
-- `GET /services`
+## Auth
+- All endpoints require `X-API-Key` unless explicitly disabled in configuration.
+- RBAC is enforced via `X-Role` when enabled.
+
+## REST Endpoints
+- `GET /health`: Liveness/readiness check.
+- `GET /status`: Full canonical snapshot.
+- `GET /contacts`: Unified contacts list.
+- `GET /system`: System stats from controller.
+- `GET /power`: UPS/power status.
+- `GET /rf`: RF scan status.
+- `GET /video`: Video/VRX status.
+- `GET /services`: Service supervision status.
+
+## Command Endpoints
 - `POST /vrx/tune`
 - `POST /scan/start`
 - `POST /scan/stop`
 - `POST /video/select`
 - `POST /system/reboot`
 - `POST /system/shutdown`
-- `WS /ws`
+
+## WebSocket
+- `WS /ws` (full path: `/api/v1/ws`)
+
+### Envelope
+```json
+{
+  "type": "CONTACT_UPDATE | SYSTEM_UPDATE | POWER_UPDATE | RF_UPDATE | COMMAND_ACK",
+  "timestamp_ms": 123456,
+  "source": "aggregator",
+  "data": {}
+}
+```
 

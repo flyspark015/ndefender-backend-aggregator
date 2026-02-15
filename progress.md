@@ -4,14 +4,20 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 
 ## Current Step
 - Step 1: Roadmap + Repo Skeleton — 🟢 complete
+- Step 2: Configuration Layer — 🟢 complete
 
-## Step 2 — Configuration Layer
+## Step 3 — Application Foundation (Auth + CI)
 - Status: 🟢 complete
-- What built: `config/default.yaml`, `config/development.yaml`, centralized loader in `src/ndefender_backend_aggregator/config.py`, and `docs/CONFIGURATION.md`.
-- Validation notes: Config validation uses pydantic models and fails fast on missing or malformed fields.
+- What built:
+  - FastAPI app skeleton with REST + WS routes in `src/ndefender_backend_aggregator/main.py`.
+  - API key auth, RBAC enforcement, and rate limiting dependencies.
+  - Central state store and WebSocket manager stubs.
+  - CI pipeline wired for ruff + pytest.
+  - Expanded documentation for architecture, API, security, integration, and deployment.
+- Validation notes: Auth defaults to required API key; RBAC and rate limits are enforced by dependency wiring.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `1 passed in 0.39s`
+- Verification: `.venv/bin/pytest` -> Output: `4 passed in 1.25s`
 
 ## Notes
-- Next: Phase 1 scaffolding continues with auth and CI wiring.
+- Next: Phase 2 state core + WS enhancements.
 

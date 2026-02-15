@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import os
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
-
-_CONFIG: "AppConfig | None" = None
 
 
 class SystemControllerConfig(BaseModel):
@@ -151,8 +150,6 @@ def _load_config() -> AppConfig:
     return AppConfig.model_validate(data)
 
 
+@lru_cache(maxsize=1)
 def get_config() -> AppConfig:
-    global _CONFIG
-    if _CONFIG is None:
-        _CONFIG = _load_config()
-    return _CONFIG
+    return _load_config()
