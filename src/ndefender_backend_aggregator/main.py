@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 import uuid
+from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
@@ -15,6 +16,7 @@ from .logging import configure_logging
 from .models import StatusSnapshot
 from .rate_limit import command_rate_limit, dangerous_rate_limit
 from .rbac import require_permission
+from .runtime import build_default_orchestrator
 from .state import StateStore
 from .ws import WebSocketManager
 
@@ -176,14 +178,27 @@ def create_app() -> FastAPI:
     config = get_config()
     configure_logging(config.logging.level)
 
-    app = FastAPI(title="N-Defender Backend Aggregator", version="0.1.0")
     state_store = StateStore()
     event_bus = EventBus()
     ws_manager = WebSocketManager(state_store)
+    orchestrator = build_default_orchestrator(config)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        await orchestrator.start()
+        yield
+        await orchestrator.stop()
+
+    app = FastAPI(
+        title="N-Defender Backend Aggregator",
+        version="0.1.0",
+        lifespan=lifespan,
+    )
 
     app.state.state_store = state_store
     app.state.event_bus = event_bus
     app.state.ws_manager = ws_manager
+    app.state.runtime = orchestrator
 
     _register_routes(app, state_store, ws_manager, config)
     return app

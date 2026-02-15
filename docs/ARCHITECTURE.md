@@ -11,6 +11,7 @@ Why this exists: It documents system boundaries, data flow, and failure isolatio
 - **Ingestion layer:** JSONL tailers, serial bridge, system controller poller.
 - **State layer:** Central async store with canonical schema.
 - **Event bus:** Internal publisher/subscriber channel for decoupled ingestion and WS broadcast.
+- **Runtime orchestrator:** Manages startup/shutdown of ingestion modules.
 - **API layer:** FastAPI with REST + WebSocket endpoints.
 - **Security layer:** API key auth, RBAC, rate limiting.
 

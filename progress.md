@@ -10,17 +10,18 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 5: Internal Event Bus Scaffold — 🟢 complete
 - Step 6: Ingestion Contracts (No Integrations) — 🟢 complete
 - Step 7: Command Routing Contracts (No Integrations) — 🟢 complete
+- Step 8: Integration Stubs (No Wiring) — 🟢 complete
 
-## Step 8 — Integration Stubs (No Wiring)
+## Step 9 — Runtime Orchestration (No Integrations)
 - Status: 🟢 complete
 - What built:
-  - Stub ingestors for System Controller, ESP32, AntSDR, and RemoteID.
-  - Integration package exports and documentation note.
-  - Tests verifying stub lifecycle and health.
-- Validation notes: Stubs implement ingestion contracts without runtime behavior.
+  - Runtime orchestrator for startup/shutdown lifecycle.
+  - FastAPI lifespan wiring for runtime control.
+  - Tests validating orchestrator behavior.
+- Validation notes: Lifespan events ensure clean start/stop sequencing for ingestors.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `12 passed in 1.15s`
+- Verification: `.venv/bin/pytest` -> Output: `13 passed in 1.57s`
 
 ## Notes
-- Next: Define runtime orchestration layer (startup/shutdown wiring) without enabling integrations.
+- Next: Begin subsystem integrations per plan once approved.
 
