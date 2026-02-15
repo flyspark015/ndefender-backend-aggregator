@@ -20,3 +20,6 @@ Why this exists: It documents how each subsystem is ingested and normalized so c
 
 ## Contracts
 See `docs/INTEGRATION_CONTRACTS.md` for the ingestion interface and event envelope requirements.
+
+## Stub Status
+All integration modules are currently stubs and implement the ingestion interface without runtime wiring.

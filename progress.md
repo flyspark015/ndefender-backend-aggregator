@@ -9,17 +9,18 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 4: State Core + WebSocket Enhancements — 🟢 complete
 - Step 5: Internal Event Bus Scaffold — 🟢 complete
 - Step 6: Ingestion Contracts (No Integrations) — 🟢 complete
+- Step 7: Command Routing Contracts (No Integrations) — 🟢 complete
 
-## Step 7 — Command Routing Contracts (No Integrations)
+## Step 8 — Integration Stubs (No Wiring)
 - Status: 🟢 complete
 - What built:
-  - Command routing contracts and router scaffolding.
-  - Command routing documentation.
-  - Tests validating router behavior.
-- Validation notes: Router returns a result for unknown commands and standardizes results.
+  - Stub ingestors for System Controller, ESP32, AntSDR, and RemoteID.
+  - Integration package exports and documentation note.
+  - Tests verifying stub lifecycle and health.
+- Validation notes: Stubs implement ingestion contracts without runtime behavior.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `11 passed in 0.95s`
+- Verification: `.venv/bin/pytest` -> Output: `12 passed in 1.15s`
 
 ## Notes
-- Next: Prepare integration stubs per subsystem without wiring runtime behavior.
+- Next: Define runtime orchestration layer (startup/shutdown wiring) without enabling integrations.
 
