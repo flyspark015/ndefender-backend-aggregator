@@ -8,17 +8,18 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 3: Application Foundation (Auth + CI) — 🟢 complete
 - Step 4: State Core + WebSocket Enhancements — 🟢 complete
 - Step 5: Internal Event Bus Scaffold — 🟢 complete
+- Step 6: Ingestion Contracts (No Integrations) — 🟢 complete
 
-## Step 6 — Ingestion Contracts (No Integrations)
+## Step 7 — Command Routing Contracts (No Integrations)
 - Status: 🟢 complete
 - What built:
-  - Ingestor base interface and metadata contract.
-  - Integration contracts documentation.
-  - Tests validating contract usage.
-- Validation notes: Contracts enforce consistent start/stop/health behavior and event normalization.
+  - Command routing contracts and router scaffolding.
+  - Command routing documentation.
+  - Tests validating router behavior.
+- Validation notes: Router returns a result for unknown commands and standardizes results.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `9 passed in 1.31s`
+- Verification: `.venv/bin/pytest` -> Output: `11 passed in 0.95s`
 
 ## Notes
-- Next: Command routing interface scaffolding (no subsystem wiring).
+- Next: Prepare integration stubs per subsystem without wiring runtime behavior.
 

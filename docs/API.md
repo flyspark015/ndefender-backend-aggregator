@@ -27,6 +27,8 @@ Why this exists: It defines the public surface consumed by the GUI and tooling, 
 - `POST /system/reboot`
 - `POST /system/shutdown`
 
+Command routing details live in `docs/COMMANDS.md`.
+
 ## WebSocket
 - `WS /ws` (full path: `/api/v1/ws`)
 
@@ -39,4 +41,3 @@ Why this exists: It defines the public surface consumed by the GUI and tooling, 
   "data": {}
 }
 ```
-
