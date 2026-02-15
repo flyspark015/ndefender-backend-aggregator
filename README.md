@@ -1,27 +1,84 @@
-# N-Defender Backend Aggregator 🛡️
+# 🛰 N-Defender Backend Aggregator
 
-Why this exists: This service unifies all N-Defender subsystems behind a single, secure API surface so the GUI and operators have one authoritative source of truth.
+![Version](https://img.shields.io/badge/version-v0.1.0-blue)
+![CI](https://github.com/flyspark015/ndefender-backend-aggregator/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-proprietary-red)
+![Production](https://img.shields.io/badge/production-GREEN-2ea043)
 
-## Scope ✨
-- Ingests subsystem data (JSONL, serial, REST/WS)
-- Normalizes into a canonical state model
-- Serves REST + WebSocket APIs for the GUI
+A production-grade unified control plane that ingests all N-Defender subsystems and exposes a single REST + WebSocket API to the GUI. JSONL logs are the ground truth. WebSocket is the fast path for responsiveness.
 
-## Architecture Snapshot 🧭
-- **Ground truth:** JSONL feeds from AntSDR and RemoteID
-- **Fast path:** WebSocket updates for UI responsiveness
-- **Control plane:** REST endpoints for snapshots and commands
+## 🔄 Event Flow (High-Level)
 
-## Configuration ⚙️
-Configuration is centralized in `config/default.yaml` with optional environment-specific overrides. See `docs/CONFIGURATION.md` for full details.
+```
+   JSONL / Serial / REST
+            │
+            ▼
+       Ingestion
+            │
+            ▼
+       State Store
+            │
+            ├─ REST Snapshot (/api/v1/status)
+            └─ WS Fast Path (/api/v1/ws)
+```
 
-## Security Posture 🔐
-- API key authentication from day one
-- RBAC roles for operator separation
-- Rate limits on dangerous operations
+## 📡 Subsystem Integration Map
 
-## Operations ✅
-Operational checklists and recovery steps are in `docs/OPERATIONS.md`.
+| Subsystem | Input | Ground Truth | Output | Notes |
+|---|---|---|---|---|
+| AntSDR | JSONL | ✅ | RF_CONTACT_* | Rotation-safe tailing |
+| RemoteID | JSONL | ✅ | CONTACT_* / TELEMETRY_UPDATE / REPLAY_STATE | Timestamp normalized |
+| ESP32 Panel | Serial JSON | ❌ | ESP32_TELEMETRY / COMMAND_ACK | Robust framing + retries |
+| System Controller | REST | ❌ | SYSTEM_UPDATE / UPS_UPDATE / NETWORK_UPDATE / AUDIO_UPDATE | Polling | 
 
-## Status 🚧
-- Foundation phase in progress
+## 🧠 Unified Contact Model
+The UI consumes a single merged contact list:
+- `REMOTE_ID` (from RemoteID engine)
+- `RF` (from AntSDR)
+- `FPV` (from ESP32 telemetry)
+
+Sorted by severity → distance (if provided) → last_seen_ts.
+
+## 📊 JSONL Ground Truth
+JSONL feeds from AntSDR and RemoteID are authoritative. The aggregator tails these logs with rotation/truncation safety and rebuilds state on restart.
+
+## ⚡ WebSocket Fast Path
+WebSocket emits normalized event envelopes for low-latency UI updates. REST remains the snapshot source of truth.
+
+## 🔐 Security Model
+- API Key authentication (`X-API-Key`) enforced by default.
+- RBAC (`X-Role`) with `viewer`, `operator`, `admin` roles.
+
+## 🚨 Safety Model
+- Reboot/shutdown are disabled by default.
+- `confirm=true` required for unsafe operations.
+- Command endpoints are rate limited.
+
+## 🔄 Command Routing
+Commands flow: REST → Router → Subsystem → ACK → WS
+- ESP32 commands mapped to serial protocol.
+- System controller commands mapped to REST endpoints.
+
+## 🟢 Production Ready
+The repository is GREEN, tested, and release-locked. Runtime logic is frozen for v0.1.0.
+
+## 🧪 GREEN Verification Checklist
+- ✅ `ruff check .`
+- ✅ `pytest`
+- ✅ All subsystems integrated
+- ✅ Release tag present: `v0.1.0`
+
+## 🔍 Documentation Index
+- `docs/ARCHITECTURE.md` — System design and data flow
+- `docs/API.md` — REST + WS contract
+- `docs/SECURITY.md` — Security model and best practices
+- `docs/OPERATIONS.md` — Operator handbook
+- `docs/CONFIGURATION.md` — Full config reference
+
+## 🏷 Release
+- Version: v0.1.0
+- Status: GREEN
+- Date: 2026-02-15
+- CI: Passing
+- Tests: Passing
+- Production Lock: Enabled

@@ -1,21 +1,27 @@
 # Security 🔐
 
-Why this exists: It captures authentication, authorization, and safety controls required for secure deployment.
+Why this exists: It defines the security posture, storage best practices, and safe evolution path for future auth mechanisms.
 
-## Authentication
-- API key required via `X-API-Key` by default.
-- Disable only in local or isolated environments.
+## API Key Storage Best Practices
+- Never commit keys to git.
+- Store in environment variables or secure config management.
+- Rotate keys whenever operator devices change.
 
-## Authorization (RBAC)
-- Roles: `viewer`, `operator`, `admin`.
-- Permissions map to read and control surfaces.
-- Enforced via `X-Role` when enabled.
+## Reverse Proxy Recommendation
+- Deploy behind Nginx or Caddy for TLS termination.
+- Enforce IP allowlists or VPN at the proxy layer.
 
-## Rate Limiting
-- Command endpoints are throttled to prevent unsafe bursts.
-- Dangerous operations are rate limited more strictly.
+## Role Separation Recommendation
+- Viewer for read-only dashboards.
+- Operator for tuning/scanning/video control.
+- Admin for reboot/shutdown and unsafe operations.
 
-## Unsafe Operations
-- Reboot/shutdown gated by configuration and explicit confirmation.
-- Cooldowns prevent repeated execution in short windows.
+## Unsafe Operations Disabled by Default
+- Reboot/shutdown are blocked unless explicitly enabled.
+- `confirm=true` required for all unsafe actions.
+
+## Future JWT Migration Path
+- Keep `X-API-Key` for local deployments.
+- Introduce JWT auth behind reverse proxy without breaking REST routes.
+- RBAC can be embedded in JWT claims when enabled.
 
