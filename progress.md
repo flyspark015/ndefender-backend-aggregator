@@ -5,19 +5,19 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 ## Current Step
 - Step 1: Roadmap + Repo Skeleton — 🟢 complete
 - Step 2: Configuration Layer — 🟢 complete
+- Step 3: Application Foundation (Auth + CI) — 🟢 complete
 
-## Step 3 — Application Foundation (Auth + CI)
+## Step 4 — State Core + WebSocket Enhancements
 - Status: 🟢 complete
 - What built:
-  - FastAPI app skeleton with REST + WS routes in `src/ndefender_backend_aggregator/main.py`.
-  - API key auth, RBAC enforcement, and rate limiting dependencies.
-  - Central state store and WebSocket manager stubs.
-  - CI pipeline wired for ruff + pytest.
-  - Expanded documentation for architecture, API, security, integration, and deployment.
-- Validation notes: Auth defaults to required API key; RBAC and rate limits are enforced by dependency wiring.
+  - Canonical pydantic models for snapshots and event envelopes.
+  - State store now returns validated snapshots.
+  - WebSocket manager emits validated SYSTEM_UPDATE envelopes.
+  - Tests for models and status response types.
+- Validation notes: Snapshot model validation is enforced before API responses.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `4 passed in 1.25s`
+- Verification: `.venv/bin/pytest` -> Output: `6 passed in 1.28s`
 
 ## Notes
-- Next: Phase 2 state core + WS enhancements.
+- Next: Prepare ingestion scaffolding without implementing integrations.
 

@@ -7,6 +7,8 @@ import copy
 import time
 from typing import Any
 
+from .models import StatusSnapshot
+
 
 class StateStore:
     """Thread-safe state container for subsystem snapshots."""
@@ -29,8 +31,8 @@ class StateStore:
                 raise KeyError(f"Unknown state section: {name}")
             self._state[name] = data
 
-    async def snapshot(self) -> dict[str, Any]:
+    async def snapshot(self) -> StatusSnapshot:
         async with self._lock:
             snapshot = copy.deepcopy(self._state)
         snapshot["timestamp_ms"] = int(time.time() * 1000)
-        return snapshot
+        return StatusSnapshot.model_validate(snapshot)

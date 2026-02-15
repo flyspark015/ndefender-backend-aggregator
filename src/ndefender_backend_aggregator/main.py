@@ -11,6 +11,7 @@ from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconn
 from .auth import api_key_auth
 from .config import get_config
 from .logging import configure_logging
+from .models import StatusSnapshot
 from .rate_limit import command_rate_limit, dangerous_rate_limit
 from .rbac import require_permission
 from .state import StateStore
@@ -43,7 +44,7 @@ def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
         return {"status": "ok", "timestamp_ms": int(time.time() * 1000)}
 
     @app.get("/api/v1/status", dependencies=[Depends(api_key_auth), read_guard])
-    async def status() -> dict[str, Any]:
+    async def status() -> StatusSnapshot:
         return await state_store.snapshot()
 
     @app.get("/api/v1/contacts", dependencies=[Depends(api_key_auth), read_guard])

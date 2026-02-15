@@ -7,6 +7,7 @@ from typing import Any
 
 from fastapi import WebSocket
 
+from .models import EventEnvelope
 from .state import StateStore
 
 
@@ -33,11 +34,10 @@ class WebSocketManager:
 
     async def send_system_update(self, websocket: WebSocket) -> None:
         snapshot = await self._state_store.snapshot()
-        await websocket.send_json(
-            {
-                "type": "SYSTEM_UPDATE",
-                "timestamp_ms": snapshot["timestamp_ms"],
-                "source": "aggregator",
-                "data": snapshot,
-            }
+        envelope = EventEnvelope(
+            type="SYSTEM_UPDATE",
+            timestamp_ms=snapshot.timestamp_ms,
+            source="aggregator",
+            data=snapshot.model_dump(),
         )
+        await websocket.send_json(envelope.model_dump())
