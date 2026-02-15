@@ -20,6 +20,8 @@ Configuration is centralized in `config/default.yaml` with optional environment-
 - RBAC roles for operator separation
 - Rate limits on dangerous operations
 
+## Operations ✅
+Operational checklists and recovery steps are in `docs/OPERATIONS.md`.
+
 ## Status 🚧
 - Foundation phase in progress
-

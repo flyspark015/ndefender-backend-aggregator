@@ -17,17 +17,18 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 12: AntSDR JSONL Integration — 🟢 complete
 - Step 13: RemoteID JSONL Integration — 🟢 complete
 - Step 14: Contact Unification + Status Aggregation — 🟢 complete
+- Step 15: System Controller Command Routing — 🟢 complete
 
-## Step 15 — System Controller Command Routing
+## Step 16 — Final Hardening Tools + Ops Checklist
 - Status: 🟢 complete
 - What built:
-  - Command handler for System Controller reboot/shutdown/service restart.
-  - Safety checks for confirm + unsafe toggle.
-  - Tests validating confirm requirements and unsafe gating.
-- Validation notes: Unsafe operations remain disabled unless explicitly enabled in config.
+  - WS contract validation tool for JSONL/WS captures.
+  - Operations checklist and recovery steps.
+  - README updated with ops references.
+- Validation notes: WS contract validator enforces envelope shape and allowed types.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `25 passed in 2.39s`
+- Verification: `.venv/bin/pytest` -> Output: `25 passed in 1.79s`
 
 ## Notes
-- Next: Final hardening (WS contract check tool + ops checklist).
+- Next: Final release validation and tag when approved.
 
