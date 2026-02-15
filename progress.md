@@ -18,17 +18,17 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 13: RemoteID JSONL Integration — 🟢 complete
 - Step 14: Contact Unification + Status Aggregation — 🟢 complete
 - Step 15: System Controller Command Routing — 🟢 complete
+- Step 16: Final Hardening Tools + Ops Checklist — 🟢 complete
 
-## Step 16 — Final Hardening Tools + Ops Checklist
-- Status: 🟢 complete
+## Step 17 — Final Release Validation
+- Status: 🟢 complete (GREEN ✅)
 - What built:
-  - WS contract validation tool for JSONL/WS captures.
-  - Operations checklist and recovery steps.
-  - README updated with ops references.
-- Validation notes: WS contract validator enforces envelope shape and allowed types.
+  - Final roadmap phase completion and release tagging.
+  - End-to-end verification of lint and tests.
+- Validation notes: All checks GREEN and release tag created.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `25 passed in 1.79s`
+- Verification: `.venv/bin/pytest` -> Output: `25 passed in 1.95s`
 
 ## Notes
-- Next: Final release validation and tag when approved.
+- Release: `v0.1.0`
 
