@@ -10,6 +10,7 @@ Why this exists: It documents how each subsystem is ingested and normalized so c
 ## ESP32 Panel
 - Serial newline JSON at 115200 baud.
 - Telemetry and command acknowledgments are normalized into the state store.
+ - Commands are routed using the ESP32 command handler.
 
 ## AntSDR Scan Engine
 - JSONL ground-truth feed for RF detections.

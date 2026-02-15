@@ -7,6 +7,10 @@ esp32:
   serial_port: "/dev/ttyACM0"
   baud_rate: 115200
   reconnect_delay_seconds: 3
+  max_line_bytes: 2048
+  read_chunk_bytes: 256
+  command_timeout_seconds: 2
+  command_retries: 1
 
 antsdr:
   jsonl_path: "/opt/ndefender/logs/antsdr_engine.jsonl"

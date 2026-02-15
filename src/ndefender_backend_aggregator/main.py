@@ -7,11 +7,14 @@ import uuid
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
+from pydantic import BaseModel, Field
 
 from .auth import api_key_auth
 from .bus import EventBus
+from .commands import CommandRequest, CommandRouter, Esp32CommandHandler
 from .config import get_config
+from .integrations.esp32_serial import Esp32Ingestor
 from .logging import configure_logging
 from .models import StatusSnapshot
 from .rate_limit import command_rate_limit, dangerous_rate_limit
@@ -37,6 +40,14 @@ class CommandAck:
         if self.detail:
             payload["detail"] = self.detail
         return payload
+
+
+class CommandBody(BaseModel):
+    payload: dict[str, Any] = Field(default_factory=dict)
+    confirm: bool = False
+
+
+COMMAND_BODY = Body(default_factory=CommandBody)
 
 
 def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
@@ -90,41 +101,63 @@ def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
         return snapshot.audio
 
 
-def _register_command_routes(app: FastAPI, config) -> None:
+def _register_command_routes(app: FastAPI, config, command_router: CommandRouter) -> None:
     device_guard = Depends(require_permission("device_control"))
     system_guard = Depends(require_permission("system_control"))
+
+    async def dispatch_command(
+        command: str,
+        body: CommandBody,
+        request: Request,
+    ) -> dict[str, Any]:
+        cmd_request = CommandRequest(
+            command=command,
+            payload=body.payload,
+            confirm=body.confirm,
+            issued_by=request.headers.get("X-Role"),
+        )
+        result = await command_router.dispatch(cmd_request)
+        return result.model_dump()
 
     @app.post(
         "/api/v1/vrx/tune",
         dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
     )
-    async def vrx_tune() -> dict[str, Any]:
-        ack = CommandAck("vrx/tune", accepted=False, detail="Not implemented")
-        raise HTTPException(status_code=501, detail=ack.model_dump())
+    async def vrx_tune(
+        request: Request,
+        body: CommandBody = COMMAND_BODY,
+    ) -> dict[str, Any]:
+        return await dispatch_command("vrx/tune", body, request)
 
     @app.post(
         "/api/v1/scan/start",
         dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
     )
-    async def scan_start() -> dict[str, Any]:
-        ack = CommandAck("scan/start", accepted=False, detail="Not implemented")
-        raise HTTPException(status_code=501, detail=ack.model_dump())
+    async def scan_start(
+        request: Request,
+        body: CommandBody = COMMAND_BODY,
+    ) -> dict[str, Any]:
+        return await dispatch_command("scan/start", body, request)
 
     @app.post(
         "/api/v1/scan/stop",
         dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
     )
-    async def scan_stop() -> dict[str, Any]:
-        ack = CommandAck("scan/stop", accepted=False, detail="Not implemented")
-        raise HTTPException(status_code=501, detail=ack.model_dump())
+    async def scan_stop(
+        request: Request,
+        body: CommandBody = COMMAND_BODY,
+    ) -> dict[str, Any]:
+        return await dispatch_command("scan/stop", body, request)
 
     @app.post(
         "/api/v1/video/select",
         dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
     )
-    async def video_select() -> dict[str, Any]:
-        ack = CommandAck("video/select", accepted=False, detail="Not implemented")
-        raise HTTPException(status_code=501, detail=ack.model_dump())
+    async def video_select(
+        request: Request,
+        body: CommandBody = COMMAND_BODY,
+    ) -> dict[str, Any]:
+        return await dispatch_command("video/select", body, request)
 
     @app.post(
         "/api/v1/system/reboot",
@@ -178,9 +211,10 @@ def _register_routes(
     state_store: StateStore,
     ws_manager: WebSocketManager,
     config,
+    command_router: CommandRouter,
 ) -> None:
     _register_read_routes(app, state_store)
-    _register_command_routes(app, config)
+    _register_command_routes(app, config, command_router)
     _register_ws_routes(app, ws_manager)
 
 
@@ -192,6 +226,13 @@ def create_app() -> FastAPI:
     event_bus = EventBus()
     ws_manager = WebSocketManager(state_store)
     orchestrator = build_default_orchestrator(config, state_store, event_bus)
+    command_router = CommandRouter()
+    esp32_ingestor = next(
+        (ingestor for ingestor in orchestrator.ingestors if isinstance(ingestor, Esp32Ingestor)),
+        None,
+    )
+    if esp32_ingestor:
+        command_router.register(Esp32CommandHandler(esp32_ingestor))
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -209,8 +250,9 @@ def create_app() -> FastAPI:
     app.state.event_bus = event_bus
     app.state.ws_manager = ws_manager
     app.state.runtime = orchestrator
+    app.state.command_router = command_router
 
-    _register_routes(app, state_store, ws_manager, config)
+    _register_routes(app, state_store, ws_manager, config, command_router)
     return app
 
 

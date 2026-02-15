@@ -17,6 +17,10 @@ Why this exists: This document defines every configuration section so deployment
 - `serial_port`: Path to the ESP32 serial device.
 - `baud_rate`: Serial baud rate.
 - `reconnect_delay_seconds`: Delay before retrying connection.
+- `max_line_bytes`: Maximum size of a single JSON line before dropping it.
+- `read_chunk_bytes`: Serial read chunk size.
+- `command_timeout_seconds`: Timeout for command acknowledgements.
+- `command_retries`: Number of retries for command delivery.
 
 ### antsdr
 - `jsonl_path`: Path to AntSDR JSONL ground-truth log.

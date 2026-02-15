@@ -12,18 +12,19 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 7: Command Routing Contracts (No Integrations) — 🟢 complete
 - Step 8: Integration Stubs (No Wiring) — 🟢 complete
 - Step 9: Runtime Orchestration (No Integrations) — 🟢 complete
+- Step 10: System Controller Integration — 🟢 complete
 
-## Step 10 — System Controller Integration
+## Step 11 — ESP32 Serial Integration
 - Status: 🟢 complete
 - What built:
-  - System Controller polling integration with state updates.
-  - Optional API key support for System Controller.
-  - Added network/audio fields and endpoints.
-  - Tests updated for new endpoints and integration behavior.
-- Validation notes: Poller safely handles failures and updates state atomically.
+  - Serial ingestion loop with buffering, size caps, and reconnect logic.
+  - Telemetry normalization into `vrx`/`video` state and WS events.
+  - ESP32 command handler with ack routing and timeouts.
+  - Configuration additions for serial limits and command timing.
+- Validation notes: Command ACKs are correlated by ID and failures surface as negative ACKs.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `15 passed in 1.78s`
+- Verification: `.venv/bin/pytest` -> Output: `18 passed in 1.76s`
 
 ## Notes
-- Next: ESP32 serial integration (RX telemetry + command path).
+- Next: AntSDR JSONL reader integration.
 

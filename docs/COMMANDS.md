@@ -17,3 +17,8 @@ Why this exists: It defines the contract and routing expectations for command ex
 - Router must remain non-blocking if a handler fails.
 - Commands must be auditable via IDs and timestamps.
 
+## ESP32 Mappings
+- `vrx/tune` → `SET_VRX_FREQ`
+- `scan/start` → `START_SCAN`
+- `scan/stop` → `STOP_SCAN`
+- `video/select` → `VIDEO_SELECT`

@@ -53,3 +53,16 @@ def test_audio_endpoint():
         headers={"X-API-Key": config.auth.api_key, "X-Role": "viewer"},
     )
     assert response.status_code == HTTP_OK
+
+
+def test_command_endpoint_returns_result():
+    config = get_config()
+    client = TestClient(create_app())
+    response = client.post(
+        "/api/v1/vrx/tune",
+        headers={"X-API-Key": config.auth.api_key, "X-Role": "operator"},
+        json={"payload": {"vrx_id": 1, "freq_hz": 5740000000}},
+    )
+    assert response.status_code == HTTP_OK
+    payload = response.json()
+    assert payload["command"] == "SET_VRX_FREQ"

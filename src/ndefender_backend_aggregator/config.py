@@ -25,6 +25,10 @@ class Esp32Config(BaseModel):
     serial_port: str
     baud_rate: int = Field(ge=1)
     reconnect_delay_seconds: int = Field(ge=1)
+    max_line_bytes: int = Field(ge=128)
+    read_chunk_bytes: int = Field(ge=1)
+    command_timeout_seconds: int = Field(ge=1)
+    command_retries: int = Field(ge=0)
 
 
 class AntsdrConfig(BaseModel):
