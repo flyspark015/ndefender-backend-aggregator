@@ -9,6 +9,7 @@ from typing import Any
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 
 from .auth import api_key_auth
+from .bus import EventBus
 from .config import get_config
 from .logging import configure_logging
 from .models import StatusSnapshot
@@ -177,9 +178,11 @@ def create_app() -> FastAPI:
 
     app = FastAPI(title="N-Defender Backend Aggregator", version="0.1.0")
     state_store = StateStore()
+    event_bus = EventBus()
     ws_manager = WebSocketManager(state_store)
 
     app.state.state_store = state_store
+    app.state.event_bus = event_bus
     app.state.ws_manager = ws_manager
 
     _register_routes(app, state_store, ws_manager, config)

@@ -6,18 +6,19 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 1: Roadmap + Repo Skeleton — 🟢 complete
 - Step 2: Configuration Layer — 🟢 complete
 - Step 3: Application Foundation (Auth + CI) — 🟢 complete
+- Step 4: State Core + WebSocket Enhancements — 🟢 complete
 
-## Step 4 — State Core + WebSocket Enhancements
+## Step 5 — Internal Event Bus Scaffold
 - Status: 🟢 complete
 - What built:
-  - Canonical pydantic models for snapshots and event envelopes.
-  - State store now returns validated snapshots.
-  - WebSocket manager emits validated SYSTEM_UPDATE envelopes.
-  - Tests for models and status response types.
-- Validation notes: Snapshot model validation is enforced before API responses.
+  - Internal event bus with backpressure and drop-oldest behavior.
+  - App wiring for event bus placeholder.
+  - Architecture documentation updated.
+  - Tests validating publish/subscribe behavior.
+- Validation notes: Event bus guarantees non-blocking publish behavior with bounded queues.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `6 passed in 1.28s`
+- Verification: `.venv/bin/pytest` -> Output: `8 passed in 1.27s`
 
 ## Notes
-- Next: Prepare ingestion scaffolding without implementing integrations.
+- Next: Define ingestion interfaces and contracts without implementing integrations.
 

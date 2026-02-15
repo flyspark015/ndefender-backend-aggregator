@@ -10,6 +10,7 @@ Why this exists: It documents system boundaries, data flow, and failure isolatio
 ## Components
 - **Ingestion layer:** JSONL tailers, serial bridge, system controller poller.
 - **State layer:** Central async store with canonical schema.
+- **Event bus:** Internal publisher/subscriber channel for decoupled ingestion and WS broadcast.
 - **API layer:** FastAPI with REST + WebSocket endpoints.
 - **Security layer:** API key auth, RBAC, rate limiting.
 
@@ -23,4 +24,3 @@ Why this exists: It documents system boundaries, data flow, and failure isolatio
 ## Failure Isolation
 - Each integration runs independently so partial failures do not block the API.
 - Restart-safe JSONL tailing ensures no data loss after service restarts.
-
