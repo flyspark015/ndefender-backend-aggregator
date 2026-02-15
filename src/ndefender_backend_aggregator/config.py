@@ -16,6 +16,7 @@ class SystemControllerConfig(BaseModel):
 
     base_url: str
     timeout_seconds: int = Field(ge=1)
+    api_key: str | None = None
 
 
 class Esp32Config(BaseModel):

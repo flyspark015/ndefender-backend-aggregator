@@ -5,6 +5,7 @@ Why this exists: It documents how each subsystem is ingested and normalized so c
 ## System Controller
 - Polled via REST for UPS, network, audio, and service status.
 - Optional WS subscription if available.
+ - Currently implemented via REST polling.
 
 ## ESP32 Panel
 - Serial newline JSON at 115200 baud.

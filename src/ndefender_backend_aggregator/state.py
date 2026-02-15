@@ -22,7 +22,9 @@ class StateStore:
             "remote_id": {},
             "vrx": {},
             "video": {},
-            "services": {},
+            "services": [],
+            "network": {},
+            "audio": {},
         }
 
     async def update_section(self, name: str, data: dict[str, Any]) -> None:

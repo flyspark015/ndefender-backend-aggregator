@@ -57,27 +57,37 @@ def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
     @app.get("/api/v1/system", dependencies=[Depends(api_key_auth), read_guard])
     async def system() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
-        return snapshot.get("system", {})
+        return snapshot.system
 
     @app.get("/api/v1/power", dependencies=[Depends(api_key_auth), read_guard])
     async def power() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
-        return snapshot.get("power", {})
+        return snapshot.power
 
     @app.get("/api/v1/rf", dependencies=[Depends(api_key_auth), read_guard])
     async def rf() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
-        return snapshot.get("rf", {})
+        return snapshot.rf
 
     @app.get("/api/v1/video", dependencies=[Depends(api_key_auth), read_guard])
     async def video() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
-        return snapshot.get("video", {})
+        return snapshot.video
 
     @app.get("/api/v1/services", dependencies=[Depends(api_key_auth), read_guard])
-    async def services() -> dict[str, Any]:
+    async def services() -> list[dict[str, Any]]:
         snapshot = await state_store.snapshot()
-        return snapshot.get("services", {})
+        return snapshot.services
+
+    @app.get("/api/v1/network", dependencies=[Depends(api_key_auth), read_guard])
+    async def network() -> dict[str, Any]:
+        snapshot = await state_store.snapshot()
+        return snapshot.network
+
+    @app.get("/api/v1/audio", dependencies=[Depends(api_key_auth), read_guard])
+    async def audio() -> dict[str, Any]:
+        snapshot = await state_store.snapshot()
+        return snapshot.audio
 
 
 def _register_command_routes(app: FastAPI, config) -> None:
@@ -181,7 +191,7 @@ def create_app() -> FastAPI:
     state_store = StateStore()
     event_bus = EventBus()
     ws_manager = WebSocketManager(state_store)
-    orchestrator = build_default_orchestrator(config)
+    orchestrator = build_default_orchestrator(config, state_store, event_bus)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):

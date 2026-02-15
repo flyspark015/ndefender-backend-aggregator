@@ -1,6 +1,7 @@
 system_controller:
   base_url: "http://127.0.0.1:8000"
   timeout_seconds: 5
+  api_key: null
 
 esp32:
   serial_port: "/dev/ttyACM0"

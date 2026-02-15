@@ -18,6 +18,8 @@ Why this exists: It defines the public surface consumed by the GUI and tooling, 
 - `GET /rf`: RF scan status.
 - `GET /video`: Video/VRX status.
 - `GET /services`: Service supervision status.
+- `GET /network`: Network status.
+- `GET /audio`: Audio status.
 
 ## Command Endpoints
 - `POST /vrx/tune`

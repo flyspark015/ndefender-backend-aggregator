@@ -11,6 +11,7 @@ Why this exists: This document defines every configuration section so deployment
 ### system_controller
 - `base_url`: Base URL for the System Controller API.
 - `timeout_seconds`: Per-request timeout in seconds.
+- `api_key`: Optional API key for System Controller authentication.
 
 ### esp32
 - `serial_port`: Path to the ESP32 serial device.

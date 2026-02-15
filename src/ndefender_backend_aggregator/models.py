@@ -17,7 +17,9 @@ class StatusSnapshot(BaseModel):
     remote_id: dict[str, Any] = Field(default_factory=dict)
     vrx: dict[str, Any] = Field(default_factory=dict)
     video: dict[str, Any] = Field(default_factory=dict)
-    services: dict[str, Any] = Field(default_factory=dict)
+    services: list[dict[str, Any]] = Field(default_factory=list)
+    network: dict[str, Any] = Field(default_factory=dict)
+    audio: dict[str, Any] = Field(default_factory=dict)
 
 
 class EventEnvelope(BaseModel):

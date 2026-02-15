@@ -11,17 +11,19 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 6: Ingestion Contracts (No Integrations) — 🟢 complete
 - Step 7: Command Routing Contracts (No Integrations) — 🟢 complete
 - Step 8: Integration Stubs (No Wiring) — 🟢 complete
+- Step 9: Runtime Orchestration (No Integrations) — 🟢 complete
 
-## Step 9 — Runtime Orchestration (No Integrations)
+## Step 10 — System Controller Integration
 - Status: 🟢 complete
 - What built:
-  - Runtime orchestrator for startup/shutdown lifecycle.
-  - FastAPI lifespan wiring for runtime control.
-  - Tests validating orchestrator behavior.
-- Validation notes: Lifespan events ensure clean start/stop sequencing for ingestors.
+  - System Controller polling integration with state updates.
+  - Optional API key support for System Controller.
+  - Added network/audio fields and endpoints.
+  - Tests updated for new endpoints and integration behavior.
+- Validation notes: Poller safely handles failures and updates state atomically.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `13 passed in 1.57s`
+- Verification: `.venv/bin/pytest` -> Output: `15 passed in 1.78s`
 
 ## Notes
-- Next: Begin subsystem integrations per plan once approved.
+- Next: ESP32 serial integration (RX telemetry + command path).
 

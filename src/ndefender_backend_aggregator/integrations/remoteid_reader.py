@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from ..bus import EventBus
+from ..config import AppConfig
 from ..ingest import Ingestor, IngestorMetadata
 from ..models import EventEnvelope
+from ..state import StateStore
 
 
 class RemoteIdIngestor(Ingestor):
@@ -11,7 +14,15 @@ class RemoteIdIngestor(Ingestor):
 
     metadata = IngestorMetadata(name="remoteid", source="remoteid")
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        config: AppConfig | None = None,
+        state_store: StateStore | None = None,
+        event_bus: EventBus | None = None,
+    ) -> None:
+        self._config = config
+        self._state_store = state_store
+        self._event_bus = event_bus
         self._running = False
 
     async def start(self) -> None:

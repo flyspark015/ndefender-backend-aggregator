@@ -33,3 +33,23 @@ def test_status_snapshot():
     assert response.status_code == HTTP_OK
     payload = response.json()
     assert "timestamp_ms" in payload
+
+
+def test_network_endpoint():
+    config = get_config()
+    client = TestClient(create_app())
+    response = client.get(
+        "/api/v1/network",
+        headers={"X-API-Key": config.auth.api_key, "X-Role": "viewer"},
+    )
+    assert response.status_code == HTTP_OK
+
+
+def test_audio_endpoint():
+    config = get_config()
+    client = TestClient(create_app())
+    response = client.get(
+        "/api/v1/audio",
+        headers={"X-API-Key": config.auth.api_key, "X-Role": "viewer"},
+    )
+    assert response.status_code == HTTP_OK

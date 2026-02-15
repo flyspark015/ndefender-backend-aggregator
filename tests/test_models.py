@@ -10,7 +10,9 @@ def test_status_snapshot_defaults():
         remote_id={},
         vrx={},
         video={},
-        services={},
+        services=[],
+        network={},
+        audio={},
     )
     assert snapshot.timestamp_ms == 1
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Iterable
 
+from .bus import EventBus
 from .config import AppConfig
 from .ingest import Ingestor
 from .integrations import (
@@ -13,6 +14,7 @@ from .integrations import (
     RemoteIdIngestor,
     SystemControllerIngestor,
 )
+from .state import StateStore
 
 
 class RuntimeOrchestrator:
@@ -43,12 +45,16 @@ class RuntimeOrchestrator:
         return health_data
 
 
-def build_default_orchestrator(config: AppConfig) -> RuntimeOrchestrator:
-    ingestors: list[Ingestor] = [SystemControllerIngestor()]
+def build_default_orchestrator(
+    config: AppConfig,
+    state_store: StateStore,
+    event_bus: EventBus,
+) -> RuntimeOrchestrator:
+    ingestors: list[Ingestor] = [SystemControllerIngestor(config, state_store, event_bus)]
     if config.features.enable_esp32:
-        ingestors.append(Esp32Ingestor())
+        ingestors.append(Esp32Ingestor(config, state_store, event_bus))
     if config.features.enable_antsdr:
-        ingestors.append(AntsdrIngestor())
+        ingestors.append(AntsdrIngestor(config, state_store, event_bus))
     if config.features.enable_remoteid:
-        ingestors.append(RemoteIdIngestor())
+        ingestors.append(RemoteIdIngestor(config, state_store, event_bus))
     return RuntimeOrchestrator(ingestors)
