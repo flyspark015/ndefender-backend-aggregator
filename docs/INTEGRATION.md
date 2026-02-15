@@ -15,6 +15,7 @@ Why this exists: It documents how each subsystem is ingested and normalized so c
 ## AntSDR Scan Engine
 - JSONL ground-truth feed for RF detections.
 - Rotation-safe tailing required for reliability.
+ - Events normalized to RF_CONTACT_* types.
 
 ## RemoteID Engine
 - JSONL feed for RemoteID contact updates.

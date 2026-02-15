@@ -11,3 +11,5 @@ Why this exists: It defines the authoritative event streams that back the system
 - Partial lines must be buffered until complete.
 - Service restarts must re-open and continue without data loss.
 
+## Tooling
+- `tools/jsonl_tail_test_driver.py` can be used to exercise tailing behavior during development.

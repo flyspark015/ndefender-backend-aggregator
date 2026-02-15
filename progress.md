@@ -13,18 +13,18 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - Step 8: Integration Stubs (No Wiring) — 🟢 complete
 - Step 9: Runtime Orchestration (No Integrations) — 🟢 complete
 - Step 10: System Controller Integration — 🟢 complete
+- Step 11: ESP32 Serial Integration — 🟢 complete
 
-## Step 11 — ESP32 Serial Integration
+## Step 12 — AntSDR JSONL Integration
 - Status: 🟢 complete
 - What built:
-  - Serial ingestion loop with buffering, size caps, and reconnect logic.
-  - Telemetry normalization into `vrx`/`video` state and WS events.
-  - ESP32 command handler with ack routing and timeouts.
-  - Configuration additions for serial limits and command timing.
-- Validation notes: Command ACKs are correlated by ID and failures surface as negative ACKs.
+  - Rotation-safe JSONL tailer with truncation detection.
+  - AntSDR ingestion pipeline with RF event normalization.
+  - Tooling and tests for rotation/truncation behavior.
+- Validation notes: Tailer tolerates inode changes, truncation, and partial lines.
 - Verification: `.venv/bin/ruff check .` -> Output: `All checks passed!`
-- Verification: `.venv/bin/pytest` -> Output: `18 passed in 1.76s`
+- Verification: `.venv/bin/pytest` -> Output: `21 passed in 2.11s`
 
 ## Notes
-- Next: AntSDR JSONL reader integration.
+- Next: RemoteID JSONL integration.
 
