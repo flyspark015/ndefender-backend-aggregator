@@ -1,0 +1,14 @@
+system_controller:
+  base_url: "http://127.0.0.1:8000"
+
+logging:
+  level: "DEBUG"
+
+auth:
+  api_key_required: false
+  api_key: "DEV_ONLY"
+
+features:
+  enable_antsdr: false
+  enable_remoteid: true
+  enable_esp32: true
