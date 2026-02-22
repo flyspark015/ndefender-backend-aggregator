@@ -182,3 +182,15 @@ Evidence (local):
 ```
 {"connected":true,"ip_v4":"192.168.1.35","ip_v6":"2401:4900:8fef:a440:ae02:e0f1:7805:a92e","ssid":"Airtel_Toybook","status":"ok"}
 ```
+
+## Step 4 Diagnostics Suite Update (2026-02-22)
+Updated `tools/run_full_diagnostics.py` to include:
+- REST checks for all contract endpoints
+- WebSocket check + envelope validation
+- CORS preflight (Origin: https://www.figma.com)
+- systemd status + journal snippets for ndefender-backend/cloudflared
+- “Why UI blank” top-5 causes section
+
+Outputs now:
+- `reports/diagnostics_local_<timestamp>.md/.json`
+- `reports/diagnostics_public_<timestamp>.md/.json`
