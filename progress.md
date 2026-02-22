@@ -488,3 +488,27 @@ Key outputs:
 Summary:
 - Overall status: RED SIGNAL (public REST blocked for non-browser clients)
 - Root cause: Cloudflare bot/WAF still blocking REST + preflight for non-browser clients.
+
+## GREEN SIGNAL Re-Verification After Cloudflare Fix (2026-02-22 15:24 UTC)
+Commands:
+```
+cd /home/toybook/ndefender-backend-aggregator
+python3 tools/diagnostics/run_green_signal.py --local http://127.0.0.1:8000/api/v1 --public https://n.flyspark.in/api/v1 --out-md reports/README_GREEN_SIGNAL.md --out-json reports/green_signal.json
+curl -i -X OPTIONS https://n.flyspark.in/api/v1/status -H "Origin: https://www.figma.com" -H "Access-Control-Request-Method: GET" -H "Access-Control-Request-Headers: Content-Type"
+python3 - <<'PY'
+# urllib checks for all endpoints
+PY
+```
+
+Reports:
+- `reports/README_GREEN_SIGNAL.md`
+- `reports/green_signal.json`
+- `reports/GREEN_SIGNAL_20260222_152418.md`
+
+Summary:
+- Public REST: PASS for all endpoints (curl + urllib)
+- Public CORS: PASS (200 + allow-*)
+- Public WS: PASS (3 msgs, envelope valid)
+- Local REST + WS: PASS
+- Command write endpoints: not exposed (405) -> FAIL in write-path test
+- RemoteID: DEGRADED (tshark/mon0 errors in journal)
