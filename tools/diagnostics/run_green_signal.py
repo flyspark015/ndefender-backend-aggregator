@@ -12,10 +12,10 @@ import socket
 import subprocess
 import sys
 import time
-from dataclasses import dataclass, asdict
-from datetime import datetime, timezone
+from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -71,12 +71,12 @@ LOG_KEYWORDS = re.compile(r"error|exception|traceback|ws|403|cloudflare", re.IGN
 class RestResult:
     endpoint: str
     url: str
-    http_status: Optional[int]
-    latency_ms: Optional[int]
+    http_status: int | None
+    latency_ms: int | None
     content_type: str
     snippet: str
     json_ok: bool
-    error: Optional[str]
+    error: str | None
 
 
 @dataclass
@@ -84,44 +84,44 @@ class WsResult:
     url: str
     connect_ok: bool
     msgs_received: int
-    first_type: Optional[str]
-    first_200: Optional[str]
-    first_message: Optional[str]
+    first_type: str | None
+    first_200: str | None
+    first_message: str | None
     envelope_valid: bool
-    error: Optional[str]
+    error: str | None
 
 
 @dataclass
 class CorsResult:
     url: str
     origin: str
-    http_status: Optional[int]
-    allow_origin: Optional[str]
-    allow_methods: Optional[str]
-    allow_headers: Optional[str]
-    error: Optional[str]
+    http_status: int | None
+    allow_origin: str | None
+    allow_methods: str | None
+    allow_headers: str | None
+    error: str | None
 
 
 @dataclass
 class ServiceResult:
     unit: str
-    active: Optional[str]
-    substate: Optional[str]
-    main_pid: Optional[str]
-    error: Optional[str]
+    active: str | None
+    substate: str | None
+    main_pid: str | None
+    error: str | None
 
 
 @dataclass
 class CommandResult:
     command: str
     url: str
-    http_status: Optional[int]
+    http_status: int | None
     response_snippet: str
-    accepted: Optional[bool]
-    command_id: Optional[str]
+    accepted: bool | None
+    command_id: str | None
     ack_received: bool
     ack_match: bool
-    error: Optional[str]
+    error: str | None
 
 
 @dataclass
@@ -132,10 +132,10 @@ class SubsystemResult:
 
 
 def now_utc() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def http_request(method: str, url: str, headers: Optional[Dict[str, str]] = None, body: Optional[bytes] = None, timeout_s: float = 10.0) -> Tuple[Optional[int], Dict[str, str], bytes, Optional[str], Optional[int]]:
+def http_request(method: str, url: str, headers: dict[str, str] | None = None, body: bytes | None = None, timeout_s: float = 10.0) -> tuple[int | None, dict[str, str], bytes, str | None, int | None]:
     start = time.perf_counter()
     req = Request(url, method=method, headers=headers or {}, data=body)
     try:
@@ -173,9 +173,9 @@ def probe_rest(base: str, endpoint: str) -> RestResult:
     return RestResult(endpoint, url, status, latency, content_type, snippet, json_ok, error)
 
 
-async def probe_ws(url: str, origin: Optional[str] = None, max_messages: int = 10, timeout_s: float = 10.0) -> WsResult:
+async def probe_ws(url: str, origin: str | None = None, max_messages: int = 10, timeout_s: float = 10.0) -> WsResult:
     headers = {"Origin": origin} if origin else None
-    msgs: List[str] = []
+    msgs: list[str] = []
     first_type = None
     envelope_valid = False
     try:
@@ -185,7 +185,7 @@ async def probe_ws(url: str, origin: Optional[str] = None, max_messages: int = 1
                 try:
                     msg = await asyncio.wait_for(ws.recv(), timeout=timeout_s - (time.time() - start))
                     msgs.append(msg)
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     break
             if msgs:
                 first = msgs[0]
@@ -204,7 +204,7 @@ def probe_cors(url: str, origin: str) -> CorsResult:
     headers = {
         "Origin": origin,
         "Access-Control-Request-Method": "GET",
-        "Access-Control-Request-Headers": "Content-Type,X-API-Key,X-Role",
+        "Access-Control-Request-Headers": "Content-Type",
     }
     status, resp_headers, _body, error, _lat = http_request("OPTIONS", url, headers=headers)
     allow_origin = resp_headers.get("Access-Control-Allow-Origin") if resp_headers else None
@@ -224,7 +224,7 @@ def systemctl_show(unit: str) -> ServiceResult:
         return ServiceResult(unit, None, None, None, str(exc))
 
 
-def journal_snippet(unit: str, lines: int = 200) -> Tuple[str, List[str]]:
+def journal_snippet(unit: str, lines: int = 200) -> tuple[str, list[str]]:
     try:
         proc = subprocess.run(["journalctl", "-u", unit, "-n", str(lines), "--no-pager"], capture_output=True, text=True, check=False)
         text = proc.stdout.strip()
@@ -234,7 +234,7 @@ def journal_snippet(unit: str, lines: int = 200) -> Tuple[str, List[str]]:
         return f"error: {exc}", []
 
 
-def pick_command_endpoint(base: str) -> Optional[str]:
+def pick_command_endpoint(base: str) -> str | None:
     for endpoint in COMMAND_ENDPOINTS:
         url = f"{base}/{endpoint}"
         status, _headers, _body, _err, _lat = http_request("POST", url, headers={"Content-Type": "application/json"}, body=b"{}")
@@ -245,8 +245,8 @@ def pick_command_endpoint(base: str) -> Optional[str]:
     return None
 
 
-def run_command_tests(base: str, ws_url: str, api_key: Optional[str], api_role: Optional[str]) -> Tuple[List[CommandResult], Optional[str], Dict[str, Optional[int]]]:
-    generic_status: Dict[str, Optional[int]] = {}
+def run_command_tests(base: str, ws_url: str, api_key: str | None, api_role: str | None) -> tuple[list[CommandResult], str | None, dict[str, int | None]]:
+    generic_status: dict[str, int | None] = {}
     for ep in GENERIC_COMMAND_ENDPOINTS:
         url = f"{base}/{ep}"
         status, _headers, _body, _err, _lat = http_request("POST", url, headers={"Content-Type": "application/json"}, body=b"{}")
@@ -264,23 +264,19 @@ def run_command_tests(base: str, ws_url: str, api_key: Optional[str], api_role: 
         return [], "No command endpoint found (generic: /command,/cmd,/control and direct: /vrx/tune,/scan/start,/scan/stop,/video/select)", generic_status
 
     headers = {"Content-Type": "application/json"}
-    if api_key:
-        headers["X-API-Key"] = api_key
-    if api_role:
-        headers["X-Role"] = api_role
 
-    results: List[CommandResult] = []
+    results: list[CommandResult] = []
     commands = ["ping", "scan/stop", "video/select"]
 
-    async def send_and_listen() -> Dict[str, List[Dict[str, Any]]]:
-        acks: Dict[str, List[Dict[str, Any]]] = {cmd: [] for cmd in commands}
+    async def send_and_listen() -> dict[str, list[dict[str, Any]]]:
+        acks: dict[str, list[dict[str, Any]]] = {cmd: [] for cmd in commands}
         try:
             async with websockets.connect(ws_url) as ws:
                 start = time.time()
                 while (time.time() - start) < 10:
                     try:
                         msg = await asyncio.wait_for(ws.recv(), timeout=10 - (time.time() - start))
-                    except asyncio.TimeoutError:
+                    except TimeoutError:
                         break
                     try:
                         payload = json.loads(msg)
@@ -327,11 +323,11 @@ def run_command_tests(base: str, ws_url: str, api_key: Optional[str], api_role: 
     return results, None, generic_status
 
 
-def status_key_check(payload: Dict[str, Any]) -> List[str]:
+def status_key_check(payload: dict[str, Any]) -> list[str]:
     return [k for k in REQUIRED_STATUS_KEYS if k not in payload]
 
 
-def fetch_status_payload(base: str) -> Dict[str, Any]:
+def fetch_status_payload(base: str) -> dict[str, Any]:
     url = f"{base}/status"
     status, _headers, body, _error, _lat = http_request("GET", url)
     if status != 200 or not body:
@@ -342,8 +338,8 @@ def fetch_status_payload(base: str) -> Dict[str, Any]:
         return {}
 
 
-def subsystem_checks(status_payload: Dict[str, Any], ws_messages: List[str], services: Dict[str, ServiceResult]) -> List[SubsystemResult]:
-    results: List[SubsystemResult] = []
+def subsystem_checks(status_payload: dict[str, Any], ws_messages: list[str], services: dict[str, ServiceResult]) -> list[SubsystemResult]:
+    results: list[SubsystemResult] = []
 
     system = status_payload.get("system")
     if isinstance(system, dict):
@@ -456,7 +452,7 @@ def main() -> int:
     if isinstance(status_payload, dict):
         missing_keys = status_key_check(status_payload)
 
-    def rest_summary(results: List[RestResult]) -> List[Dict[str, Any]]:
+    def rest_summary(results: list[RestResult]) -> list[dict[str, Any]]:
         out = []
         for r in results:
             out.append({
@@ -506,11 +502,11 @@ def main() -> int:
     with open(args.out_json, "w", encoding="utf-8") as f:
         json.dump(result_obj, f, indent=2)
 
-    def format_rest_table(label: str, results: List[RestResult]) -> str:
+    def format_rest_table(label: str, results: list[RestResult]) -> str:
         lines = [f"### {label}", "| Endpoint | HTTP | JSON | Snippet |", "| --- | --- | --- | --- |"]
         for r in results:
             snippet = r.snippet.replace("\n", " ")[:120]
-            lines.append(f"| {r.endpoint} | {r.http_status} | {str(r.json_ok)} | {snippet} |")
+            lines.append(f"| {r.endpoint} | {r.http_status} | {r.json_ok!s} | {snippet} |")
         return "\n".join(lines)
 
     def format_ws(label: str, result: WsResult) -> str:

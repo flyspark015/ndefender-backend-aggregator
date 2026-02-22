@@ -1,7 +1,6 @@
 system_controller:
   base_url: "http://127.0.0.1:8000"
   timeout_seconds: 5
-  api_key: null
 
 esp32:
   serial_port: "/dev/ttyACM0"
@@ -19,20 +18,6 @@ antsdr:
 remoteid:
   jsonl_path: "/opt/ndefender/logs/remoteid_engine.jsonl"
   tail_poll_interval_ms: 200
-
-auth:
-  api_key_required: true
-  api_key: "CHANGE_ME"
-  rbac_enabled: true
-
-rbac:
-  roles:
-    viewer:
-      permissions: ["read"]
-    operator:
-      permissions: ["read", "device_control"]
-    admin:
-      permissions: ["read", "device_control", "system_control"]
 
 safety:
   allow_unsafe_operations: false
@@ -54,7 +39,7 @@ cors:
     - "https://figma.com"
   allow_origin_regex: "^https://([a-z0-9-]+\\.)*figma\\.com$"
   allow_methods: ["GET", "POST", "OPTIONS"]
-  allow_headers: ["Content-Type", "X-API-Key", "X-Role"]
+  allow_headers: ["Content-Type"]
   allow_credentials: false
   max_age: 86400
 

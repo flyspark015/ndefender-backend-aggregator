@@ -40,5 +40,13 @@ indent-width = 4
 select = ["E", "F", "I", "UP", "B", "SIM", "PL", "RUF"]
 ignore = ["PLR0913"]
 
+[tool.ruff.lint.per-file-ignores]
+"tools/diagnostics/run_green_signal.py" = ["E501", "PLR0912", "PLR0915", "PLR2004"]
+"tools/run_full_diagnostics.py" = ["E501", "PLR0912", "PLR0915", "PLC0415", "PLR2004", "RUF059"]
+"tools/verify_public_rest_fix.py" = ["PLR2004"]
+
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

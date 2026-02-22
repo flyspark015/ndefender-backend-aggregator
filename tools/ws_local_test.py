@@ -2,6 +2,7 @@
 import asyncio
 import json
 import sys
+
 import websockets
 
 URL = "ws://127.0.0.1:8000/api/v1/ws"

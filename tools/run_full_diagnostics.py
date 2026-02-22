@@ -6,16 +6,15 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import subprocess
 import re
+import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import UTC, datetime
+from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-
 
 FIGMA_ORIGIN = "https://www.figma.com"
 
@@ -25,25 +24,25 @@ class EndpointResult:
     name: str
     url: str
     status: str
-    http_status: Optional[int]
-    latency_ms: Optional[int]
+    http_status: int | None
+    latency_ms: int | None
     content_type: str
     snippet: str
     json_ok: bool
-    error: Optional[str]
-    missing_keys: List[str] = field(default_factory=list)
-    present_keys: List[str] = field(default_factory=list)
+    error: str | None
+    missing_keys: list[str] = field(default_factory=list)
+    present_keys: list[str] = field(default_factory=list)
 
 
 @dataclass
 class CorsResult:
     url: str
     status: str
-    http_status: Optional[int]
-    allow_origin: Optional[str]
-    allow_methods: Optional[str]
-    allow_headers: Optional[str]
-    error: Optional[str]
+    http_status: int | None
+    allow_origin: str | None
+    allow_methods: str | None
+    allow_headers: str | None
+    error: str | None
 
 
 @dataclass
@@ -52,25 +51,25 @@ class WsResult:
     status: str
     messages_received: int
     envelope_ok: bool
-    missing_keys: List[str]
-    error: Optional[str]
-    first_message: Optional[str]
+    missing_keys: list[str]
+    error: str | None
+    first_message: str | None
 
 
 @dataclass
 class SystemdResult:
     unit: str
-    active: Optional[str]
-    error: Optional[str]
+    active: str | None
+    error: str | None
 
 
 @dataclass
 class JournalResult:
     unit: str
     ok: bool
-    error: Optional[str]
+    error: str | None
     snippet: str
-    highlights: List[str]
+    highlights: list[str]
 
 
 @dataclass
@@ -79,20 +78,20 @@ class DiagnosticsReport:
     base_api: str
     base_root: str
     generated_at: str
-    health_attempts: List[EndpointResult]
-    endpoints: List[EndpointResult]
-    cors: Optional[CorsResult]
-    websocket: Optional[WsResult]
-    systemd: List[SystemdResult]
-    journals: List[JournalResult]
-    ui_blank_causes: List[Dict[str, str]]
+    health_attempts: list[EndpointResult]
+    endpoints: list[EndpointResult]
+    cors: CorsResult | None
+    websocket: WsResult | None
+    systemd: list[SystemdResult]
+    journals: list[JournalResult]
+    ui_blank_causes: list[dict[str, str]]
 
 
 def now_timestamp() -> str:
-    return datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    return datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
 
 
-def normalize_base(base: str) -> Tuple[str, str]:
+def normalize_base(base: str) -> tuple[str, str]:
     base = base.rstrip("/")
     if base.endswith("/api/v1"):
         return base, base[: -len("/api/v1")]
@@ -102,9 +101,9 @@ def normalize_base(base: str) -> Tuple[str, str]:
 def http_request(
     method: str,
     url: str,
-    headers: Optional[Dict[str, str]] = None,
+    headers: dict[str, str] | None = None,
     timeout_s: float = 10.0,
-) -> Tuple[Optional[int], Dict[str, str], bytes, Optional[str], Optional[int]]:
+) -> tuple[int | None, dict[str, str], bytes, str | None, int | None]:
     start = time.perf_counter()
     req = Request(url, method=method, headers=headers or {})
     try:
@@ -132,7 +131,7 @@ def snippet_from_body(body: bytes, limit: int = 300) -> str:
     return text[:limit]
 
 
-def try_parse_json(body: bytes) -> Tuple[bool, Any, Optional[str]]:
+def try_parse_json(body: bytes) -> tuple[bool, Any, str | None]:
     try:
         parsed = json.loads(body.decode("utf-8", errors="strict"))
         return True, parsed, None
@@ -140,7 +139,7 @@ def try_parse_json(body: bytes) -> Tuple[bool, Any, Optional[str]]:
         return False, None, str(err)
 
 
-def _present_keys(payload: Any, expected: List[str]) -> Tuple[List[str], List[str]]:
+def _present_keys(payload: Any, expected: list[str]) -> tuple[list[str], list[str]]:
     if not isinstance(payload, dict):
         return [], expected
     keys = set(payload.keys())
@@ -149,7 +148,7 @@ def _present_keys(payload: Any, expected: List[str]) -> Tuple[List[str], List[st
     return present, missing
 
 
-def evaluate_status_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_status_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = [
         "timestamp_ms",
         "system",
@@ -166,14 +165,14 @@ def evaluate_status_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
     return ok, missing, present
 
 
-def evaluate_contacts_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_contacts_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = ["contacts"]
     present, missing = _present_keys(payload, expected)
     ok = isinstance(payload, dict) and "contacts" in present
     return ok, missing, present
 
 
-def evaluate_system_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_system_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = [
         "uptime_s",
         "cpu_temp_c",
@@ -193,7 +192,7 @@ def evaluate_system_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
     return ok, missing, present
 
 
-def evaluate_power_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_power_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = [
         "pack_voltage_v",
         "current_a",
@@ -211,21 +210,21 @@ def evaluate_power_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
     return ok, missing, present
 
 
-def evaluate_rf_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_rf_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = ["last_event_type", "last_event", "last_timestamp_ms", "status"]
     present, missing = _present_keys(payload, expected)
     ok = isinstance(payload, dict)
     return ok, missing, present
 
 
-def evaluate_video_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_video_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = ["selected", "status"]
     present, missing = _present_keys(payload, expected)
     ok = isinstance(payload, dict)
     return ok, missing, present
 
 
-def evaluate_services_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_services_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     if not isinstance(payload, list):
         return False, ["services[]"], []
     required = ["name", "active_state", "sub_state", "restart_count"]
@@ -238,21 +237,21 @@ def evaluate_services_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
     return True, missing, present
 
 
-def evaluate_network_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_network_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = ["connected", "ssid", "ip_v4", "ip_v6", "status"]
     present, missing = _present_keys(payload, expected)
     ok = isinstance(payload, dict)
     return ok, missing, present
 
 
-def evaluate_audio_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_audio_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = ["volume_percent", "muted", "status"]
     present, missing = _present_keys(payload, expected)
     ok = isinstance(payload, dict)
     return ok, missing, present
 
 
-def evaluate_health_fields(payload: Any) -> Tuple[bool, List[str], List[str]]:
+def evaluate_health_fields(payload: Any) -> tuple[bool, list[str], list[str]]:
     expected = ["status", "timestamp_ms"]
     present, missing = _present_keys(payload, expected)
     ok = isinstance(payload, dict)
@@ -266,8 +265,8 @@ def check_endpoint(name: str, url: str) -> EndpointResult:
     json_ok, payload, json_error = try_parse_json(body)
 
     status = "PASS" if http_status and 200 <= http_status < 300 else "FAIL"
-    missing_keys: List[str] = []
-    present_keys: List[str] = []
+    missing_keys: list[str] = []
+    present_keys: list[str] = []
 
     if status == "PASS" and json_ok:
         ok = True
@@ -313,7 +312,7 @@ def check_endpoint(name: str, url: str) -> EndpointResult:
     )
 
 
-def probe_health(base_api: str, base_root: str) -> Tuple[EndpointResult, List[EndpointResult]]:
+def probe_health(base_api: str, base_root: str) -> tuple[EndpointResult, list[EndpointResult]]:
     urls = []
     primary = f"{base_api}/health"
     alt = f"{base_root}/health" if base_root else ""
@@ -321,8 +320,8 @@ def probe_health(base_api: str, base_root: str) -> Tuple[EndpointResult, List[En
         if url and url not in urls:
             urls.append(url)
 
-    attempts: List[EndpointResult] = []
-    chosen: Optional[EndpointResult] = None
+    attempts: list[EndpointResult] = []
+    chosen: EndpointResult | None = None
     for url in urls:
         res = check_endpoint("health", url)
         attempts.append(res)
@@ -368,13 +367,13 @@ def _ws_url_from_base(base_api: str) -> str:
     return base_api.rstrip("/") + "/ws"
 
 
-def _ws_recv_websocket_client(ws_url: str, timeout_s: float) -> Tuple[int, List[str], Optional[str]]:
+def _ws_recv_websocket_client(ws_url: str, timeout_s: float) -> tuple[int, list[str], str | None]:
     try:
         import websocket  # type: ignore
     except Exception as err:
         return 0, [], f"websocket-client import failed: {err}"
 
-    messages: List[str] = []
+    messages: list[str] = []
     try:
         ws = websocket.create_connection(
             ws_url,
@@ -396,14 +395,15 @@ def _ws_recv_websocket_client(ws_url: str, timeout_s: float) -> Tuple[int, List[
         return 0, [], str(err)
 
 
-def _ws_recv_websockets(ws_url: str, timeout_s: float) -> Tuple[int, List[str], Optional[str]]:
+def _ws_recv_websockets(ws_url: str, timeout_s: float) -> tuple[int, list[str], str | None]:
     try:
         import asyncio
+
         import websockets  # type: ignore
     except Exception as err:
         return 0, [], f"websockets import failed: {err}"
 
-    messages: List[str] = []
+    messages: list[str] = []
 
     async def _run() -> None:
         nonlocal messages
@@ -432,7 +432,7 @@ def check_websocket(base_api: str, timeout_s: float = 6.0) -> WsResult:
         recv_count, messages, error = _ws_recv_websockets(ws_url, timeout_s)
 
     envelope_ok = False
-    missing_keys: List[str] = []
+    missing_keys: list[str] = []
     first_message = messages[0] if messages else None
 
     if messages:
@@ -458,7 +458,7 @@ def check_websocket(base_api: str, timeout_s: float = 6.0) -> WsResult:
     )
 
 
-def _run_cmd(cmd: List[str], timeout_s: float = 6.0) -> Tuple[int, str, str, Optional[str]]:
+def _run_cmd(cmd: list[str], timeout_s: float = 6.0) -> tuple[int, str, str, str | None]:
     try:
         proc = subprocess.run(
             cmd,
@@ -472,8 +472,8 @@ def _run_cmd(cmd: List[str], timeout_s: float = 6.0) -> Tuple[int, str, str, Opt
         return 1, "", "", str(err)
 
 
-def check_systemd(units: List[str]) -> List[SystemdResult]:
-    results: List[SystemdResult] = []
+def check_systemd(units: list[str]) -> list[SystemdResult]:
+    results: list[SystemdResult] = []
     for unit in units:
         code, out, err, exc = _run_cmd(["systemctl", "is-active", unit])
         if exc:
@@ -486,8 +486,8 @@ def check_systemd(units: List[str]) -> List[SystemdResult]:
     return results
 
 
-def _journal_highlights(text: str, limit: int = 80) -> List[str]:
-    highlights: List[str] = []
+def _journal_highlights(text: str, limit: int = 80) -> list[str]:
+    highlights: list[str] = []
     pattern = re.compile(r"(?i)(error|exception|traceback|\\bws\\b|websocket)")
     for line in text.splitlines():
         if pattern.search(line):
@@ -521,13 +521,13 @@ def check_journal(unit: str, lines: int = 120) -> JournalResult:
 
 
 def derive_ui_blank_causes(
-    endpoints: List[EndpointResult],
-    cors: Optional[CorsResult],
-    ws: Optional[WsResult],
-    systemd: List[SystemdResult],
-    journals: List[JournalResult],
-) -> List[Dict[str, str]]:
-    causes: List[Tuple[int, str, str]] = []
+    endpoints: list[EndpointResult],
+    cors: CorsResult | None,
+    ws: WsResult | None,
+    systemd: list[SystemdResult],
+    journals: list[JournalResult],
+) -> list[dict[str, str]]:
+    causes: list[tuple[int, str, str]] = []
 
     status_res = next((r for r in endpoints if r.name == "status"), None)
     if status_res and status_res.status == "FAIL":
@@ -566,7 +566,7 @@ def derive_ui_blank_causes(
 
 
 def render_markdown(report: DiagnosticsReport, report_path: str) -> str:
-    lines: List[str] = []
+    lines: list[str] = []
     lines.append("# N-Defender Diagnostics Report")
     lines.append("")
     lines.append(f"Base URL: `{report.base}`")
@@ -667,7 +667,7 @@ def render_markdown(report: DiagnosticsReport, report_path: str) -> str:
 
 
 def write_json_report(report: DiagnosticsReport, report_path: str) -> str:
-    payload: Dict[str, Any] = {
+    payload: dict[str, Any] = {
         "base": report.base,
         "base_api": report.base_api,
         "base_root": report.base_root,
@@ -710,7 +710,7 @@ def main() -> int:
         "audio",
     ]
 
-    results: List[EndpointResult] = [health_primary]
+    results: list[EndpointResult] = [health_primary]
     for name in endpoints:
         url = f"{base_api}/{name}"
         results.append(check_endpoint(name, url))
@@ -729,7 +729,7 @@ def main() -> int:
         base=args.base,
         base_api=base_api,
         base_root=base_root,
-        generated_at=datetime.now(timezone.utc).isoformat(),
+        generated_at=datetime.now(UTC).isoformat(),
         health_attempts=health_attempts,
         endpoints=results,
         cors=cors_result,

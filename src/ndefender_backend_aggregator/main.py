@@ -2,18 +2,16 @@
 
 from __future__ import annotations
 
+import re
 import time
 import uuid
 from contextlib import asynccontextmanager
 from typing import Any
 
-import re
-
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from .auth import api_key_auth
 from .bus import EventBus
 from .commands import CommandRequest, CommandRouter, Esp32CommandHandler, SystemCommandHandler
 from .config import get_config
@@ -22,7 +20,6 @@ from .integrations.esp32_serial import Esp32Ingestor
 from .logging import configure_logging
 from .models import StatusSnapshot
 from .rate_limit import command_rate_limit, dangerous_rate_limit
-from .rbac import require_permission
 from .runtime import build_default_orchestrator
 from .state import StateStore
 from .ws import WebSocketManager
@@ -60,61 +57,56 @@ def require_confirm(body: CommandBody) -> None:
 
 
 def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
-    read_guard = Depends(require_permission("read"))
-
-    @app.get("/api/v1/health", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/health")
     async def health() -> dict[str, Any]:
         return {"status": "ok", "timestamp_ms": int(time.time() * 1000)}
 
-    @app.get("/api/v1/status", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/status")
     async def status() -> StatusSnapshot:
         return await state_store.snapshot()
 
-    @app.get("/api/v1/contacts", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/contacts")
     async def contacts() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
         return {"contacts": snapshot.contacts}
 
-    @app.get("/api/v1/system", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/system")
     async def system() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
         return snapshot.system
 
-    @app.get("/api/v1/power", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/power")
     async def power() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
         return snapshot.power
 
-    @app.get("/api/v1/rf", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/rf")
     async def rf() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
         return snapshot.rf
 
-    @app.get("/api/v1/video", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/video")
     async def video() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
         return snapshot.video
 
-    @app.get("/api/v1/services", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/services")
     async def services() -> list[dict[str, Any]]:
         snapshot = await state_store.snapshot()
         return snapshot.services
 
-    @app.get("/api/v1/network", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/network")
     async def network() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
         return snapshot.network
 
-    @app.get("/api/v1/audio", dependencies=[Depends(api_key_auth), read_guard])
+    @app.get("/api/v1/audio")
     async def audio() -> dict[str, Any]:
         snapshot = await state_store.snapshot()
         return snapshot.audio
 
 
 def _register_command_routes(app: FastAPI, config, command_router: CommandRouter) -> None:
-    device_guard = Depends(require_permission("device_control"))
-    system_guard = Depends(require_permission("system_control"))
-
     async def dispatch_command(
         command: str,
         body: CommandBody,
@@ -124,14 +116,14 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
             command=command,
             payload=body.payload,
             confirm=body.confirm,
-            issued_by=request.headers.get("X-Role"),
+            issued_by=request.client.host if request.client else None,
         )
         result = await command_router.dispatch(cmd_request)
         return result.model_dump()
 
     @app.post(
         "/api/v1/vrx/tune",
-        dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
+        dependencies=[Depends(command_rate_limit)],
     )
     async def vrx_tune(
         request: Request,
@@ -141,7 +133,7 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
 
     @app.post(
         "/api/v1/scan/start",
-        dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
+        dependencies=[Depends(command_rate_limit)],
     )
     async def scan_start(
         request: Request,
@@ -151,7 +143,7 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
 
     @app.post(
         "/api/v1/scan/stop",
-        dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
+        dependencies=[Depends(command_rate_limit)],
     )
     async def scan_stop(
         request: Request,
@@ -161,7 +153,7 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
 
     @app.post(
         "/api/v1/video/select",
-        dependencies=[Depends(api_key_auth), device_guard, Depends(command_rate_limit)],
+        dependencies=[Depends(command_rate_limit)],
     )
     async def video_select(
         request: Request,
@@ -172,8 +164,6 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
     @app.post(
         "/api/v1/system/reboot",
         dependencies=[
-            Depends(api_key_auth),
-            system_guard,
             Depends(command_rate_limit),
             Depends(dangerous_rate_limit),
         ],
@@ -190,8 +180,6 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
     @app.post(
         "/api/v1/system/shutdown",
         dependencies=[
-            Depends(api_key_auth),
-            system_guard,
             Depends(command_rate_limit),
             Depends(dangerous_rate_limit),
         ],
@@ -220,9 +208,7 @@ def _register_ws_routes(app: FastAPI, ws_manager: WebSocketManager) -> None:
             return False
         if origin in allowed_origins:
             return True
-        if origin_pattern and origin_pattern.match(origin):
-            return True
-        return False
+        return bool(origin_pattern and origin_pattern.match(origin))
 
     @app.websocket("/api/v1/ws")
     async def ws_endpoint(websocket: WebSocket) -> None:

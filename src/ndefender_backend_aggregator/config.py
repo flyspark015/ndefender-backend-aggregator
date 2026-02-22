@@ -16,7 +16,6 @@ class SystemControllerConfig(BaseModel):
 
     base_url: str
     timeout_seconds: int = Field(ge=1)
-    api_key: str | None = None
 
 
 class Esp32Config(BaseModel):
@@ -43,26 +42,6 @@ class RemoteIdConfig(BaseModel):
 
     jsonl_path: str
     tail_poll_interval_ms: int = Field(ge=1)
-
-
-class AuthConfig(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    api_key_required: bool
-    api_key: str
-    rbac_enabled: bool
-
-
-class RoleConfig(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    permissions: list[str]
-
-
-class RbacConfig(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    roles: dict[str, RoleConfig]
 
 
 class SafetyConfig(BaseModel):
@@ -121,8 +100,6 @@ class AppConfig(BaseModel):
     esp32: Esp32Config
     antsdr: AntsdrConfig
     remoteid: RemoteIdConfig
-    auth: AuthConfig
-    rbac: RbacConfig
     safety: SafetyConfig
     polling: PollingConfig
     logging: LoggingConfig

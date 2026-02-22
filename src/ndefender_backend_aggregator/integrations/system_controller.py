@@ -80,10 +80,7 @@ class SystemControllerIngestor(Ingestor):
     async def _poll_status(self) -> None:
         if not self._client:
             return
-        headers = {}
-        if self._config.system_controller.api_key:
-            headers["X-API-Key"] = self._config.system_controller.api_key
-        response = await self._client.get("/api/v1/status", headers=headers)
+        response = await self._client.get("/api/v1/status")
         response.raise_for_status()
         payload = response.json() or {}
         await self._state_store.update_section("system", payload.get("system") or {})

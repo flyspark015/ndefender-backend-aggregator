@@ -60,12 +60,9 @@ class SystemCommandHandler(CommandHandler):
             base_url=self._config.system_controller.base_url,
             timeout=self._config.system_controller.timeout_seconds,
         )
-        headers = {}
-        if self._config.system_controller.api_key:
-            headers["X-API-Key"] = self._config.system_controller.api_key
         command_id = str(uuid.uuid4())
         try:
-            response = await client.post(endpoint, json=payload, headers=headers)
+            response = await client.post(endpoint, json=payload)
             response.raise_for_status()
             return self._result(command, True, None, command_id)
         except Exception as exc:

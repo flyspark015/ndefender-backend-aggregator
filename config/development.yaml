@@ -4,10 +4,6 @@ system_controller:
 logging:
   level: "DEBUG"
 
-auth:
-  api_key_required: false
-  api_key: "DEV_ONLY"
-
 features:
   enable_antsdr: false
   enable_remoteid: true
