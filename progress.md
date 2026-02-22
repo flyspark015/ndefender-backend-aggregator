@@ -168,3 +168,17 @@ Plan:
 - Ensure JSON contract alignment (gps.latitude/longitude, freq_hz, timestamp_ms, etc.) and ms timestamps.
 - If a subsystem is unavailable, return valid JSON with nulls + status=degraded.
 - Ensure `/api/v1/status` includes cpu, ram, disk, ups, services, rf, network, audio, video (even if degraded).
+
+## Step 3 Backend Fix (2026-02-22)
+Implemented missing v1 endpoints in the live backend (`/opt/ndefender/backend/app.py`) and restarted `ndefender-backend`.
+
+Evidence (local):
+1) `GET /api/v1/system`
+```
+{"cpu_temp_c":62.25,"cpu_usage_percent":64.24754557338834,"disk_total_gb":117,"disk_used_gb":69,"load_15m":6.83984375,"load_1m":6.23876953125,"load_5m":6.650390625,"ram_total_mb":16215,"ram_used_mb":7822,"status":"ok","throttled_flags":0,"uptime_s":346001}
+```
+
+2) `GET /api/v1/network`
+```
+{"connected":true,"ip_v4":"192.168.1.35","ip_v6":"2401:4900:8fef:a440:ae02:e0f1:7805:a92e","ssid":"Airtel_Toybook","status":"ok"}
+```
