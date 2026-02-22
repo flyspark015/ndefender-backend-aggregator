@@ -223,3 +223,32 @@ Evidence:
 Reports:
 - `reports/diagnostics_20260222_131001.md/.json` (local)
 - `reports/diagnostics_20260222_131011.md/.json` (public)
+
+## Public 403 Investigation (2026-02-22)
+Headers (public, default UA) show Cloudflare edge + 200:
+```
+$ curl -sS -D - https://n.flyspark.in/api/v1/health -o /dev/null
+HTTP/2 200
+server: cloudflare
+cf-ray: 9d1ebe54dc163dd5-SIN
+```
+
+Headers (public, Python-urllib UA) show Cloudflare edge + 403:
+```
+$ curl -sS -D - -A "Python-urllib/3.11" https://n.flyspark.in/api/v1/health -o /dev/null
+HTTP/2 403
+server: cloudflare
+cf-ray: 9d1ec036caad20f4-HKG
+```
+
+Local backend headers (origin) show Werkzeug:
+```
+$ curl -sS -D - http://127.0.0.1:8000/api/v1/health -o /dev/null
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.5 Python/3.11.2
+```
+
+Conclusion: 403 is issued by Cloudflare edge and appears tied to UA/Bot protections.
+Recommended Cloudflare rule expression to allow API:
+- `http.host eq "n.flyspark.in" and starts_with(http.request.uri.path, "/api/v1/")`
+Action: Skip/Allow (disable Bot Fight/Managed Challenge/WAF for this path).
