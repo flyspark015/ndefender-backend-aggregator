@@ -135,3 +135,36 @@ GET /api/v1/status -> JSON (contacts...)
 
 Report file:
 - `reports/inventory_20260222_120413.md`
+
+## Contract Alignment Plan (2026-02-22)
+Decision: Option A (implement missing REST endpoints in backend on port 8000).
+
+Evidence:
+1) Contract-required Aggregator endpoints (from `ndefender-api-contracts/docs/OPENAPI.yaml`)
+```
+/health
+/status
+/contacts
+/system
+/power
+/rf
+/video
+/services
+/network
+/audio
+/ws
+```
+
+2) Running backend routes (from `/opt/ndefender/backend/app.py`)
+```
+/api/v1/health
+/api/v1/status
+/api/v1/ws
+... (no /api/v1/contacts|system|power|rf|video|services|network|audio base routes)
+```
+
+Plan:
+- Implement missing endpoints in the backend that is actually running on 8000 (currently `/opt/ndefender/backend/app.py`).
+- Ensure JSON contract alignment (gps.latitude/longitude, freq_hz, timestamp_ms, etc.) and ms timestamps.
+- If a subsystem is unavailable, return valid JSON with nulls + status=degraded.
+- Ensure `/api/v1/status` includes cpu, ram, disk, ups, services, rf, network, audio, video (even if degraded).
