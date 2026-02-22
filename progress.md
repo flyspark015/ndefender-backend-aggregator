@@ -257,6 +257,17 @@ Evidence:
 connected
 received=1, first_type=CONTACT_NEW
 ```
+
+## Step 5 — Full Diagnostics (2026-02-22)
+Local run:
+- report_md: `reports/diagnostics_20260222_133348.md`
+- report_json: `reports/diagnostics_20260222_133348.json`
+- summary: all REST endpoints PASS (200)
+
+Public run:
+- report_md: `reports/diagnostics_20260222_133353.md`
+- report_json: `reports/diagnostics_20260222_133353.json`
+- summary: REST endpoints FAIL (403), CORS preflight FAIL (403), WS PASS
 /api/v1/status
 /api/v1/ws
 ... (no /api/v1/contacts|system|power|rf|video|services|network|audio base routes)
