@@ -5,10 +5,8 @@ Why this exists: It defines the production REST + WebSocket surface consumed by 
 ## Base
 - `/api/v1`
 
-## Auth & RBAC 🔐
-- `X-API-Key` required unless explicitly disabled.
-- `X-Role` enforced when RBAC is enabled.
-- Roles: `viewer`, `operator`, `admin`.
+## Auth 🔐
+- No auth headers are required in the current deployment.
 
 ## REST Endpoints
 
@@ -18,7 +16,7 @@ Why this exists: It defines the production REST + WebSocket surface consumed by 
 
 Example:
 ```bash
-curl -H "X-API-Key: <key>" -H "X-Role: viewer" http://127.0.0.1:8001/api/v1/status
+curl http://127.0.0.1:8001/api/v1/status
 ```
 
 ### Contacts & Telemetry
@@ -41,24 +39,22 @@ Example response excerpt (contacts):
 ```
 
 ### Commands
-- `POST /vrx/tune` (operator+)
-- `POST /scan/start` (operator+)
-- `POST /scan/stop` (operator+)
-- `POST /video/select` (operator+)
-- `POST /system/reboot` (admin)
-- `POST /system/shutdown` (admin)
+- `POST /vrx/tune`
+- `POST /scan/start`
+- `POST /scan/stop`
+- `POST /video/select`
+- `POST /system/reboot` (confirm required + unsafe toggle)
+- `POST /system/shutdown` (confirm required + unsafe toggle)
 
-Example (operator):
+Example:
 ```bash
 curl -X POST http://127.0.0.1:8001/api/v1/vrx/tune \
-  -H "X-API-Key: <key>" -H "X-Role: operator" \
   -d '{"payload":{"vrx_id":1,"freq_hz":5740000000}}'
 ```
 
-Example (admin, unsafe):
+Example (unsafe):
 ```bash
 curl -X POST http://127.0.0.1:8001/api/v1/system/reboot \
-  -H "X-API-Key: <key>" -H "X-Role: admin" \
   -d '{"confirm":true}'
 ```
 
@@ -116,8 +112,6 @@ ACK example:
 }
 ```
 
-## Role-Based Access Notes
-- **Viewer**: read-only endpoints.
-- **Operator**: tuning/scanning/video commands.
-- **Admin**: reboot/shutdown and unsafe operations.
-
+## Access Notes
+- All endpoints are callable without auth headers.
+- Unsafe actions still require `confirm=true` and config enablement.

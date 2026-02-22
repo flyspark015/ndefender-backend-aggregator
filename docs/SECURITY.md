@@ -1,27 +1,22 @@
 # Security 🔐
 
-Why this exists: It defines the security posture, storage best practices, and safe evolution path for future auth mechanisms.
+Why this exists: It defines the security posture for a deployment with no auth headers required and explains how to harden the perimeter.
 
-## API Key Storage Best Practices
-- Never commit keys to git.
-- Store in environment variables or secure config management.
-- Rotate keys whenever operator devices change.
+## Current Auth Posture (No Auth Required)
+- The API accepts requests without `X-API-Key` or role headers.
+- Safety controls still apply to dangerous operations (`confirm=true`, cooldowns).
 
 ## Reverse Proxy Recommendation
 - Deploy behind Nginx or Caddy for TLS termination.
 - Enforce IP allowlists or VPN at the proxy layer.
 
-## Role Separation Recommendation
-- Viewer for read-only dashboards.
-- Operator for tuning/scanning/video control.
-- Admin for reboot/shutdown and unsafe operations.
+## Role Separation (Future Option)
+- If auth is reintroduced later, roles can be mapped to read vs control.
 
 ## Unsafe Operations Disabled by Default
 - Reboot/shutdown are blocked unless explicitly enabled.
 - `confirm=true` required for all unsafe actions.
 
 ## Future JWT Migration Path
-- Keep `X-API-Key` for local deployments.
-- Introduce JWT auth behind reverse proxy without breaking REST routes.
-- RBAC can be embedded in JWT claims when enabled.
-
+- Introduce JWT behind a reverse proxy without changing routes.
+- Embed role claims only if access control becomes necessary.

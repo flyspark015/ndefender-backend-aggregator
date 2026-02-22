@@ -5,7 +5,7 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 ## Current Step
 - Step 1: Roadmap + Repo Skeleton — 🟢 complete
 - Step 2: Configuration Layer — 🟢 complete
-- Step 3: Application Foundation (Auth + CI) — 🟢 complete
+- Step 3: Application Foundation (CI) — 🟢 complete
 - Step 4: State Core + WebSocket Enhancements — 🟢 complete
 - Step 5: Internal Event Bus Scaffold — 🟢 complete
 - Step 6: Ingestion Contracts (No Integrations) — 🟢 complete
@@ -40,7 +40,7 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 ```
 HTTP/2 200
 content-type: application/json
-access-control-allow-headers: Content-Type,X-API-Key,X-Role
+access-control-allow-headers: Content-Type
 access-control-allow-methods: GET,POST,OPTIONS
 ```
 
@@ -54,7 +54,7 @@ access-control-allow-methods: GET,POST,OPTIONS
 HTTP/2 200
 access-control-allow-origin: https://www.figma.com
 access-control-allow-methods: GET,POST,OPTIONS
-access-control-allow-headers: Content-Type,X-API-Key,X-Role
+access-control-allow-headers: Content-Type
 ```
 
 4) WSS test
@@ -76,7 +76,7 @@ CONTACT_NEW
 HTTP/2 200
 access-control-allow-origin: *
 access-control-allow-methods: GET,POST,OPTIONS
-access-control-allow-headers: Content-Type,X-API-Key,X-Role
+access-control-allow-headers: Content-Type
 ```
 
 2) `curl -i -X OPTIONS https://n.flyspark.in/api/v1/status \
@@ -87,7 +87,7 @@ access-control-allow-headers: Content-Type,X-API-Key,X-Role
 HTTP/2 200
 access-control-allow-origin: *
 access-control-allow-methods: GET,POST,OPTIONS
-access-control-allow-headers: Content-Type,X-API-Key,X-Role
+access-control-allow-headers: Content-Type
 ```
 
 3) `python3 tools/ws_public_test.py`
@@ -293,7 +293,7 @@ Evidence:
 HTTP/2 200
 access-control-allow-origin: *
 access-control-allow-methods: GET,POST,OPTIONS
-access-control-allow-headers: Content-Type,X-API-Key,X-Role
+access-control-allow-headers: Content-Type
 server: cloudflare
 ```
 
@@ -465,7 +465,7 @@ CORS (public):
 HTTP/2 200
 access-control-allow-origin: *
 access-control-allow-methods: GET,POST,OPTIONS
-access-control-allow-headers: Content-Type,X-API-Key,X-Role
+access-control-allow-headers: Content-Type
 ```
 
 GREEN_SIGNAL report:
@@ -512,3 +512,35 @@ Summary:
 - Local REST + WS: PASS
 - Command write endpoints: not exposed (405) -> FAIL in write-path test
 - RemoteID: DEGRADED (tshark/mon0 errors in journal)
+
+## Auth Removal & No-Auth Confirmation (2026-02-23)
+- [x] Removed API key / RBAC enforcement in aggregator.
+- [x] Updated CORS allow-headers to `Content-Type` only.
+- [x] Verified live Flask backend responds without auth.
+
+### Commands + Evidence
+1) Restart live backend
+```
+sudo systemctl restart ndefender-backend
+```
+
+2) Local health/status (no headers)
+```
+$ curl -sS http://127.0.0.1:8000/api/v1/health | jq .
+{"status":"ok","timestamp_ms":1771802618711}
+```
+
+3) Public health/status (no headers)
+```
+$ curl -sS https://n.flyspark.in/api/v1/health | jq .
+{"status":"ok","timestamp_ms":1771802623999}
+```
+
+4) Lint + tests (post-auth-removal)
+```
+$ /home/toybook/.venvs/ndefender-agg/bin/ruff check .
+All checks passed!
+
+$ /home/toybook/.venvs/ndefender-agg/bin/pytest
+============================== 24 passed in 1.19s ==============================
+```

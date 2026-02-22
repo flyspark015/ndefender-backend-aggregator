@@ -11,7 +11,6 @@ Why this exists: This document defines every configuration section so deployment
 ### system_controller
 - `base_url`: Base URL for the System Controller API.
 - `timeout_seconds`: Per-request timeout in seconds.
-- `api_key`: Optional API key for System Controller authentication.
 
 ### esp32
 - `serial_port`: Path to the ESP32 serial device.
@@ -29,15 +28,6 @@ Why this exists: This document defines every configuration section so deployment
 ### remoteid
 - `jsonl_path`: Path to RemoteID JSONL ground-truth log.
 - `tail_poll_interval_ms`: Poll interval for tailer.
-
-### auth
-- `api_key_required`: Enforce `X-API-Key` when true.
-- `api_key`: Shared API key for GUI and tooling.
-- `rbac_enabled`: Enables role-based access control checks.
-
-### rbac
-- `roles`: Role definitions and permissions.
-- `permissions`: Allowed actions for each role.
 
 ### safety
 - `allow_unsafe_operations`: Global switch for dangerous actions.
@@ -72,9 +62,8 @@ export NDEFENDER_CONFIG=/opt/ndefender/config/production.yaml
 The override file is merged on top of `config/default.yaml`. Only the keys you set are changed.
 
 ## Security Notes 🔐
-- Never commit real API keys to git.
-- Keep `api_key_required` enabled in production.
-- Rotate `api_key` when operators or devices change.
+- The aggregator does not require auth headers in the current deployment.
+- Protect the API with network segmentation or a reverse proxy if exposed.
 
 ## Switching Environments
 - Development: set `NDEFENDER_CONFIG` to a local override file.

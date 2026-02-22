@@ -3,8 +3,8 @@
 Why this exists: This roadmap keeps delivery phased, testable, and auditable so integration work stays aligned with safety and uptime requirements.
 
 ## Phases
-- [x] Phase 1: Skeleton + Auth + CI
-  - Establish FastAPI service, config loader, auth, RBAC, and baseline CI.
+- [x] Phase 1: Skeleton + CI
+  - Establish FastAPI service, config loader, and baseline CI.
 - [x] Phase 2: State Core + WS
   - Central async state store and WebSocket broadcast manager.
 - [x] Phase 3: System Controller Integration

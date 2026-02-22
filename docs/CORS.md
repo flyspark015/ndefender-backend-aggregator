@@ -8,7 +8,7 @@ Backend Aggregator CORS is controlled via config (`cors` in `config/default.yaml
   - `https://figma.com`
   - Regex: `^https://([a-z0-9-]+\.)*figma\.com$`
 - Allowed methods: `GET`, `POST`, `OPTIONS`
-- Allowed headers: `Content-Type`, `X-API-Key`, `X-Role`
+- Allowed headers: `Content-Type`
 - Credentials: `false`
 - Max age: `86400`
 
@@ -24,7 +24,7 @@ cors:
     - "https://staging.figma.com"
   allow_origin_regex: "^https://([a-z0-9-]+\\.)*figma\\.com$"
   allow_methods: ["GET", "POST", "OPTIONS"]
-  allow_headers: ["Content-Type", "X-API-Key", "X-Role"]
+  allow_headers: ["Content-Type"]
   allow_credentials: false
   max_age: 86400
 ```
@@ -39,11 +39,11 @@ export NDEFENDER_CONFIG=/opt/ndefender/config/override.yaml
 curl -i -X OPTIONS https://n.flyspark.in/api/v1/status \
   -H "Origin: https://www.figma.com" \
   -H "Access-Control-Request-Method: GET" \
-  -H "Access-Control-Request-Headers: X-API-Key, X-Role, Content-Type"
+  -H "Access-Control-Request-Headers: Content-Type"
 ```
 
 Expected headers:
 - `Access-Control-Allow-Origin: https://www.figma.com`
 - `Access-Control-Allow-Methods: GET,POST,OPTIONS`
-- `Access-Control-Allow-Headers: Content-Type,X-API-Key,X-Role`
+- `Access-Control-Allow-Headers: Content-Type`
 - `Access-Control-Allow-Credentials: false`

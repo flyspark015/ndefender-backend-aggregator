@@ -4,7 +4,6 @@ Why this exists: It is the operator handbook for production deployments, includi
 
 ## Service Startup Checklist
 - [ ] `config/default.yaml` present and validated.
-- [ ] API key distributed to GUI clients.
 - [ ] System Controller reachable at configured base URL.
 - [ ] AntSDR JSONL path accessible and writable.
 - [ ] RemoteID JSONL path accessible and writable.
@@ -45,6 +44,5 @@ ls -lah /opt/ndefender/logs/
 
 ## Safe Reboot Flow
 1. Ensure `allow_unsafe_operations=true` in config.
-2. Issue command with `confirm=true` and admin role.
+2. Issue command with `confirm=true`.
 3. Observe `COMMAND_ACK` in WS stream.
-

@@ -1,6 +1,6 @@
 # PUBLIC_TEST_MODE (Test-Only)
 
-**WARNING:** This mode disables all auth and origin restrictions. Use ONLY for short-lived public tests.
+**WARNING:** This mode disables origin restrictions. Use ONLY for short-lived public tests.
 
 ## Enable
 Set the environment variable on the backend service and restart:
@@ -23,10 +23,9 @@ sudo systemctl restart ndefender-backend
 ```
 
 ## Behavior When Enabled
-- No API keys, no auth, no RBAC enforcement
 - CORS allows all origins (`*`)
 - Allowed methods: `GET, POST, OPTIONS`
-- Allowed headers: `Content-Type, X-API-Key, X-Role`
+- Allowed headers: `Content-Type`
 - WebSocket accepts all origins (or missing Origin)
 
 ## Risks

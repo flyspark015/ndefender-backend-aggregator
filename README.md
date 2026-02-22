@@ -46,8 +46,8 @@ JSONL feeds from AntSDR and RemoteID are authoritative. The aggregator tails the
 WebSocket emits normalized event envelopes for low-latency UI updates. REST remains the snapshot source of truth.
 
 ## 🔐 Security Model
-- API Key authentication (`X-API-Key`) enforced by default.
-- RBAC (`X-Role`) with `viewer`, `operator`, `admin` roles.
+- No auth headers required in current deployment.
+- Perimeter security recommended (VPN, allowlists, reverse proxy).
 
 ## 🚨 Safety Model
 - Reboot/shutdown are disabled by default.
