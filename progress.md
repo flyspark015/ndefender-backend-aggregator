@@ -236,6 +236,24 @@ Result: No 403 observed; no edge-layer change required.
 
 Evidence (from Step 1): 200 responses with `server: cloudflare` for `/health` and `/status`.
 
+### Update (2026-02-22 13:35 UTC)
+Public REST returns 403 for `urllib` (no browser UA) with Cloudflare error 1010, while browser-like UA returns 200. This indicates a Cloudflare bot/BI check blocking non-browser signatures. Needs an edge rule to allow `/api/v1/*` without bot/BI enforcement.
+
+Evidence:
+1) Python urllib (no UA) -> 403
+```
+status 403
+server cloudflare
+body b'error code: 1010'
+```
+
+2) Python with browser UA -> 200
+```
+status 200
+server cloudflare
+body b'{"status":"ok","timestamp_ms":1771767364663}'
+```
+
 ## Step 3 — Public CORS Preflight (2026-02-22)
 Evidence:
 1) `curl -i -X OPTIONS https://n.flyspark.in/api/v1/status \
