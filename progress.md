@@ -200,3 +200,26 @@ Evidence:
 - Local report: `reports/diagnostics_local_20260222_122423.md` + `.json`
 - Public report: `reports/diagnostics_public_20260222_122430.md` + `.json`
 - Final summary: `reports/final_summary_20260222_122447.md`
+
+## Backend Verification + Diagnostics Update (2026-02-22)
+Commands:
+```
+sudo systemctl status ndefender-backend --no-pager
+sudo systemctl cat ndefender-backend
+ps aux | grep -E "python|uvicorn|gunicorn|flask|fastapi" | head -n 30
+sudo ss -ltnp | grep :8000
+curl -sS http://127.0.0.1:8000/api/v1/health
+curl -sS http://127.0.0.1:8000/api/v1/status | head -c 600
+for p in contacts system power rf video services network audio; do echo "== $p =="; curl -sS -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8000/api/v1/$p; done
+python3 tools/run_full_diagnostics.py --base http://127.0.0.1:8000/api/v1
+python3 tools/run_full_diagnostics.py --base https://n.flyspark.in/api/v1
+```
+
+Evidence:
+- /api/v1 endpoints all 200 locally (contacts/system/power/rf/video/services/network/audio)
+- diagnostics local: all REST endpoints PASS; WS PASS first type CONTACT_NEW
+- diagnostics public: REST endpoints 403; WS PASS
+
+Reports:
+- `reports/diagnostics_20260222_131001.md/.json` (local)
+- `reports/diagnostics_20260222_131011.md/.json` (public)

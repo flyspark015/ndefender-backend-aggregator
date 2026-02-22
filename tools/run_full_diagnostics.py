@@ -7,13 +7,13 @@ import argparse
 import json
 import os
 import subprocess
+import re
 import sys
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 
@@ -70,6 +70,7 @@ class JournalResult:
     ok: bool
     error: Optional[str]
     snippet: str
+    highlights: List[str]
 
 
 @dataclass
@@ -485,14 +486,38 @@ def check_systemd(units: List[str]) -> List[SystemdResult]:
     return results
 
 
+def _journal_highlights(text: str, limit: int = 80) -> List[str]:
+    highlights: List[str] = []
+    pattern = re.compile(r"(?i)(error|exception|traceback|\\bws\\b|websocket)")
+    for line in text.splitlines():
+        if pattern.search(line):
+            highlights.append(line)
+            if len(highlights) >= limit:
+                break
+    return highlights
+
+
 def check_journal(unit: str, lines: int = 120) -> JournalResult:
     cmd = ["journalctl", "-u", unit, "-n", str(lines), "--no-pager"]
     code, out, err, exc = _run_cmd(cmd, timeout_s=8.0)
     if exc:
-        return JournalResult(unit=unit, ok=False, error=exc, snippet="")
+        return JournalResult(unit=unit, ok=False, error=exc, snippet="", highlights=[])
     if code != 0:
-        return JournalResult(unit=unit, ok=False, error=err.strip() or "journalctl_failed", snippet=out[:1200])
-    return JournalResult(unit=unit, ok=True, error=None, snippet=out[-1200:])
+        return JournalResult(
+            unit=unit,
+            ok=False,
+            error=err.strip() or "journalctl_failed",
+            snippet=out[:1200],
+            highlights=_journal_highlights(out),
+        )
+    snippet = out[-1200:]
+    return JournalResult(
+        unit=unit,
+        ok=True,
+        error=None,
+        snippet=snippet,
+        highlights=_journal_highlights(out),
+    )
 
 
 def derive_ui_blank_causes(
@@ -529,10 +554,8 @@ def derive_ui_blank_causes(
             causes.append((70, f"systemd {unit} not active", f"state={state.active} err={state.error}"))
 
     for journal in journals:
-        if journal.ok and "ERR" in journal.snippet:
-            causes.append((60, f"errors in {journal.unit} journal", "ERR found in last 120 lines"))
-        if journal.ok and "Traceback" in journal.snippet:
-            causes.append((60, f"exceptions in {journal.unit} journal", "Traceback found in last 120 lines"))
+        if journal.ok and journal.highlights:
+            causes.append((60, f"journal warnings in {journal.unit}", "error/exception/traceback/ws lines detected"))
 
     if not causes:
         causes.append((10, "No obvious backend failures", "Backend responses look healthy; check UI assets/build."))
@@ -605,6 +628,10 @@ def render_markdown(report: DiagnosticsReport, report_path: str) -> str:
         lines.append(f"### {journal.unit}")
         if journal.error:
             lines.append(f"Error: `{journal.error}`")
+        if journal.highlights:
+            lines.append("Highlights:")
+            for line in journal.highlights:
+                lines.append(f"- {line}")
         lines.append("```")
         lines.append(journal.snippet)
         lines.append("```")
@@ -658,13 +685,6 @@ def write_json_report(report: DiagnosticsReport, report_path: str) -> str:
     return report_path
 
 
-def label_for_base(base: str) -> str:
-    host = urlparse(base).hostname or ""
-    if host in ("127.0.0.1", "localhost"):
-        return "local"
-    return "public"
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run N-Defender diagnostics")
     parser.add_argument("--base", required=True, help="Base API URL, e.g. http://127.0.0.1:8000/api/v1")
@@ -672,7 +692,6 @@ def main() -> int:
 
     base_api, base_root = normalize_base(args.base)
     timestamp = now_timestamp()
-    label = label_for_base(base_api)
 
     reports_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reports")
     os.makedirs(reports_dir, exist_ok=True)
@@ -720,8 +739,8 @@ def main() -> int:
         ui_blank_causes=ui_causes,
     )
 
-    md_path = os.path.join(reports_dir, f"diagnostics_{label}_{timestamp}.md")
-    json_path = os.path.join(reports_dir, f"diagnostics_{label}_{timestamp}.json")
+    md_path = os.path.join(reports_dir, f"diagnostics_{timestamp}.md")
+    json_path = os.path.join(reports_dir, f"diagnostics_{timestamp}.json")
 
     render_markdown(report, md_path)
     write_json_report(report, json_path)
