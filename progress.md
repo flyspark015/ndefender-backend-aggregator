@@ -470,3 +470,21 @@ access-control-allow-headers: Content-Type,X-API-Key,X-Role
 
 GREEN_SIGNAL report:
 - `reports/GREEN_SIGNAL_20260222_142140.md` (RED SIGNAL: public REST diagnostics still 403)
+
+## GREEN SIGNAL End-to-End Suite (2026-02-22 14:38 UTC)
+Commands:
+```
+cd /home/toybook/ndefender-backend-aggregator
+python3 tools/diagnostics/run_green_signal.py --local http://127.0.0.1:8000/api/v1 --public https://n.flyspark.in/api/v1 --out-md reports/README_GREEN_SIGNAL.md --out-json reports/green_signal.json
+cat reports/README_GREEN_SIGNAL.md
+```
+
+Key outputs:
+- `reports/README_GREEN_SIGNAL.md` (RED SIGNAL: public REST 403 / error code 1010)
+- `reports/green_signal.json`
+- Local REST + WS PASS; Public WS PASS; Public REST + CORS FAIL (403).
+- Command endpoints `/command,/cmd,/control` -> 405; direct command endpoints not detected.
+
+Summary:
+- Overall status: RED SIGNAL (public REST blocked for non-browser clients)
+- Root cause: Cloudflare bot/WAF still blocking REST + preflight for non-browser clients.

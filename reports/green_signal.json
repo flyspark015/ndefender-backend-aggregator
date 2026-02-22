@@ -1,0 +1,309 @@
+{
+  "meta": {
+    "generated_at": "2026-02-22T14:38:56Z",
+    "hostname": "ndefender-pi",
+    "local_base": "http://127.0.0.1:8000/api/v1",
+    "public_base": "https://n.flyspark.in/api/v1"
+  },
+  "rest": {
+    "local": [
+      {
+        "endpoint": "health",
+        "status": 200,
+        "latency_ms": 16,
+        "json_ok": true,
+        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1771771124530}\n"
+      },
+      {
+        "endpoint": "status",
+        "status": 200,
+        "latency_ms": 828,
+        "json_ok": true,
+        "snippet": "{\"audio\":{\"muted\":false,\"volume_percent\":100},\"contacts\":[{\"id\":\"rf:1350000000\",\"last_seen_ts\":1771771124353,\"type\":\"UNKNOWN_RF\",\"unknown_rf\":{\"bandwidth_class\":\"narrow\",\"center_hz\":1350000000,\"family_hint\":\"unknown\",\"peak_db\":85.89897138241005,\"snr_db\":12.600681135039792}},{\"id\":\"rf:1348000000\",\"la"
+      },
+      {
+        "endpoint": "contacts",
+        "status": 200,
+        "latency_ms": 5,
+        "json_ok": true,
+        "snippet": "{\"contacts\":[{\"id\":\"rf:1354000000\",\"last_seen_ts\":1771771124947,\"type\":\"UNKNOWN_RF\",\"unknown_rf\":{\"bandwidth_class\":\"narrow\",\"center_hz\":1354000000,\"family_hint\":\"unknown\",\"peak_db\":84.81748853422621,\"snr_db\":11.530053465458565}},{\"id\":\"rf:1352000000\",\"last_seen_ts\":1771771124646,\"type\":\"UNKNOWN_RF\""
+      },
+      {
+        "endpoint": "system",
+        "status": 200,
+        "latency_ms": 16,
+        "json_ok": true,
+        "snippet": "{\"cpu_temp_c\":60.05,\"cpu_usage_percent\":64.84654263354707,\"disk_total_gb\":117,\"disk_used_gb\":69,\"load_15m\":6.29150390625,\"load_1m\":6.51708984375,\"load_5m\":6.36572265625,\"ram_total_mb\":16215,\"ram_used_mb\":7231,\"status\":\"ok\",\"throttled_flags\":0,\"uptime_s\":354406}\n"
+      },
+      {
+        "endpoint": "power",
+        "status": 200,
+        "latency_ms": 26,
+        "json_ok": true,
+        "snippet": "{\"current_a\":null,\"input_power_w\":null,\"input_vbus_v\":null,\"pack_voltage_v\":null,\"per_cell_v\":null,\"soc_percent\":null,\"state\":null,\"status\":\"degraded\",\"time_to_empty_s\":null,\"time_to_full_s\":null}\n"
+      },
+      {
+        "endpoint": "rf",
+        "status": 200,
+        "latency_ms": 12,
+        "json_ok": true,
+        "snippet": "{\"last_event\":{\"id\":\"rf:1356000000\",\"last_seen_ts\":1771771125253,\"type\":\"UNKNOWN_RF\",\"unknown_rf\":{\"bandwidth_class\":\"narrow\",\"center_hz\":1356000000,\"family_hint\":\"unknown\",\"peak_db\":86.9146245711305,\"snr_db\":13.60119498540351}},\"last_event_type\":\"CONTACT_UPDATE\",\"last_timestamp_ms\":1771771125253,\"s"
+      },
+      {
+        "endpoint": "video",
+        "status": 200,
+        "latency_ms": 7,
+        "json_ok": true,
+        "snippet": "{\"selected\":1,\"status\":\"ok\"}\n"
+      },
+      {
+        "endpoint": "services",
+        "status": 200,
+        "latency_ms": 274,
+        "json_ok": true,
+        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":100521,\"sub_state\":\"running\"},{\"active_"
+      },
+      {
+        "endpoint": "network",
+        "status": 200,
+        "latency_ms": 492,
+        "json_ok": true,
+        "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:ae02:e0f1:7805:a92e\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"}\n"
+      },
+      {
+        "endpoint": "audio",
+        "status": 200,
+        "latency_ms": 22,
+        "json_ok": true,
+        "snippet": "{\"muted\":false,\"status\":\"ok\",\"volume_percent\":100}\n"
+      }
+    ],
+    "public": [
+      {
+        "endpoint": "health",
+        "status": 403,
+        "latency_ms": 627,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "status",
+        "status": 403,
+        "latency_ms": 445,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "contacts",
+        "status": 403,
+        "latency_ms": 476,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "system",
+        "status": 403,
+        "latency_ms": 532,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "power",
+        "status": 403,
+        "latency_ms": 904,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "rf",
+        "status": 403,
+        "latency_ms": 429,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "video",
+        "status": 403,
+        "latency_ms": 799,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "services",
+        "status": 403,
+        "latency_ms": 904,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "network",
+        "status": 403,
+        "latency_ms": 370,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      },
+      {
+        "endpoint": "audio",
+        "status": 403,
+        "latency_ms": 676,
+        "json_ok": false,
+        "snippet": "error code: 1010"
+      }
+    ]
+  },
+  "ws": {
+    "local": {
+      "url": "ws://127.0.0.1:8000/api/v1/ws",
+      "connect_ok": true,
+      "msgs_received": 10,
+      "first_type": "CONTACT_NEW",
+      "first_200": "{\"type\":\"CONTACT_NEW\",\"timestamp\":1771771132464,\"source\":\"rf_sensor\",\"data\":{\"id\":\"rf:3144000000\",\"type\":\"UNKNOWN_RF\",\"last_seen_ts\":1771771132349,\"unknown_rf\":{\"center_hz\":3144000000,\"snr_db\":10.8246",
+      "first_message": "{\"type\":\"CONTACT_NEW\",\"timestamp\":1771771132464,\"source\":\"rf_sensor\",\"data\":{\"id\":\"rf:3144000000\",\"type\":\"UNKNOWN_RF\",\"last_seen_ts\":1771771132349,\"unknown_rf\":{\"center_hz\":3144000000,\"snr_db\":10.824635589900609,\"peak_db\":79.47051144002315,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\"}}}",
+      "envelope_valid": true,
+      "error": null
+    },
+    "public": {
+      "url": "wss://n.flyspark.in/api/v1/ws",
+      "connect_ok": true,
+      "msgs_received": 10,
+      "first_type": "CONTACT_NEW",
+      "first_200": "{\"type\":\"CONTACT_NEW\",\"timestamp\":1771771133140,\"source\":\"rf_sensor\",\"data\":{\"id\":\"rf:3148000000\",\"type\":\"UNKNOWN_RF\",\"last_seen_ts\":1771771132871,\"unknown_rf\":{\"center_hz\":3148000000,\"snr_db\":11.8190",
+      "first_message": "{\"type\":\"CONTACT_NEW\",\"timestamp\":1771771133140,\"source\":\"rf_sensor\",\"data\":{\"id\":\"rf:3148000000\",\"type\":\"UNKNOWN_RF\",\"last_seen_ts\":1771771132871,\"unknown_rf\":{\"center_hz\":3148000000,\"snr_db\":11.819040471051835,\"peak_db\":80.45544151819544,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\"}}}",
+      "envelope_valid": true,
+      "error": null
+    }
+  },
+  "cors": [
+    {
+      "url": "https://n.flyspark.in/api/v1/status",
+      "origin": "https://www.figma.com",
+      "http_status": 403,
+      "allow_origin": null,
+      "allow_methods": null,
+      "allow_headers": null,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://n.flyspark.in/api/v1/status",
+      "origin": "http://127.0.0.1",
+      "http_status": 403,
+      "allow_origin": null,
+      "allow_methods": null,
+      "allow_headers": null,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://n.flyspark.in/api/v1/ws",
+      "origin": "https://www.figma.com",
+      "http_status": 403,
+      "allow_origin": null,
+      "allow_methods": null,
+      "allow_headers": null,
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://n.flyspark.in/api/v1/ws",
+      "origin": "http://127.0.0.1",
+      "http_status": 403,
+      "allow_origin": null,
+      "allow_methods": null,
+      "allow_headers": null,
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ],
+  "services": {
+    "ndefender-backend": {
+      "unit": "ndefender-backend",
+      "active": "active",
+      "substate": "running",
+      "main_pid": "3950898",
+      "error": null
+    },
+    "cloudflared": {
+      "unit": "cloudflared",
+      "active": "active",
+      "substate": "running",
+      "main_pid": "3895612",
+      "error": null
+    },
+    "ndefender-remoteid-engine": {
+      "unit": "ndefender-remoteid-engine",
+      "active": "activating",
+      "substate": "auto-restart",
+      "main_pid": "0",
+      "error": null
+    },
+    "ndefender-rfscan": {
+      "unit": "ndefender-rfscan",
+      "active": "active",
+      "substate": "running",
+      "main_pid": "1335",
+      "error": null
+    },
+    "gpsd": {
+      "unit": "gpsd",
+      "active": "active",
+      "substate": "running",
+      "main_pid": "1489",
+      "error": null
+    }
+  },
+  "commands": {
+    "error": "No command endpoint found (generic: /command,/cmd,/control and direct: /vrx/tune,/scan/start,/scan/stop,/video/select)",
+    "generic_endpoint_status": {
+      "command": 405,
+      "cmd": 405,
+      "control": 405
+    },
+    "results": []
+  },
+  "subsystems": [
+    {
+      "name": "system_metrics",
+      "status": "PASS",
+      "evidence": "cpu_usage=64.84731418583381, temp=58.95"
+    },
+    {
+      "name": "services_status",
+      "status": "PASS",
+      "evidence": "services_count=6"
+    },
+    {
+      "name": "power_ups",
+      "status": "DEGRADED",
+      "evidence": "power fields present but null"
+    },
+    {
+      "name": "network",
+      "status": "PASS",
+      "evidence": "connected=True ssid=Airtel_Toybook"
+    },
+    {
+      "name": "rf_pipeline",
+      "status": "PASS",
+      "evidence": "rf_last=1771771136057 rf_sensor_state=ok"
+    },
+    {
+      "name": "remoteid",
+      "status": "DEGRADED",
+      "evidence": "state=DEGRADED capture_active=True"
+    },
+    {
+      "name": "esp32_link",
+      "status": "PASS",
+      "evidence": "device=/dev/ndefender-esp32"
+    },
+    {
+      "name": "contacts_pipeline",
+      "status": "PASS",
+      "evidence": "contact_events=2"
+    }
+  ],
+  "missing_status_keys": [],
+  "diagnosis": {
+    "public_rest_ok": false,
+    "local_rest_ok": true,
+    "public_ws_ok": true,
+    "local_ws_ok": true
+  }
+}
