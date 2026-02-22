@@ -97,3 +97,17 @@ received=1, first_type=CONTACT_NEW
 ```
 
 Revert steps recorded in `docs/PUBLIC_TEST_MODE.md`.
+
+## Diagnostics Runner (2026-02-22)
+- [x] Runner skeleton + REST probes + report generation
+- [x] Local run completed
+
+Evidence:
+- report_md: `reports/diagnostics_20260222_115655.md`
+- report_json: `reports/diagnostics_20260222_115655.json`
+- summary snippet:
+```
+health PASS 200
+status DEGRADED 200
+contacts FAIL 404
+```
