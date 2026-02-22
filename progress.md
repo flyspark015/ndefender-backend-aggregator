@@ -158,6 +158,56 @@ Evidence:
 2) Running backend routes (from `/opt/ndefender/backend/app.py`)
 ```
 /api/v1/health
+
+## Step 0 — Inventory + Baseline Snapshot (2026-02-22)
+Evidence:
+1) `systemctl status ndefender-backend --no-pager`
+```
+● ndefender-backend.service - N-Defender Backend (Flask + WebSocket)
+     Loaded: loaded (/etc/systemd/system/ndefender-backend.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2026-02-22 17:48:34 IST; 1h 9min ago
+   Main PID: 3950898 (python)
+     CGroup: /system.slice/ndefender-backend.service
+             └─3950898 /opt/ndefender/backend/venv/bin/python -u /opt/ndefender/backend/app.py
+```
+
+2) `systemctl status cloudflared --no-pager`
+```
+● cloudflared.service - cloudflared
+     Loaded: loaded (/etc/systemd/system/cloudflared.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2026-02-22 16:28:47 IST; 2h 29min ago
+   Main PID: 3895612 (cloudflared)
+     CGroup: /system.slice/cloudflared.service
+             └─3895612 /usr/bin/cloudflared --no-autoupdate --config /etc/cloudflared/config.yml tunnel run
+```
+
+3) Local REST
+```
+curl http://127.0.0.1:8000/api/v1/health
+{"status":"ok","timestamp_ms":1771766888077}
+
+curl http://127.0.0.1:8000/api/v1/status
+{"audio":{"muted":false,"volume_percent":100},"contacts":[{"id":"rf:3414000000","last_seen_ts":1771766889785, ... }], ...}
+```
+
+4) Public REST (with headers)
+```
+curl -D - https://n.flyspark.in/api/v1/health
+HTTP/2 200
+content-type: application/json
+access-control-allow-origin: *
+server: cloudflare
+
+{"status":"ok","timestamp_ms":1771766894712}
+
+curl -D - https://n.flyspark.in/api/v1/status
+HTTP/2 200
+content-type: application/json
+access-control-allow-origin: *
+server: cloudflare
+
+{"audio":{"muted":false,"volume_percent":100},"contacts":[{"id":"rf:3476000000","last_seen_ts":1771766897914, ... }], ...}
+```
 /api/v1/status
 /api/v1/ws
 ... (no /api/v1/contacts|system|power|rf|video|services|network|audio base routes)
