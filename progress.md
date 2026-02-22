@@ -254,6 +254,29 @@ server cloudflare
 body b'{"status":"ok","timestamp_ms":1771767364663}'
 ```
 
+### Step 2 Instructions (Cloudflare Dashboard)
+Apply a rule to allow `/api/v1/*` from non-browser clients.
+
+Rule expression:
+```
+(http.host eq "n.flyspark.in" and starts_with(http.request.uri.path, "/api/v1/"))
+```
+
+Action: `Skip`
+Skip components:
+- Managed Rules
+- Browser Integrity Check
+- Bot Fight Mode / Super Bot Fight Mode
+- (Optional) Rate Limiting only if required
+
+### Step 2 Verification Script
+Script: `tools/verify_public_rest_fix.py`
+
+Runs:
+- `curl -i https://n.flyspark.in/api/v1/health`
+- Python urllib GET (no UA) to `/health` (must be 200)
+- `python3 tools/run_full_diagnostics.py --base https://n.flyspark.in/api/v1`
+
 ## Step 3 — Public CORS Preflight (2026-02-22)
 Evidence:
 1) `curl -i -X OPTIONS https://n.flyspark.in/api/v1/status \
