@@ -62,3 +62,38 @@ access-control-allow-headers: Content-Type,X-API-Key,X-Role
 {"type":"CONTACT_NEW","timestamp":1771757947009,"source":"rf_sensor",...}
 CONTACT_NEW
 ```
+
+## Public Test Mode (2026-02-22)
+- [x] PUBLIC_TEST_MODE toggle added
+- [x] CORS open verified
+- [x] WS open verified
+- [x] curl tests recorded (outputs)
+- [x] revert steps recorded
+
+### Evidence
+1) `curl -i https://n.flyspark.in/api/v1/health`
+```
+HTTP/2 200
+access-control-allow-origin: *
+access-control-allow-methods: GET,POST,OPTIONS
+access-control-allow-headers: Content-Type,X-API-Key,X-Role
+```
+
+2) `curl -i -X OPTIONS https://n.flyspark.in/api/v1/status \
+  -H "Origin: https://www.figma.com" \
+  -H "Access-Control-Request-Method: GET" \
+  -H "Access-Control-Request-Headers: Content-Type"`
+```
+HTTP/2 200
+access-control-allow-origin: *
+access-control-allow-methods: GET,POST,OPTIONS
+access-control-allow-headers: Content-Type,X-API-Key,X-Role
+```
+
+3) `python3 tools/ws_public_test.py`
+```
+connected
+received=1, first_type=CONTACT_NEW
+```
+
+Revert steps recorded in `docs/PUBLIC_TEST_MODE.md`.
