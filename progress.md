@@ -269,6 +269,12 @@ Skip components:
 - Bot Fight Mode / Super Bot Fight Mode
 - (Optional) Rate Limiting only if required
 
+Dashboard URL (best-guess):
+`https://dash.cloudflare.com/?to=/:account/:zone/security/waf`
+
+Fallback navigation:
+Cloudflare Dashboard -> select `flyspark.in` zone -> `Security` -> `WAF` -> `Custom Rules` (or `Rules` -> `WAF rules`) -> `Create rule`
+
 ### Step 2 Verification Script
 Script: `tools/verify_public_rest_fix.py`
 
@@ -309,6 +315,41 @@ Public run:
 - report_md: `reports/diagnostics_20260222_133353.md`
 - report_json: `reports/diagnostics_20260222_133353.json`
 - summary: REST endpoints FAIL (403), CORS preflight FAIL (403), WS PASS
+
+## Step 1 — Cloudflare Block Evidence (2026-02-22 13:55 UTC)
+Public REST shows mixed behavior: curl returns 200, but Python urllib (no UA) and diagnostics return 403 with Cloudflare error 1010.
+
+Evidence:
+1) `curl -i https://n.flyspark.in/api/v1/health`
+```
+HTTP/2 200
+content-type: application/json
+server: cloudflare
+{"status":"ok","timestamp_ms":1771768538788}
+```
+
+2) `curl -i https://n.flyspark.in/api/v1/status`
+```
+HTTP/2 200
+content-type: application/json
+server: cloudflare
+{"audio":{"muted":false,"volume_percent":100},"contacts":[...]}
+```
+
+3) `python3 tools/run_full_diagnostics.py --base https://n.flyspark.in/api/v1`
+```
+report_md=/home/toybook/ndefender-backend-aggregator/reports/diagnostics_20260222_135547.md
+report_json=/home/toybook/ndefender-backend-aggregator/reports/diagnostics_20260222_135547.json
+Summary: REST endpoints FAIL (403); WS PASS
+```
+
+4) Python urllib (no UA) -> 403 + error code 1010
+```
+status 403
+Server: cloudflare
+CF-RAY: 9d1efc2efd25fe0d-SIN
+body: b'error code: 1010'
+```
 /api/v1/status
 /api/v1/ws
 ... (no /api/v1/contacts|system|power|rf|video|services|network|audio base routes)
