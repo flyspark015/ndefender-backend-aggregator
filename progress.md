@@ -31,6 +31,34 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 
 ## Public API Exposure (2026-02-22)
 - Step A: Cloudflared install on Pi — ✅
-- Step B: Cloudflared auth + tunnel create — ⏳ waiting on Cloudflare login
-- Step C: CORS policy + WS origin enforcement in backend aggregator — ✅
-- Step D: Public HTTPS/WSS verification + evidence capture — ⏳ pending
+- Step B: Cloudflared auth + tunnel create — ✅
+- Step C: CORS policy + WS origin enforcement — ✅
+- Step D: Public HTTPS/WSS verification + evidence capture — ✅
+
+### Evidence
+1) `curl -I https://n.flyspark.in/api/v1/health`
+```
+HTTP/2 200
+content-type: application/json
+access-control-allow-headers: Content-Type,X-API-Key,X-Role
+access-control-allow-methods: GET,POST,OPTIONS
+```
+
+2) `curl https://n.flyspark.in/api/v1/status`
+```
+{"contacts":[{"id":"rf:3586000000","last_seen_ts":1771757937112,"type":"UNKNOWN_RF"}
+```
+
+3) CORS preflight (OPTIONS)
+```
+HTTP/2 200
+access-control-allow-origin: https://www.figma.com
+access-control-allow-methods: GET,POST,OPTIONS
+access-control-allow-headers: Content-Type,X-API-Key,X-Role
+```
+
+4) WSS test
+```
+{"type":"CONTACT_NEW","timestamp":1771757947009,"source":"rf_sensor",...}
+CONTACT_NEW
+```
