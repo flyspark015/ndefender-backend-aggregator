@@ -249,6 +249,14 @@ access-control-allow-methods: GET,POST,OPTIONS
 access-control-allow-headers: Content-Type,X-API-Key,X-Role
 server: cloudflare
 ```
+
+## Step 4 — Public WS Must Work (2026-02-22)
+Evidence:
+1) `python3 tools/ws_public_test.py`
+```
+connected
+received=1, first_type=CONTACT_NEW
+```
 /api/v1/status
 /api/v1/ws
 ... (no /api/v1/contacts|system|power|rf|video|services|network|audio base routes)
