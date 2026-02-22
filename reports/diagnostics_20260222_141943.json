@@ -1,0 +1,238 @@
+{
+  "base": "https://n.flyspark.in/api/v1",
+  "base_api": "https://n.flyspark.in/api/v1",
+  "base_root": "https://n.flyspark.in",
+  "generated_at": "2026-02-22T14:19:51.773905+00:00",
+  "health_attempts": [
+    {
+      "name": "health",
+      "url": "https://n.flyspark.in/api/v1/health",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 758,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "health",
+      "url": "https://n.flyspark.in/health",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 611,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "health",
+      "url": "https://n.flyspark.in/api/v1/health",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 758,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "status",
+      "url": "https://n.flyspark.in/api/v1/status",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 762,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "contacts",
+      "url": "https://n.flyspark.in/api/v1/contacts",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 475,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "system",
+      "url": "https://n.flyspark.in/api/v1/system",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 796,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "power",
+      "url": "https://n.flyspark.in/api/v1/power",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 515,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "rf",
+      "url": "https://n.flyspark.in/api/v1/rf",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 485,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "video",
+      "url": "https://n.flyspark.in/api/v1/video",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 423,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "services",
+      "url": "https://n.flyspark.in/api/v1/services",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 835,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "network",
+      "url": "https://n.flyspark.in/api/v1/network",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 573,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    },
+    {
+      "name": "audio",
+      "url": "https://n.flyspark.in/api/v1/audio",
+      "status": "FAIL",
+      "http_status": 403,
+      "latency_ms": 470,
+      "content_type": "text/plain; charset=UTF-8",
+      "snippet": "error code: 1010",
+      "json_ok": false,
+      "error": "HTTP Error 403: Forbidden",
+      "missing_keys": [],
+      "present_keys": []
+    }
+  ],
+  "cors": {
+    "url": "https://n.flyspark.in/api/v1/status",
+    "status": "FAIL",
+    "http_status": 403,
+    "allow_origin": null,
+    "allow_methods": null,
+    "allow_headers": null,
+    "error": "HTTP Error 403: Forbidden"
+  },
+  "websocket": {
+    "url": "wss://n.flyspark.in/api/v1/ws",
+    "status": "PASS",
+    "messages_received": 3,
+    "envelope_ok": true,
+    "missing_keys": [],
+    "error": null,
+    "first_message": "{\"type\":\"CONTACT_NEW\",\"timestamp\":1771769991304,\"source\":\"rf_sensor\",\"data\":{\"id\":\"rf:5862000000\",\"type\":\"UNKNOWN_RF\",\"last_seen_ts\":1771769990992,\"unknown_rf\":{\"center_hz\":5862000000,\"snr_db\":11.635580183256408,\"peak_db\":79.24013084597577,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\"}}}"
+  },
+  "systemd": [
+    {
+      "unit": "ndefender-backend",
+      "active": "active",
+      "error": null
+    },
+    {
+      "unit": "cloudflared",
+      "active": "active",
+      "error": null
+    },
+    {
+      "unit": "ndefender-kiosk",
+      "active": "active",
+      "error": null
+    }
+  ],
+  "journals": [
+    {
+      "unit": "ndefender-backend",
+      "ok": true,
+      "error": null,
+      "snippet": "d_name=drone_detected_alarm exit_code=1 timed_out=False ok=False\nFeb 22 19:49:45 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:45] \"GET /api/v1/health HTTP/1.1\" 200 -\nFeb 22 19:49:45 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:45] \"GET /api/v1/status HTTP/1.1\" 200 -\nFeb 22 19:49:48 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:48] \"GET /api/v1/health HTTP/1.1\" 200 -\nFeb 22 19:49:48 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:48] \"GET /api/v1/status HTTP/1.1\" 200 -\nFeb 22 19:49:48 ndefender-pi python[3950898]: PLAY_SOUND req_id=u_mlxu3p3c_z6_37lw9 sound_name=drone_detected_alarm exit_code=1 timed_out=False ok=False\nFeb 22 19:49:49 ndefender-pi python[3950898]: PLAY_SOUND req_id=u_mlxu3sxn_yx_821i1 sound_name=drone_detected_alarm exit_code=1 timed_out=False ok=False\nFeb 22 19:49:50 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:50] \"GET /api/v1/health HTTP/1.1\" 200 -\nFeb 22 19:49:51 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:51] \"GET /api/v1/status HTTP/1.1\" 200 -\nFeb 22 19:49:51 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:51] \"GET /api/v1/ws HTTP/1.1\" 200 -\n",
+      "highlights": []
+    },
+    {
+      "unit": "cloudflared",
+      "ok": true,
+      "error": null,
+      "snippet": "Feb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR  error=\"Incoming request ended abruptly: context canceled\" connIndex=1 event=1 ingressRule=0 originService=http://127.0.0.1:8000\nFeb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR Request failed error=\"Incoming request ended abruptly: context canceled\" connIndex=1 dest=https://n.flyspark.in/api/v1 event=0 ip=198.41.192.57 type=http\n",
+      "highlights": [
+        "Feb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR  error=\"Incoming request ended abruptly: context canceled\" connIndex=1 event=1 ingressRule=0 originService=http://127.0.0.1:8000",
+        "Feb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR Request failed error=\"Incoming request ended abruptly: context canceled\" connIndex=1 dest=https://n.flyspark.in/api/v1 event=0 ip=198.41.192.57 type=http"
+      ]
+    }
+  ],
+  "ui_blank_causes": [
+    {
+      "cause": "API /status failing",
+      "evidence": "/status HTTP=403 err=HTTP Error 403: Forbidden"
+    },
+    {
+      "cause": "API /health failing",
+      "evidence": "/health HTTP=403 err=HTTP Error 403: Forbidden"
+    },
+    {
+      "cause": "CORS preflight blocked",
+      "evidence": "allow_origin=None http=403"
+    },
+    {
+      "cause": "journal warnings in cloudflared",
+      "evidence": "error/exception/traceback/ws lines detected"
+    }
+  ]
+}

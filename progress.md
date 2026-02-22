@@ -444,3 +444,29 @@ Conclusion: 403 is issued by Cloudflare edge and appears tied to UA/Bot protecti
 Recommended Cloudflare rule expression to allow API:
 - `http.host eq "n.flyspark.in" and starts_with(http.request.uri.path, "/api/v1/")`
 Action: Skip/Allow (disable Bot Fight/Managed Challenge/WAF for this path).
+
+## Re-Verification After Cloudflare Change (2026-02-22 14:20 UTC)
+Quick public sanity:
+```
+curl -i https://n.flyspark.in/api/v1/health -> HTTP/2 200 (server: cloudflare)
+curl -s https://n.flyspark.in/api/v1/status | head -c 400 -> JSON snippet
+```
+
+Diagnostics:
+- local: `reports/diagnostics_20260222_141936.md` (all PASS 200)
+- public: `reports/diagnostics_20260222_141943.md` (REST FAIL 403; WS PASS)
+
+WS:
+- public `tools/ws_public_test.py` -> connected, received=1, first_type=CONTACT_NEW
+- local `tools/ws_local_test.py` -> connected, received=1, first_type=CONTACT_NEW
+
+CORS (public):
+```
+HTTP/2 200
+access-control-allow-origin: *
+access-control-allow-methods: GET,POST,OPTIONS
+access-control-allow-headers: Content-Type,X-API-Key,X-Role
+```
+
+GREEN_SIGNAL report:
+- `reports/GREEN_SIGNAL_20260222_142140.md` (RED SIGNAL: public REST diagnostics still 403)

@@ -1,0 +1,278 @@
+{
+  "base": "http://127.0.0.1:8000/api/v1",
+  "base_api": "http://127.0.0.1:8000/api/v1",
+  "base_root": "http://127.0.0.1:8000",
+  "generated_at": "2026-02-22T14:19:38.866600+00:00",
+  "health_attempts": [
+    {
+      "name": "health",
+      "url": "http://127.0.0.1:8000/api/v1/health",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 6,
+      "content_type": "application/json",
+      "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1771769976901}\n",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "status",
+        "timestamp_ms"
+      ]
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "health",
+      "url": "http://127.0.0.1:8000/api/v1/health",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 6,
+      "content_type": "application/json",
+      "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1771769976901}\n",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "status",
+        "timestamp_ms"
+      ]
+    },
+    {
+      "name": "status",
+      "url": "http://127.0.0.1:8000/api/v1/status",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 721,
+      "content_type": "application/json",
+      "snippet": "{\"audio\":{\"muted\":false,\"volume_percent\":100},\"contacts\":[{\"id\":\"rf:5754000000\",\"last_seen_ts\":1771769976532,\"type\":\"UNKNOWN_RF\",\"unknown_rf\":{\"bandwidth_class\":\"narrow\",\"center_hz\":5754000000,\"family_hint\":\"unknown\",\"peak_db\":79.90281375183935,\"snr_db\":12.391170287848851}},{\"id\":\"rf:5752000000\",\"la",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "timestamp_ms",
+        "system",
+        "power",
+        "rf",
+        "video",
+        "services",
+        "network",
+        "audio",
+        "contacts"
+      ]
+    },
+    {
+      "name": "contacts",
+      "url": "http://127.0.0.1:8000/api/v1/contacts",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 9,
+      "content_type": "application/json",
+      "snippet": "{\"contacts\":[{\"id\":\"rf:5760000000\",\"last_seen_ts\":1771769977381,\"type\":\"UNKNOWN_RF\",\"unknown_rf\":{\"bandwidth_class\":\"narrow\",\"center_hz\":5760000000,\"family_hint\":\"unknown\",\"peak_db\":79.40674988946456,\"snr_db\":11.837061538726289}},{\"id\":\"rf:5758000000\",\"last_seen_ts\":1771769977074,\"type\":\"UNKNOWN_RF\"",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "contacts"
+      ]
+    },
+    {
+      "name": "system",
+      "url": "http://127.0.0.1:8000/api/v1/system",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 20,
+      "content_type": "application/json",
+      "snippet": "{\"cpu_temp_c\":60.05,\"cpu_usage_percent\":64.76717889606167,\"disk_total_gb\":117,\"disk_used_gb\":69,\"load_15m\":6.29541015625,\"load_1m\":7.0126953125,\"load_5m\":6.2490234375,\"ram_total_mb\":16215,\"ram_used_mb\":6948,\"status\":\"ok\",\"throttled_flags\":0,\"uptime_s\":353258}\n",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "uptime_s",
+        "cpu_temp_c",
+        "cpu_usage_percent",
+        "load_1m",
+        "load_5m",
+        "load_15m",
+        "ram_used_mb",
+        "ram_total_mb",
+        "disk_used_gb",
+        "disk_total_gb",
+        "throttled_flags",
+        "status"
+      ]
+    },
+    {
+      "name": "power",
+      "url": "http://127.0.0.1:8000/api/v1/power",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 5,
+      "content_type": "application/json",
+      "snippet": "{\"current_a\":null,\"input_power_w\":null,\"input_vbus_v\":null,\"pack_voltage_v\":null,\"per_cell_v\":null,\"soc_percent\":null,\"state\":null,\"status\":\"degraded\",\"time_to_empty_s\":null,\"time_to_full_s\":null}\n",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "pack_voltage_v",
+        "current_a",
+        "input_vbus_v",
+        "input_power_w",
+        "soc_percent",
+        "time_to_empty_s",
+        "time_to_full_s",
+        "per_cell_v",
+        "state",
+        "status"
+      ]
+    },
+    {
+      "name": "rf",
+      "url": "http://127.0.0.1:8000/api/v1/rf",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 5,
+      "content_type": "application/json",
+      "snippet": "{\"last_event\":{\"id\":\"rf:5740000000\",\"last_seen_ts\":1771769977405,\"type\":\"UNKNOWN_RF\",\"unknown_rf\":{\"bandwidth_class\":\"narrow\",\"center_hz\":5740000000,\"family_hint\":\"unknown\",\"peak_db\":78.69703938185572,\"snr_db\":11.164836652125928}},\"last_event_type\":\"CONTACT_LOST\",\"last_timestamp_ms\":1771769977405,\"s",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "last_event_type",
+        "last_event",
+        "last_timestamp_ms",
+        "status"
+      ]
+    },
+    {
+      "name": "video",
+      "url": "http://127.0.0.1:8000/api/v1/video",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 6,
+      "content_type": "application/json",
+      "snippet": "{\"selected\":1,\"status\":\"ok\"}\n",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "selected",
+        "status"
+      ]
+    },
+    {
+      "name": "services",
+      "url": "http://127.0.0.1:8000/api/v1/services",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 251,
+      "content_type": "application/json",
+      "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":100260,\"sub_state\":\"running\"},{\"active_",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "name",
+        "active_state",
+        "sub_state",
+        "restart_count"
+      ]
+    },
+    {
+      "name": "network",
+      "url": "http://127.0.0.1:8000/api/v1/network",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 547,
+      "content_type": "application/json",
+      "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:ae02:e0f1:7805:a92e\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"}\n",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "connected",
+        "ssid",
+        "ip_v4",
+        "ip_v6",
+        "status"
+      ]
+    },
+    {
+      "name": "audio",
+      "url": "http://127.0.0.1:8000/api/v1/audio",
+      "status": "PASS",
+      "http_status": 200,
+      "latency_ms": 111,
+      "content_type": "application/json",
+      "snippet": "{\"muted\":false,\"status\":\"ok\",\"volume_percent\":100}\n",
+      "json_ok": true,
+      "error": null,
+      "missing_keys": [],
+      "present_keys": [
+        "volume_percent",
+        "muted",
+        "status"
+      ]
+    }
+  ],
+  "cors": {
+    "url": "http://127.0.0.1:8000/api/v1/status",
+    "status": "PASS",
+    "http_status": 200,
+    "allow_origin": "*",
+    "allow_methods": "GET,POST,OPTIONS",
+    "allow_headers": "Content-Type,X-API-Key,X-Role",
+    "error": null
+  },
+  "websocket": {
+    "url": "ws://127.0.0.1:8000/api/v1/ws",
+    "status": "PASS",
+    "messages_received": 3,
+    "envelope_ok": true,
+    "missing_keys": [],
+    "error": null,
+    "first_message": "{\"type\":\"CONTACT_NEW\",\"timestamp\":1771769978689,\"source\":\"rf_sensor\",\"data\":{\"id\":\"rf:5768000000\",\"type\":\"UNKNOWN_RF\",\"last_seen_ts\":1771769978399,\"unknown_rf\":{\"center_hz\":5768000000,\"snr_db\":15.819018047840558,\"peak_db\":83.38114327478371,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\"}}}"
+  },
+  "systemd": [
+    {
+      "unit": "ndefender-backend",
+      "active": "active",
+      "error": null
+    },
+    {
+      "unit": "cloudflared",
+      "active": "active",
+      "error": null
+    },
+    {
+      "unit": "ndefender-kiosk",
+      "active": "active",
+      "error": null
+    }
+  ],
+  "journals": [
+    {
+      "unit": "ndefender-backend",
+      "ok": true,
+      "error": null,
+      "snippet": "fender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:37] \"GET /api/v1/power HTTP/1.1\" 200 -\nFeb 22 19:49:37 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:37] \"GET /api/v1/rf HTTP/1.1\" 200 -\nFeb 22 19:49:37 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:37] \"GET /api/v1/video HTTP/1.1\" 200 -\nFeb 22 19:49:37 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:37] \"GET /api/v1/status HTTP/1.1\" 200 -\nFeb 22 19:49:37 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:37] \"GET /api/v1/services HTTP/1.1\" 200 -\nFeb 22 19:49:38 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:38] \"GET /api/v1/network HTTP/1.1\" 200 -\nFeb 22 19:49:38 ndefender-pi python[3950898]: PLAY_SOUND req_id=u_mlxu3gt4_z4_75mlj sound_name=drone_detected_alarm exit_code=0 timed_out=False ok=True\nFeb 22 19:49:38 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:38] \"GET /api/v1/audio HTTP/1.1\" 200 -\nFeb 22 19:49:38 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:38] \"OPTIONS /api/v1/status HTTP/1.1\" 200 -\nFeb 22 19:49:38 ndefender-pi python[3950898]: 127.0.0.1 - - [22/Feb/2026 19:49:38] \"GET /api/v1/ws HTTP/1.1\" 200 -\n",
+      "highlights": []
+    },
+    {
+      "unit": "cloudflared",
+      "ok": true,
+      "error": null,
+      "snippet": "Feb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR  error=\"Incoming request ended abruptly: context canceled\" connIndex=1 event=1 ingressRule=0 originService=http://127.0.0.1:8000\nFeb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR Request failed error=\"Incoming request ended abruptly: context canceled\" connIndex=1 dest=https://n.flyspark.in/api/v1 event=0 ip=198.41.192.57 type=http\n",
+      "highlights": [
+        "Feb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR  error=\"Incoming request ended abruptly: context canceled\" connIndex=1 event=1 ingressRule=0 originService=http://127.0.0.1:8000",
+        "Feb 22 16:51:20 ndefender-pi cloudflared[3895612]: 2026-02-22T11:21:20Z ERR Request failed error=\"Incoming request ended abruptly: context canceled\" connIndex=1 dest=https://n.flyspark.in/api/v1 event=0 ip=198.41.192.57 type=http"
+      ]
+    }
+  ],
+  "ui_blank_causes": [
+    {
+      "cause": "journal warnings in cloudflared",
+      "evidence": "error/exception/traceback/ws lines detected"
+    }
+  ]
+}

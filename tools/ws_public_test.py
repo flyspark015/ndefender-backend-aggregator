@@ -14,6 +14,7 @@ async def main() -> None:
     async with websockets.connect(url, extra_headers=headers) as ws:
         print("connected")
         msg = await ws.recv()
+        print(f"first_200={msg[:200]}")
         first_type = None
         try:
             first_type = json.loads(msg).get("type")
