@@ -29,3 +29,8 @@ Why this exists: This log provides a traceable record of each delivery step, ver
 - CI confirmation: Passing
 - Statement: Runtime logic frozen for v0.1.0
 
+## Public API Exposure (2026-02-22)
+- Step A: Cloudflared install on Pi — ✅
+- Step B: Cloudflared auth + tunnel create — ⏳ waiting on Cloudflare login
+- Step C: CORS policy + WS origin enforcement in backend aggregator — ✅
+- Step D: Public HTTPS/WSS verification + evidence capture — ⏳ pending
