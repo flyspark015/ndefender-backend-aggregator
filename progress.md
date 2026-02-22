@@ -230,6 +230,25 @@ access-control-allow-origin: *
 server: cloudflare
 cf-ray: 9d1ed64aba07ff7d-SIN
 ```
+
+## Step 2 — Fix Public 403 (Edge Layer) (2026-02-22)
+Result: No 403 observed; no edge-layer change required.
+
+Evidence (from Step 1): 200 responses with `server: cloudflare` for `/health` and `/status`.
+
+## Step 3 — Public CORS Preflight (2026-02-22)
+Evidence:
+1) `curl -i -X OPTIONS https://n.flyspark.in/api/v1/status \
+  -H "Origin: https://www.figma.com" \
+  -H "Access-Control-Request-Method: GET" \
+  -H "Access-Control-Request-Headers: Content-Type"`
+```
+HTTP/2 200
+access-control-allow-origin: *
+access-control-allow-methods: GET,POST,OPTIONS
+access-control-allow-headers: Content-Type,X-API-Key,X-Role
+server: cloudflare
+```
 /api/v1/status
 /api/v1/ws
 ... (no /api/v1/contacts|system|power|rf|video|services|network|audio base routes)
