@@ -111,3 +111,27 @@ health PASS 200
 status DEGRADED 200
 contacts FAIL 404
 ```
+
+## Inventory Snapshot (2026-02-22)
+Evidence:
+1) Listener map (ports 443/8000/9109)
+```
+LISTEN 0 4096 100.99.78.121:443 0.0.0.0:* users:("tailscaled",pid=913,fd=24))
+LISTEN 0  128 0.0.0.0:8000       0.0.0.0:* users:("python",pid=3900428,fd=12))
+LISTEN 0 2048 0.0.0.0:9109       0.0.0.0:* users:("uvicorn",pid=66862,fd=8))
+```
+
+2) Backend process + service
+```
+/opt/ndefender/backend/venv/bin/python -u /opt/ndefender/backend/app.py
+ndefender-backend.service active (running)
+```
+
+3) API reality (local)
+```
+GET /api/v1/health -> 200
+GET /api/v1/status -> JSON (contacts...)
+```
+
+Report file:
+- `reports/inventory_20260222_120413.md`
