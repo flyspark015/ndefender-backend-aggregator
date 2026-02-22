@@ -194,3 +194,9 @@ Updated `tools/run_full_diagnostics.py` to include:
 Outputs now:
 - `reports/diagnostics_local_<timestamp>.md/.json`
 - `reports/diagnostics_public_<timestamp>.md/.json`
+
+## Step 5 Diagnostics Run + Final Summary (2026-02-22)
+Evidence:
+- Local report: `reports/diagnostics_local_20260222_122423.md` + `.json`
+- Public report: `reports/diagnostics_public_20260222_122430.md` + `.json`
+- Final summary: `reports/final_summary_20260222_122447.md`
