@@ -88,6 +88,17 @@ class LoggingConfig(BaseModel):
     level: str
 
 
+class CorsConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    allow_origins: list[str]
+    allow_origin_regex: str | None = None
+    allow_methods: list[str]
+    allow_headers: list[str]
+    allow_credentials: bool = False
+    max_age: int = Field(ge=0, default=86400)
+
+
 class RateLimitConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -115,6 +126,7 @@ class AppConfig(BaseModel):
     safety: SafetyConfig
     polling: PollingConfig
     logging: LoggingConfig
+    cors: CorsConfig
     rate_limits: RateLimitConfig
     features: FeaturesConfig
 

@@ -48,6 +48,16 @@ polling:
 logging:
   level: "INFO"
 
+cors:
+  allow_origins:
+    - "https://www.figma.com"
+    - "https://figma.com"
+  allow_origin_regex: "^https://([a-z0-9-]+\\.)*figma\\.com$"
+  allow_methods: ["GET", "POST", "OPTIONS"]
+  allow_headers: ["Content-Type", "X-API-Key", "X-Role"]
+  allow_credentials: false
+  max_age: 86400
+
 rate_limits:
   dangerous_per_minute: 2
   command_per_minute: 10

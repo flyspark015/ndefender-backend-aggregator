@@ -7,7 +7,10 @@ import uuid
 from contextlib import asynccontextmanager
 from typing import Any
 
+import re
+
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from .auth import api_key_auth
@@ -204,8 +207,28 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
 
 
 def _register_ws_routes(app: FastAPI, ws_manager: WebSocketManager) -> None:
+    config = get_config()
+    allowed_origins = set(config.cors.allow_origins)
+    origin_pattern = (
+        re.compile(config.cors.allow_origin_regex)
+        if config.cors.allow_origin_regex
+        else None
+    )
+
+    def origin_allowed(origin: str | None) -> bool:
+        if not origin:
+            return False
+        if origin in allowed_origins:
+            return True
+        if origin_pattern and origin_pattern.match(origin):
+            return True
+        return False
+
     @app.websocket("/api/v1/ws")
     async def ws_endpoint(websocket: WebSocket) -> None:
+        if not origin_allowed(websocket.headers.get("origin")):
+            await websocket.close(code=1008)
+            return
         await ws_manager.connect(websocket)
         try:
             await ws_manager.send_system_update(websocket)
@@ -255,6 +278,16 @@ def create_app() -> FastAPI:
         title="N-Defender Backend Aggregator",
         version="0.1.0",
         lifespan=lifespan,
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=config.cors.allow_origins,
+        allow_origin_regex=config.cors.allow_origin_regex,
+        allow_credentials=config.cors.allow_credentials,
+        allow_methods=config.cors.allow_methods,
+        allow_headers=config.cors.allow_headers,
+        max_age=config.cors.max_age,
     )
 
     app.state.state_store = state_store
