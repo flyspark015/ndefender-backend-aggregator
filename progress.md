@@ -208,6 +208,28 @@ server: cloudflare
 
 {"audio":{"muted":false,"volume_percent":100},"contacts":[{"id":"rf:3476000000","last_seen_ts":1771766897914, ... }], ...}
 ```
+
+## Step 1 — Identify Source Of Public 403 (2026-02-22)
+Conclusion: Public REST is not returning 403. Responses are 200 with `server: cloudflare`. This indicates the edge is currently allowing REST; no 403 present at this time.
+
+Evidence:
+1) `curl -sS -D - https://n.flyspark.in/api/v1/health -o /dev/null`
+```
+HTTP/2 200
+content-type: application/json
+access-control-allow-origin: *
+server: cloudflare
+cf-ray: 9d1ed63aca7c6d97-SIN
+```
+
+2) `curl -sS -D - https://n.flyspark.in/api/v1/status -o /dev/null`
+```
+HTTP/2 200
+content-type: application/json
+access-control-allow-origin: *
+server: cloudflare
+cf-ray: 9d1ed64aba07ff7d-SIN
+```
 /api/v1/status
 /api/v1/ws
 ... (no /api/v1/contacts|system|power|rf|video|services|network|audio base routes)
