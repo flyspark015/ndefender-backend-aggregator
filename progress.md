@@ -558,3 +558,26 @@ $ /home/toybook/.venvs/ndefender-agg/bin/pytest
 ```
 Phase Live-Deploy (Production Switch)
 ```
+
+## Phase Live-Deploy Step 1 — Systemd Service (2026-02-23)
+- [x] Created venv and installed deps.
+- [x] Systemd unit + env file created.
+- [x] Service enabled and running on 127.0.0.1:8001.
+
+### Evidence
+1) `systemctl status ndefender-backend-aggregator --no-pager`
+```
+● ndefender-backend-aggregator.service - N-Defender Backend Aggregator (FastAPI)
+     Loaded: loaded (/etc/systemd/system/ndefender-backend-aggregator.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-02-23 06:04:30 IST; 3s ago
+```
+
+2) `curl -sS http://127.0.0.1:8001/api/v1/health`
+```
+{"status":"ok","timestamp_ms":1771806907240}
+```
+
+3) `curl -sS http://127.0.0.1:8001/api/v1/status | head -c 120`
+```
+{"timestamp_ms":1771806912049,"system":{"cpu_temp_c":46.85,"cpu_temp_celsius":49.6, ...
+```
