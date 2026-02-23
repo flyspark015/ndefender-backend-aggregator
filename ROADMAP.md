@@ -25,3 +25,11 @@ Why this exists: This roadmap keeps delivery phased, testable, and auditable so 
   - Final validation, CI green, and tagged release.
 - [ ] Phase 11: Public API Exposure (Cloudflare Tunnel + CORS)
   - Cloudflare Tunnel, CORS policy, and public WSS verification.
+
+## Phase Live-Deploy (Production Switch)
+- [ ] Deploy aggregator as systemd service
+- [ ] Switch cloudflared origin to aggregator
+- [ ] Validate collectors (system controller, esp32, antsdr JSONL, remoteid JSONL)
+- [ ] Fix null fields + health correctness
+- [ ] WS fast path stable
+- [ ] GREEN SIGNAL runner updated to test live domain

@@ -544,3 +544,17 @@ All checks passed!
 $ /home/toybook/.venvs/ndefender-agg/bin/pytest
 ============================== 24 passed in 1.19s ==============================
 ```
+
+## Phase Live-Deploy Plan (2026-02-23)
+- [ ] Deploy aggregator as systemd service
+- [ ] Switch cloudflared origin to aggregator
+- [ ] Validate collectors (system controller, esp32, antsdr JSONL, remoteid JSONL)
+- [ ] Fix null fields + health correctness
+- [ ] WS fast path stable
+- [ ] GREEN SIGNAL runner updated to test live domain
+
+### Evidence
+1) `rg -n "Phase Live-Deploy" ROADMAP.md`
+```
+Phase Live-Deploy (Production Switch)
+```
