@@ -581,3 +581,36 @@ Phase Live-Deploy (Production Switch)
 ```
 {"timestamp_ms":1771806912049,"system":{"cpu_temp_c":46.85,"cpu_temp_celsius":49.6, ...
 ```
+
+## Phase Live-Deploy Step 2 — Cloudflared Switch (2026-02-23)
+- [x] Cloudflared origin updated to aggregator (127.0.0.1:8001).
+- [x] Cloudflared restarted and public REST verified.
+- [ ] Public WS verified (currently HTTP 404; to fix in Phase 4).
+
+### Evidence
+1) `/etc/cloudflared/config.yml`
+```
+service: http://127.0.0.1:8001
+```
+
+2) `systemctl status cloudflared --no-pager`
+```
+Active: active (running)
+```
+
+3) Public REST
+```
+$ curl -sS https://n.flyspark.in/api/v1/health | jq .
+{"status":"ok","timestamp_ms":1771807422903}
+
+$ curl -sS https://n.flyspark.in/api/v1/status | jq '.timestamp_ms,.overall_ok,.system.hostname'
+1771807428316
+null
+"ndefender-pi"
+```
+
+4) Public WS (current failure)
+```
+$ python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10
+websockets.exceptions.InvalidStatusCode: server rejected WebSocket connection: HTTP 404
+```
