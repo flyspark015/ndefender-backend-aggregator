@@ -63,8 +63,9 @@ ls -lah /opt/ndefender/logs/
 
 ## Troubleshooting Degraded States
 - `RF_SCAN_OFFLINE`: AntSDR scan JSONL not updating.
-  - Check AntSDR reachability (default `192.168.10.2`) and `journalctl -u ndefender-rfscan -n 200 --no-pager`.
-- `no_remoteid_events`: RemoteID engine is running but no frames are captured.
+  - If `last_error=antsdr_unreachable`, verify AntSDR IP (default `192.168.10.2`) and `journalctl -u ndefender-rfscan -n 200 --no-pager`.
+  - If `last_error=rf_jsonl_missing`, confirm JSONL path `/opt/ndefender/logs/antsdr_scan.jsonl` is writable.
+- `REMOTEID_STALE` with `last_error=no_odid_frames`: capture is running but no OpenDroneID frames decoded.
   - Check monitor interface (`mon0`) and `journalctl -u ndefender-remoteid-engine -n 200 --no-pager`.
 - `VRX DISCONNECTED`: ESP32 serial device not detected.
   - Verify USB device under `/dev/serial/by-id` and update `config/default.yaml` if port changed.
@@ -78,6 +79,14 @@ ls -lah /opt/ndefender/logs/
   - `journalctl -u ndefender-remoteid-engine -n 200 --no-pager | grep -i tshark`
   - Verify monitor interface (`mon0`) is present and captures are fresh.
 
+## RemoteID capture_active Semantics
+- `capture_active=true` means the capture process is running (tshark active, interface present), even if 0 frames are decoded.
+- `capture_active=false` means capture is not running or the interface is missing/down.
+- `last_error` clarifies why no events are present:
+  - `no_odid_frames`: capture running, no decoded frames.
+  - `mon0_missing` / `mon0_down`: monitor interface not ready.
+  - `remoteid_service_inactive`: engine not running.
+
 ## RemoteID Engine Bring-Up
 - RemoteID capture requires a monitor-mode interface (`mon0`).
 - If `tshark` reports `There is no device named "mon0"`:
@@ -89,7 +98,9 @@ ls -lah /opt/ndefender/logs/
 
 ## RF Scan Offline Detection
 - If AntSDR is disconnected or its IP is unreachable, RF scan will restart and the JSONL file will not update.
-- Aggregator marks RF as offline/stale when no new JSONL events arrive.
+- Aggregator marks RF as offline/stale when no new JSONL events arrive and sets:
+  - `status=offline`
+  - `last_error=antsdr_unreachable` (or `rf_jsonl_missing`)
 - Logs to check:
   - `journalctl -u ndefender-rfscan -n 200 --no-pager | grep -i \"no device\"`
   - `ping -c 1 192.168.10.2` (AntSDR default IP).

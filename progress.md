@@ -762,3 +762,65 @@ Short outputs:
 
 Report:
 - `reports/GREEN_SIGNAL_REMOTEID_FPV_VIDEO.md`
+
+## RF + RemoteID Data Quality (2026-02-26)
+- RF last_error now explicit: `antsdr_unreachable`.
+- RemoteID capture_active reflects capture running; last_error `no_odid_frames` when no decodes.
+- Report: `reports/GREEN_SIGNAL_RF_REMOTEID.md`
+
+Evidence:
+1) `journalctl -u ndefender-rfscan -n 20 --no-pager` (tail)
+```
+Feb 26 03:56:30 ndefender-pi python3[48403]: TimeoutError: [Errno 110] Connection timed out
+Feb 26 03:56:30 ndefender-pi python3[48403]: Exception: No device found
+```
+
+2) `ping -c 1 192.168.10.2`
+```
+1 packets transmitted, 0 received, 100% packet loss
+```
+
+3) `curl -sS http://127.0.0.1:8001/api/v1/status | jq '.overall_ok,.rf,.remote_id'`
+```
+false
+{
+  "last_event": {"reason": "antsdr_unreachable"},
+  "last_event_type": "RF_SCAN_OFFLINE",
+  "scan_active": false,
+  "status": "offline",
+  "last_error": "antsdr_unreachable"
+}
+{
+  "last_event": {"reason": "no_odid_frames"},
+  "last_event_type": "REMOTEID_STALE",
+  "state": "DEGRADED",
+  "capture_active": true,
+  "last_error": "no_odid_frames"
+}
+```
+
+4) `curl -sS https://n.flyspark.in/api/v1/status | jq '.overall_ok,.rf,.remote_id'`
+```
+false
+{
+  "last_event": {"reason": "antsdr_unreachable"},
+  "last_event_type": "RF_SCAN_OFFLINE",
+  "scan_active": false,
+  "status": "offline",
+  "last_error": "antsdr_unreachable"
+}
+{
+  "last_event": {"reason": "no_odid_frames"},
+  "last_event_type": "REMOTEID_STALE",
+  "state": "DEGRADED",
+  "capture_active": true,
+  "last_error": "no_odid_frames"
+}
+```
+
+5) `python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10`
+```
+connected
+received=7, first_type=HELLO
+PASS: received >=3 messages
+```
