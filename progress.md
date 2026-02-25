@@ -656,3 +656,37 @@ Key outcomes:
 ## Merge + Tag (2026-02-25)
 - Merged branch `fix/status-schema-and-remoteid-staleness` -> `main` (fast-forward)
 - Tag: `v0.1.1-aggregator-status-fix-green`
+
+## Step 7 Verification (2026-02-26)
+Commands:
+```
+sudo systemctl restart ndefender-backend-aggregator
+systemctl status ndefender-backend-aggregator --no-pager | sed -n '1,25p'
+journalctl -u ndefender-backend-aggregator -n 120 --no-pager
+curl -sS http://127.0.0.1:8001/api/v1/status | jq '.timestamp_ms,.overall_ok,.power,.rf,.remote_id,.vrx,.fpv,.video'
+curl -sS https://n.flyspark.in/api/v1/status | jq '.timestamp_ms,.overall_ok,.power,.rf,.remote_id,.vrx,.fpv,.video'
+python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10
+python3 tools/diagnostics/run_green_signal.py --local http://127.0.0.1:8001/api/v1 --public https://n.flyspark.in/api/v1
+```
+
+Short outputs:
+- systemctl status:
+  - `Active: active (running)` (PID 29622)
+- journalctl tail:
+  - `Uvicorn running on http://127.0.0.1:8001`
+- local /status:
+  - `power.status="ok" pack_voltage_v=16.71 soc_percent=98`
+  - `rf.last_event_type="RF_SCAN_OFFLINE" scan_active=false`
+  - `remote_id.state="DEGRADED" last_error="no_remoteid_events"`
+  - `vrx.sys.status="DISCONNECTED" last_error=".../dev/ttyACM0"`
+- public /status:
+  - same as local (non-empty sections with explicit states)
+- public WS:
+  - `connected` `received=1 first_type=SYSTEM_UPDATE`
+- green signal:
+  - generated report output (stdout)
+
+Reports:
+- `reports/GREEN_SIGNAL_LIVE_DATA.md`
+- `reports/README_GREEN_SIGNAL.md`
+- `reports/green_signal.json`

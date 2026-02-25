@@ -46,6 +46,16 @@ ls -lah /opt/ndefender/logs/
 - `system`/`power`/`network`/`audio` fields may be stale or empty.
   - UPS fallback still attempts to read local I2C telemetry even if controller is offline.
 
+## Troubleshooting Degraded States
+- `RF_SCAN_OFFLINE`: AntSDR scan JSONL not updating.
+  - Check AntSDR reachability (default `192.168.10.2`) and `journalctl -u ndefender-rfscan -n 200 --no-pager`.
+- `no_remoteid_events`: RemoteID engine is running but no frames are captured.
+  - Check monitor interface (`mon0`) and `journalctl -u ndefender-remoteid-engine -n 200 --no-pager`.
+- `VRX DISCONNECTED`: ESP32 serial device not detected.
+  - Verify USB device under `/dev/serial/by-id` and update `config/default.yaml` if port changed.
+- `UPS fallback`: Power data is taken from local I2C UPS HAT E when system-controller lacks `/api/v1/ups`.
+  - Ensure I2C bus 1 device `0x2d` is present (`sudo i2cdetect -y -r 1 0x2d 0x2d`).
+
 ## RemoteID Stale / Replay Detection
 - If `replay.active=false`, RemoteID contacts older than 15s are dropped and test markers (`TestDrone`, `WARMSTART`) are filtered.
 - If you still see stale RemoteID timestamps, confirm RemoteID JSONL is live and not replaying.

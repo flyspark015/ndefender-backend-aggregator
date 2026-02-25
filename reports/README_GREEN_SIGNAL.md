@@ -1,5 +1,5 @@
 # N-Defender GREEN SIGNAL Report
-Generated: 2026-02-25T18:46:06Z
+Generated: 2026-02-25T21:14:33Z
 Hostname: ndefender-pi
 
 ## Summary
@@ -14,43 +14,43 @@ Hostname: ndefender-pi
 ### Local REST
 | Endpoint | HTTP | JSON | Snippet |
 | --- | --- | --- | --- |
-| health | 200 | True | {"status":"ok","timestamp_ms":1772045121744} |
-| status | 200 | True | {"timestamp_ms":1772045121750,"overall_ok":false,"system":{"cpu_temp_c":42.45,"cpu_usage_percent":40.92255563157723,"loa |
+| health | 200 | True | {"status":"ok","timestamp_ms":1772054040708} |
+| status | 200 | True | {"timestamp_ms":1772054040710,"overall_ok":false,"system":{"cpu_temp_c":36.95,"cpu_usage_percent":16.542836803184613,"lo |
 | contacts | 200 | True | {"contacts":[]} |
-| system | 200 | True | {"cpu_temp_c":42.45,"cpu_usage_percent":40.92255563157723,"load_1m":4.3232421875,"load_5m":4.078125,"load_15m":3.6005859 |
-| power | 200 | True | {"pack_voltage_v":null,"current_a":null,"input_vbus_v":null,"input_power_w":null,"soc_percent":null,"state":null,"time_t |
-| rf | 200 | True | {"last_event":null,"last_event_type":null,"last_timestamp_ms":null,"scan_active":null} |
+| system | 200 | True | {"cpu_temp_c":36.95,"cpu_usage_percent":16.542836803184613,"load_1m":2.7060546875,"load_5m":2.1005859375,"load_15m":1.47 |
+| power | 200 | True | {"pack_voltage_v":16.71,"current_a":0.0,"input_vbus_v":0.0,"input_power_w":0.0,"soc_percent":98,"state":"IDLE","time_to_ |
+| rf | 200 | True | {"last_event":{"reason":"no_rf_events"},"last_event_type":"RF_SCAN_OFFLINE","last_timestamp_ms":1772054037096,"scan_acti |
 | video | 200 | True | {"selected":null,"status":"unknown"} |
 | services | 200 | True | [{"active_state":"active","name":"ndefender-backend","restart_count":0,"sub_state":"running"},{"active_state":"active"," |
 | network | 200 | True | {"connected":true,"ip_v4":"192.168.1.35","ip_v6":"2401:4900:8fef:a440:69de:a6e0:f49b:2f21","ssid":"Airtel_Toybook","stat |
-| audio | 200 | True | {"muted":false,"volume_percent":100,"status":"unknown"} |
+| audio | 200 | True | {"muted":false,"volume_percent":100,"status":"ok"} |
 
 ### Public REST
 | Endpoint | HTTP | JSON | Snippet |
 | --- | --- | --- | --- |
-| health | 200 | True | {"status":"ok","timestamp_ms":1772045122212} |
-| status | 200 | True | {"timestamp_ms":1772045123081,"overall_ok":false,"system":{"cpu_temp_c":42.45,"cpu_usage_percent":40.93305458938204,"loa |
+| health | 200 | True | {"status":"ok","timestamp_ms":1772054041322} |
+| status | 200 | True | {"timestamp_ms":1772054042246,"overall_ok":false,"system":{"cpu_temp_c":36.4,"cpu_usage_percent":16.53056081020403,"load |
 | contacts | 200 | True | {"contacts":[]} |
-| system | 200 | True | {"cpu_temp_c":42.45,"cpu_usage_percent":40.93305458938204,"load_1m":4.056640625,"load_5m":4.02685546875,"load_15m":3.586 |
-| power | 200 | True | {"pack_voltage_v":null,"current_a":null,"input_vbus_v":null,"input_power_w":null,"soc_percent":null,"state":null,"time_t |
-| rf | 200 | True | {"last_event":null,"last_event_type":null,"last_timestamp_ms":null,"scan_active":null} |
+| system | 200 | True | {"cpu_temp_c":36.4,"cpu_usage_percent":16.550913559140934,"load_1m":2.6494140625,"load_5m":2.0986328125,"load_15m":1.473 |
+| power | 200 | True | {"pack_voltage_v":16.71,"current_a":0.0,"input_vbus_v":0.0,"input_power_w":0.0,"soc_percent":98,"state":"IDLE","time_to_ |
+| rf | 200 | True | {"last_event":{"reason":"no_rf_events"},"last_event_type":"RF_SCAN_OFFLINE","last_timestamp_ms":1772054042096,"scan_acti |
 | video | 200 | True | {"selected":null,"status":"unknown"} |
 | services | 200 | True | [{"active_state":"active","name":"ndefender-backend","restart_count":0,"sub_state":"running"},{"active_state":"active"," |
 | network | 200 | True | {"connected":true,"ip_v4":"192.168.1.35","ip_v6":"2401:4900:8fef:a440:69de:a6e0:f49b:2f21","ssid":"Airtel_Toybook","stat |
-| audio | 200 | True | {"muted":false,"volume_percent":100,"status":"unknown"} |
+| audio | 200 | True | {"muted":false,"volume_percent":100,"status":"ok"} |
 
 ## WebSocket
 ### Local WS
 - connect_ok: True
 - msgs_received: 1
 - first_type: SYSTEM_UPDATE
-- first_200: {"type":"SYSTEM_UPDATE","timestamp_ms":1772045130027,"source":"aggregator","data":{"timestamp_ms":1772045130027,"overall_ok":false,"system":{"cpu_temp_c":42.45,"cpu_usage_percent":40.9285563242786,"lo
+- first_200: {"type":"SYSTEM_UPDATE","timestamp_ms":1772054048895,"source":"aggregator","data":{"timestamp_ms":1772054048895,"overall_ok":false,"system":{"cpu_temp_c":37.5,"cpu_usage_percent":16.555986246061867,"l
 
 ### Public WS
 - connect_ok: True
 - msgs_received: 1
 - first_type: SYSTEM_UPDATE
-- first_200: {"type":"SYSTEM_UPDATE","timestamp_ms":1772045140904,"source":"aggregator","data":{"timestamp_ms":1772045140904,"overall_ok":false,"system":{"cpu_temp_c":43.55,"cpu_usage_percent":40.921649713258226,"
+- first_200: {"type":"SYSTEM_UPDATE","timestamp_ms":1772054059654,"source":"aggregator","data":{"timestamp_ms":1772054059654,"overall_ok":false,"system":{"cpu_temp_c":37.5,"cpu_usage_percent":16.55690233964585,"lo
 
 ## CORS
 - https://n.flyspark.in/api/v1/status origin=https://www.figma.com status=200 allow-origin=None allow-methods=None allow-headers=None
@@ -64,28 +64,28 @@ Generic endpoint probe (POST):
 | Command | HTTP | Accepted | Ack | Snippet |
 | --- | --- | --- | --- | --- |
 | ping | None | None | False | no generic endpoint; ping not supported |
-| scan/stop | 200 | False | False | {"command":"STOP_SCAN","command_id":"dea1519f-5452-4e83-bf8b-b4cf340dbbfe","accepted":false,"detail":"timeout","timestam |
-| video/select | 200 | False | False | {"command":"VIDEO_SELECT","command_id":"b04acefc-3ff6-4f38-9600-a88aebd40974","accepted":false,"detail":"timeout","times |
+| scan/stop | 200 | False | False | {"command":"STOP_SCAN","command_id":"b720d0c1-bdfa-4830-84f8-eb5fd6b6870b","accepted":false,"detail":"serial not connect |
+| video/select | 200 | False | False | {"command":"VIDEO_SELECT","command_id":"b2cf1544-a37e-42a9-af85-92ec67352ea1","accepted":false,"detail":"serial not conn |
 
 ## Services
 | Unit | Active | SubState | MainPID | Error |
 | --- | --- | --- | --- | --- |
-| ndefender-backend | active | running | 1061 | None |
-| cloudflared | active | running | 1059 | None |
+| ndefender-backend | active | running | 1053 | None |
+| cloudflared | active | running | 2384 | None |
 | ndefender-remoteid-engine | activating | auto-restart | 0 | None |
-| ndefender-rfscan | active | running | 1064 | None |
-| gpsd | active | running | 1352 | None |
+| ndefender-rfscan | active | running | 31763 | None |
+| gpsd | active | running | 1116 | None |
 
 ## Subsystems
 | Name | Status | Evidence |
 | --- | --- | --- |
-| system_metrics | PASS | cpu_usage=40.90415774992357, temp=41.9 |
+| system_metrics | PASS | cpu_usage=16.56497753096343, temp=36.4 |
 | services_status | PASS | services_count=6 |
-| power_ups | DEGRADED | power fields present but null |
+| power_ups | PASS | power fields populated |
 | network | PASS | connected=True ssid=Airtel_Toybook |
-| rf_pipeline | PASS | rf_last=None rf_sensor_state=None |
-| remoteid | PASS | state=None capture_active=None |
-| esp32_link | PASS | device=/dev/ndefender-esp32 |
+| rf_pipeline | PASS | rf_last=1772054072108 rf_sensor_state=None |
+| remoteid | DEGRADED | state=DEGRADED capture_active=False |
+| esp32_link | FAIL | device not found: /dev/ndefender-esp32 |
 | contacts_pipeline | DEGRADED | no CONTACT_* events observed in WS capture |
 
 ## Missing /status Keys
@@ -95,77 +95,90 @@ none
 none
 
 ## RemoteID Freshness
-remote_id.last_timestamp_ms=None stale=False
+remote_id.last_timestamp_ms=1772054072108 stale=False
 
 ## Replay/Test Contacts
 blocked
+
+## Subsystem Population Checks
+power_ok=True rf_ok=True vrx_ok=True remote_id_ok=True
 
 ## Log Highlights
 ### ndefender-backend
 (no matching error/exception/traceback/ws/403/cloudflare lines)
 ### cloudflared
 ```
-Feb 24 03:41:32 ndefender-pi systemd[1]: Starting cloudflared.service - cloudflared...
-Feb 24 03:41:34 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:34Z INF Starting tunnel tunnelID=da648051-1eb6-42c8-abdb-552876710a96
-Feb 24 03:41:34 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:34Z INF Version 2026.2.0 (Checksum 03c5d58e283f521d752dc4436014eb341092edf076eb1095953ab82debe54a8e)
-Feb 24 03:41:34 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:34Z INF GOOS: linux, GOVersion: go1.24.13, GoArch: arm64
-Feb 24 03:41:34 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:34Z INF Settings: map[config:/etc/cloudflared/config.yml cred-file:/etc/cloudflared/da648051-1eb6-42c8-abdb-552876710a96.json credentials-file:/etc/cloudflared/da648051-1eb6-42c8-abdb-552876710a96.json no-autoupdate:true]
-Feb 24 03:41:34 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:34Z INF cloudflared will not automatically update if installed by a package manager.
-Feb 24 03:41:34 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:34Z INF Generated Connector ID: 76e30a58-6497-4819-b9a5-175f8a725075
-Feb 24 03:41:34 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:34Z INF Initial protocol quic
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF ICMP proxy will use 192.168.1.35 as source for IPv4
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF ICMP proxy will use 2401:4900:8fef:a440:69de:a6e0:f49b:2f21 in zone wlan0 as source for IPv6
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF ICMP proxy will use 192.168.1.35 as source for IPv4
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF ICMP proxy will use 2401:4900:8fef:a440:69de:a6e0:f49b:2f21 in zone wlan0 as source for IPv6
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF Starting metrics server on 127.0.0.1:20241/metrics
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.67
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF Registered tunnel connection connIndex=0 connection=deeca3fb-eabf-4654-918f-a58c9a75bf29 event=0 ip=198.41.192.67 location=bom03 protocol=quic
-Feb 24 03:41:35 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:35Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=1 event=0 ip=198.41.200.63
-Feb 24 03:41:35 ndefender-pi systemd[1]: Started cloudflared.service - cloudflared.
-Feb 24 03:41:36 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:36Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=2 event=0 ip=198.41.192.7
-Feb 24 03:41:36 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:36Z INF Registered tunnel connection connIndex=1 connection=e6bf3c2e-d01f-44c2-b136-d99eb42e69fc event=0 ip=198.41.200.63 location=bom11 protocol=quic
-Feb 24 03:41:37 ndefender-pi cloudflared[1059]: 2026-02-23T22:11:37Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=3 event=0 ip=198.41.200.43
+Feb 26 02:28:57 ndefender-pi cloudflared[1047]: 2026-02-25T20:58:57Z INF Starting tunnel tunnelID=da648051-1eb6-42c8-abdb-552876710a96
+Feb 26 02:28:57 ndefender-pi cloudflared[1047]: 2026-02-25T20:58:57Z INF Version 2026.2.0 (Checksum 03c5d58e283f521d752dc4436014eb341092edf076eb1095953ab82debe54a8e)
+Feb 26 02:28:57 ndefender-pi cloudflared[1047]: 2026-02-25T20:58:57Z INF GOOS: linux, GOVersion: go1.24.13, GoArch: arm64
+Feb 26 02:28:57 ndefender-pi cloudflared[1047]: 2026-02-25T20:58:57Z INF Settings: map[config:/etc/cloudflared/config.yml cred-file:/etc/cloudflared/da648051-1eb6-42c8-abdb-552876710a96.json credentials-file:/etc/cloudflared/da648051-1eb6-42c8-abdb-552876710a96.json no-autoupdate:true]
+Feb 26 02:28:57 ndefender-pi cloudflared[1047]: 2026-02-25T20:58:57Z INF cloudflared will not automatically update if installed by a package manager.
+Feb 26 02:28:57 ndefender-pi cloudflared[1047]: 2026-02-25T20:58:57Z INF Generated Connector ID: 2a261028-4e54-4978-86ad-6625472e85e3
+Feb 26 02:28:57 ndefender-pi cloudflared[1047]: 2026-02-25T20:58:57Z INF Initial protocol quic
+Feb 26 02:29:00 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:00Z INF ICMP proxy will use 192.168.1.35 as source for IPv4
+Feb 26 02:29:00 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:00Z INF ICMP proxy will use fe80::a0bf:f773:ab35:ec94 in zone wlan0 as source for IPv6
+Feb 26 02:29:11 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:11Z INF Initiating graceful shutdown due to signal terminated ...
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z INF ICMP proxy will use 192.168.1.35 as source for IPv4
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z INF ICMP proxy will use fe80::a0bf:f773:ab35:ec94 in zone wlan0 as source for IPv6
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z INF Starting metrics server on 127.0.0.1:20241/metrics
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z INF Tunnel server stopped
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z ERR Failed to initialize DNS local resolver error="lookup region1.v2.argotunnel.com: operation was canceled"
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.33
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z ERR icmp router terminated error="context canceled"
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: context canceled" connIndex=0 event=0 ip=198.41.200.33
+Feb 26 02:29:12 ndefender-pi cloudflared[1047]: 2026-02-25T20:59:12Z INF Metrics server stopped
+Feb 26 02:29:18 ndefender-pi cloudflared[2384]: 2026-02-25T20:59:18Z INF Starting tunnel tunnelID=da648051-1eb6-42c8-abdb-552876710a96
 ```
 ### ndefender-remoteid-engine
 ```
-Feb 26 00:15:25 ndefender-pi ndefender-remoteid[73433]: Traceback (most recent call last):
-Feb 26 00:15:25 ndefender-pi ndefender-remoteid[73433]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 00:15:25 ndefender-pi ndefender-remoteid[73433]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 00:15:28 ndefender-pi ndefender-remoteid[73554]: Traceback (most recent call last):
-Feb 26 00:15:28 ndefender-pi ndefender-remoteid[73554]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 00:15:28 ndefender-pi ndefender-remoteid[73554]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 00:15:31 ndefender-pi ndefender-remoteid[73645]: Traceback (most recent call last):
-Feb 26 00:15:31 ndefender-pi ndefender-remoteid[73645]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 00:15:31 ndefender-pi ndefender-remoteid[73645]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 00:15:34 ndefender-pi ndefender-remoteid[73798]: Traceback (most recent call last):
-Feb 26 00:15:34 ndefender-pi ndefender-remoteid[73798]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 00:15:34 ndefender-pi ndefender-remoteid[73798]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 00:15:37 ndefender-pi ndefender-remoteid[73915]: Traceback (most recent call last):
-Feb 26 00:15:37 ndefender-pi ndefender-remoteid[73915]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 00:15:37 ndefender-pi ndefender-remoteid[73915]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 00:15:40 ndefender-pi ndefender-remoteid[74007]: Traceback (most recent call last):
-Feb 26 00:15:40 ndefender-pi ndefender-remoteid[74007]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 00:15:40 ndefender-pi ndefender-remoteid[74007]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 00:15:43 ndefender-pi ndefender-remoteid[74131]: Traceback (most recent call last):
-Feb 26 00:15:43 ndefender-pi ndefender-remoteid[74131]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 02:43:47 ndefender-pi ndefender-remoteid[30356]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 02:43:50 ndefender-pi ndefender-remoteid[30456]: Traceback (most recent call last):
+Feb 26 02:43:50 ndefender-pi ndefender-remoteid[30456]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 02:43:50 ndefender-pi ndefender-remoteid[30456]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 02:43:53 ndefender-pi ndefender-remoteid[30540]: Traceback (most recent call last):
+Feb 26 02:43:53 ndefender-pi ndefender-remoteid[30540]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 02:43:53 ndefender-pi ndefender-remoteid[30540]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 02:43:57 ndefender-pi ndefender-remoteid[30658]: Traceback (most recent call last):
+Feb 26 02:43:57 ndefender-pi ndefender-remoteid[30658]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 02:43:57 ndefender-pi ndefender-remoteid[30658]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 02:44:00 ndefender-pi ndefender-remoteid[30760]: Traceback (most recent call last):
+Feb 26 02:44:00 ndefender-pi ndefender-remoteid[30760]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 02:44:00 ndefender-pi ndefender-remoteid[30760]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 02:44:04 ndefender-pi ndefender-remoteid[30912]: Traceback (most recent call last):
+Feb 26 02:44:04 ndefender-pi ndefender-remoteid[30912]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 02:44:04 ndefender-pi ndefender-remoteid[30912]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 02:44:07 ndefender-pi ndefender-remoteid[30997]: Traceback (most recent call last):
+Feb 26 02:44:07 ndefender-pi ndefender-remoteid[30997]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 02:44:07 ndefender-pi ndefender-remoteid[30997]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 02:44:10 ndefender-pi ndefender-remoteid[31089]: Traceback (most recent call last):
 ```
 ### ndefender-rfscan
 ```
-Feb 26 00:15:50 ndefender-pi python3[1064]: {"t":1772045150.8538213,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5780000000,"peak_freq_hz":5780446403.503418,"snr_db":22.342583873050742,"peak_db":93.93889195821461,"noise_floor_db":71.59630808516387,"bandwidth_class":"narrow"}}
-Feb 26 00:15:50 ndefender-pi python3[1064]: {"type":"RF_CONTACT_LOST","ts_ms":1772045150867,"id":"rf:5760000000","data":{"center_hz":5760000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":22.241034148121926,"peak_db":92.96838384540337}}
-Feb 26 00:15:51 ndefender-pi python3[1064]: {"t":1772045151.3747766,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5784000000,"peak_freq_hz":5784367713.928223,"snr_db":20.640322951516723,"peak_db":92.13121733238839,"noise_floor_db":71.49089438087167,"bandwidth_class":"narrow"}}
-Feb 26 00:15:51 ndefender-pi python3[1064]: {"type":"RF_CONTACT_UPDATE","ts_ms":1772045151374,"id":"rf:5784000000","data":{"center_hz":5784000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":20.640322951516723,"peak_db":92.13121733238839}}
-Feb 26 00:15:53 ndefender-pi python3[1064]: {"t":1772045153.4756663,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5800000000,"peak_freq_hz":5800867958.068848,"snr_db":30.477456771602476,"peak_db":104.57125164213403,"noise_floor_db":74.09379487053155,"bandwidth_class":"narrow"}}
-Feb 26 00:15:53 ndefender-pi python3[1064]: {"type":"RF_CONTACT_UPDATE","ts_ms":1772045153475,"id":"rf:5800000000","data":{"center_hz":5800000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":30.477456771602476,"peak_db":104.57125164213403}}
-Feb 26 00:15:54 ndefender-pi python3[1064]: {"t":1772045154.2560446,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5806000000,"peak_freq_hz":5805145729.064941,"snr_db":16.35013699950892,"peak_db":91.69052386751969,"noise_floor_db":75.34038686801077,"bandwidth_class":"narrow"}}
-Feb 26 00:15:54 ndefender-pi python3[1064]: {"t":1772045154.2560446,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5806000000,"peak_freq_hz":5805400360.107422,"snr_db":24.53766272201534,"peak_db":99.87804959002611,"noise_floor_db":75.34038686801077,"bandwidth_class":"narrow"}}
-Feb 26 00:15:54 ndefender-pi python3[1064]: {"t":1772045154.2560446,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5806000000,"peak_freq_hz":5805807769.775391,"snr_db":29.48687531772606,"peak_db":104.82726218573683,"noise_floor_db":75.34038686801077,"bandwidth_class":"narrow"}}
-Feb 26 00:15:54 ndefender-pi python3[1064]: {"t":1772045154.2560446,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5806000000,"peak_freq_hz":5806062400.817871,"snr_db":16.54853167283065,"peak_db":91.88891854084142,"noise_floor_db":75.34038686801077,"bandwidth_class":"narrow"}}
-Feb 26 00:15:54 ndefender-pi python3[1064]: {"t":1772045154.2560446,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5806000000,"peak_freq_hz":5806418884.277344,"snr_db":21.48682835691369,"peak_db":96.82721522492446,"noise_floor_db":75.34038686801077,"bandwidth_class":"narrow"}}
-Feb 26 00:15:54 ndefender-pi python3[1064]: {"t":1772045154.2560446,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":5806000000,"peak_freq_hz":5806673515.319824,"snr_db":18.517518842173487,"peak_db":93.85790571018426,"noise_floor_db":75.34038686801077,"bandwidth_class":"narrow"}}
+Feb 26 02:43:41 ndefender-pi python3[30018]:     raise OSError(err, _strerror(err))
+Feb 26 02:43:41 ndefender-pi python3[30018]: TimeoutError: [Errno 110] Connection timed out
+Feb 26 02:43:41 ndefender-pi python3[30018]: During handling of the above exception, another exception occurred:
+Feb 26 02:43:41 ndefender-pi python3[30018]: Traceback (most recent call last):
+Feb 26 02:43:41 ndefender-pi python3[30018]:     raise Exception("No device found")
+Feb 26 02:43:41 ndefender-pi python3[30018]: Exception: No device found
+Feb 26 02:43:50 ndefender-pi python3[30348]: Traceback (most recent call last):
+Feb 26 02:43:50 ndefender-pi python3[30348]:     raise OSError(err, _strerror(err))
+Feb 26 02:43:50 ndefender-pi python3[30348]: TimeoutError: [Errno 110] Connection timed out
+Feb 26 02:43:50 ndefender-pi python3[30348]: During handling of the above exception, another exception occurred:
+Feb 26 02:43:50 ndefender-pi python3[30348]: Traceback (most recent call last):
+Feb 26 02:43:50 ndefender-pi python3[30348]:     raise Exception("No device found")
+Feb 26 02:43:50 ndefender-pi python3[30348]: Exception: No device found
+Feb 26 02:43:58 ndefender-pi python3[30552]: Traceback (most recent call last):
+Feb 26 02:43:58 ndefender-pi python3[30552]:     raise OSError(err, _strerror(err))
+Feb 26 02:43:58 ndefender-pi python3[30552]: TimeoutError: [Errno 110] Connection timed out
+Feb 26 02:43:58 ndefender-pi python3[30552]: During handling of the above exception, another exception occurred:
+Feb 26 02:43:58 ndefender-pi python3[30552]: Traceback (most recent call last):
+Feb 26 02:43:58 ndefender-pi python3[30552]:     raise Exception("No device found")
+Feb 26 02:43:58 ndefender-pi python3[30552]: Exception: No device found
 ```
 ### gpsd
-(no matching error/exception/traceback/ws/403/cloudflare lines)
+```
+Feb 26 02:29:02 ndefender-pi gpsd[1116]: gpsd:ERROR: SER: Error setting port attributes: Invalid argument
+```
 
 ## Conclusion
 GREEN SIGNAL

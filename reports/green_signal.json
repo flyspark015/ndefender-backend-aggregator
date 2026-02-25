@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-02-25T18:46:06Z",
+    "generated_at": "2026-02-25T21:14:33Z",
     "hostname": "ndefender-pi",
     "local_base": "http://127.0.0.1:8001/api/v1",
     "public_base": "https://n.flyspark.in/api/v1"
@@ -10,21 +10,21 @@
       {
         "endpoint": "health",
         "status": 200,
-        "latency_ms": 20,
+        "latency_ms": 5,
         "json_ok": true,
-        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772045121744}"
+        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772054040708}"
       },
       {
         "endpoint": "status",
         "status": 200,
-        "latency_ms": 5,
+        "latency_ms": 2,
         "json_ok": true,
-        "snippet": "{\"timestamp_ms\":1772045121750,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":42.45,\"cpu_usage_percent\":40.92255563157723,\"load_1m\":4.3232421875,\"load_5m\":4.078125,\"load_15m\":3.6005859375,\"ram_used_mb\":1743,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1946,\"throttled_flags\":0,\"sta"
+        "snippet": "{\"timestamp_ms\":1772054040710,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":36.95,\"cpu_usage_percent\":16.542836803184613,\"load_1m\":2.7060546875,\"load_5m\":2.1005859375,\"load_15m\":1.470703125,\"ram_used_mb\":1672,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":977,\"throttled_flags\":0,\""
       },
       {
         "endpoint": "contacts",
         "status": 200,
-        "latency_ms": 4,
+        "latency_ms": 3,
         "json_ok": true,
         "snippet": "{\"contacts\":[]}"
       },
@@ -33,121 +33,121 @@
         "status": 200,
         "latency_ms": 3,
         "json_ok": true,
-        "snippet": "{\"cpu_temp_c\":42.45,\"cpu_usage_percent\":40.92255563157723,\"load_1m\":4.3232421875,\"load_5m\":4.078125,\"load_15m\":3.6005859375,\"ram_used_mb\":1743,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1946,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":43.0,\"hostname\":\"ndefen"
+        "snippet": "{\"cpu_temp_c\":36.95,\"cpu_usage_percent\":16.542836803184613,\"load_1m\":2.7060546875,\"load_5m\":2.1005859375,\"load_15m\":1.470703125,\"ram_used_mb\":1672,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":977,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":37.5,\"hostname\":\"nde"
       },
       {
         "endpoint": "power",
         "status": 200,
         "latency_ms": 4,
         "json_ok": true,
-        "snippet": "{\"pack_voltage_v\":null,\"current_a\":null,\"input_vbus_v\":null,\"input_power_w\":null,\"soc_percent\":null,\"state\":null,\"time_to_empty_s\":null,\"time_to_full_s\":null,\"status\":\"degraded\"}"
+        "snippet": "{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.178,4.176,4.179]}"
       },
       {
         "endpoint": "rf",
         "status": 200,
-        "latency_ms": 5,
+        "latency_ms": 7,
         "json_ok": true,
-        "snippet": "{\"last_event\":null,\"last_event_type\":null,\"last_timestamp_ms\":null,\"scan_active\":null}"
+        "snippet": "{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054037096,\"scan_active\":false}"
       },
       {
         "endpoint": "video",
         "status": 200,
-        "latency_ms": 4,
+        "latency_ms": 5,
         "json_ok": true,
         "snippet": "{\"selected\":null,\"status\":\"unknown\"}"
       },
       {
         "endpoint": "services",
         "status": 200,
-        "latency_ms": 7,
+        "latency_ms": 2,
         "json_ok": true,
-        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":606,\"sub_state\":\"auto-restart\"},{\"a"
+        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":262,\"sub_state\":\"running\"},{\"active_sta"
       },
       {
         "endpoint": "network",
         "status": 200,
-        "latency_ms": 4,
+        "latency_ms": 1,
         "json_ok": true,
-        "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"unknown\"}"
+        "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"}"
       },
       {
         "endpoint": "audio",
         "status": 200,
-        "latency_ms": 3,
+        "latency_ms": 1,
         "json_ok": true,
-        "snippet": "{\"muted\":false,\"volume_percent\":100,\"status\":\"unknown\"}"
+        "snippet": "{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"}"
       }
     ],
     "public": [
       {
         "endpoint": "health",
         "status": 200,
-        "latency_ms": 539,
+        "latency_ms": 716,
         "json_ok": true,
-        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772045122212}"
+        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772054041322}"
       },
       {
         "endpoint": "status",
         "status": 200,
-        "latency_ms": 875,
+        "latency_ms": 959,
         "json_ok": true,
-        "snippet": "{\"timestamp_ms\":1772045123081,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":42.45,\"cpu_usage_percent\":40.93305458938204,\"load_1m\":4.056640625,\"load_5m\":4.02685546875,\"load_15m\":3.58642578125,\"ram_used_mb\":1787,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1948,\"throttled_flags\":0"
+        "snippet": "{\"timestamp_ms\":1772054042246,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":36.4,\"cpu_usage_percent\":16.53056081020403,\"load_1m\":2.7060546875,\"load_5m\":2.1005859375,\"load_15m\":1.470703125,\"ram_used_mb\":1604,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":980,\"throttled_flags\":0,\"st"
       },
       {
         "endpoint": "contacts",
         "status": 200,
-        "latency_ms": 717,
+        "latency_ms": 872,
         "json_ok": true,
         "snippet": "{\"contacts\":[]}"
       },
       {
         "endpoint": "system",
         "status": 200,
-        "latency_ms": 939,
+        "latency_ms": 672,
         "json_ok": true,
-        "snippet": "{\"cpu_temp_c\":42.45,\"cpu_usage_percent\":40.93305458938204,\"load_1m\":4.056640625,\"load_5m\":4.02685546875,\"load_15m\":3.58642578125,\"ram_used_mb\":1787,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1948,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":43.0,\"hostname\":\"n"
+        "snippet": "{\"cpu_temp_c\":36.4,\"cpu_usage_percent\":16.550913559140934,\"load_1m\":2.6494140625,\"load_5m\":2.0986328125,\"load_15m\":1.4736328125,\"ram_used_mb\":1635,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":983,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":36.95,\"hostname\":\"nd"
       },
       {
         "endpoint": "power",
         "status": 200,
-        "latency_ms": 1039,
+        "latency_ms": 732,
         "json_ok": true,
-        "snippet": "{\"pack_voltage_v\":null,\"current_a\":null,\"input_vbus_v\":null,\"input_power_w\":null,\"soc_percent\":null,\"state\":null,\"time_to_empty_s\":null,\"time_to_full_s\":null,\"status\":\"degraded\"}"
+        "snippet": "{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.179,4.175,4.179]}"
       },
       {
         "endpoint": "rf",
         "status": 200,
-        "latency_ms": 812,
+        "latency_ms": 924,
         "json_ok": true,
-        "snippet": "{\"last_event\":null,\"last_event_type\":null,\"last_timestamp_ms\":null,\"scan_active\":null}"
+        "snippet": "{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054042096,\"scan_active\":false}"
       },
       {
         "endpoint": "video",
         "status": 200,
-        "latency_ms": 613,
+        "latency_ms": 594,
         "json_ok": true,
         "snippet": "{\"selected\":null,\"status\":\"unknown\"}"
       },
       {
         "endpoint": "services",
         "status": 200,
-        "latency_ms": 895,
+        "latency_ms": 889,
         "json_ok": true,
-        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":608,\"sub_state\":\"auto-restart\"},{\"a"
+        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":264,\"sub_state\":\"auto-restart\"},{\"a"
       },
       {
         "endpoint": "network",
         "status": 200,
-        "latency_ms": 1078,
+        "latency_ms": 706,
         "json_ok": true,
-        "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"unknown\"}"
+        "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"}"
       },
       {
         "endpoint": "audio",
         "status": 200,
-        "latency_ms": 691,
+        "latency_ms": 1063,
         "json_ok": true,
-        "snippet": "{\"muted\":false,\"volume_percent\":100,\"status\":\"unknown\"}"
+        "snippet": "{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"}"
       }
     ]
   },
@@ -157,8 +157,8 @@
       "connect_ok": true,
       "msgs_received": 1,
       "first_type": "SYSTEM_UPDATE",
-      "first_200": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772045130027,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772045130027,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":42.45,\"cpu_usage_percent\":40.9285563242786,\"lo",
-      "first_message": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772045130027,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772045130027,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":42.45,\"cpu_usage_percent\":40.9285563242786,\"load_1m\":4.37255859375,\"load_5m\":4.09326171875,\"load_15m\":3.6103515625,\"ram_used_mb\":1800,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1955,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":41.35,\"hostname\":\"ndefender-pi\",\"storage_free_gb\":46.92474365234375,\"storage_total_gb\":116.6063117980957,\"uptime_seconds\":1955.73,\"version\":\"dev\"},\"power\":{\"pack_voltage_v\":null,\"current_a\":null,\"input_vbus_v\":null,\"input_power_w\":null,\"soc_percent\":null,\"state\":null,\"time_to_empty_s\":null,\"time_to_full_s\":null,\"status\":\"degraded\"},\"rf\":{\"last_event\":null,\"last_event_type\":null,\"last_timestamp_ms\":null,\"scan_active\":null},\"remote_id\":{\"last_event\":null,\"last_event_type\":null,\"last_timestamp_ms\":null,\"state\":null,\"mode\":\"live\",\"capture_active\":null},\"vrx\":{\"selected\":null,\"vrx\":[],\"led\":{},\"sys\":{},\"scan_state\":\"idle\"},\"fpv\":{\"selected\":null,\"locked_channels\":[],\"rssi_raw\":null,\"scan_state\":\"idle\",\"freq_hz\":null},\"video\":{\"selected\":null,\"status\":\"unknown\"},\"services\":[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":609,\"sub_state\":\"auto-restart\"},{\"active_state\":\"active\",\"name\":\"ndefender-rfscan\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"cloudflared\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"gpsd\",\"restart_count\":0,\"sub_state\":\"running\"}],\"network\":{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"unknown\"},\"audio\":{\"muted\":false,\"volume_percent\":100,\"status\":\"unknown\"},\"contacts\":[],\"replay\":{\"active\":false,\"source\":\"none\"}}}",
+      "first_200": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054048895,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054048895,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.555986246061867,\"l",
+      "first_message": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054048895,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054048895,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.555986246061867,\"load_1m\":2.43701171875,\"load_5m\":2.0634765625,\"load_15m\":1.46533203125,\"ram_used_mb\":1692,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":986,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":37.5,\"hostname\":\"ndefender-pi\",\"storage_free_gb\":46.810184478759766,\"storage_total_gb\":116.6063117980957,\"uptime_seconds\":987.06,\"version\":\"dev\"},\"power\":{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.178,4.178,4.175,4.179]},\"rf\":{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054047097,\"scan_active\":false},\"remote_id\":{\"last_event\":{\"reason\":\"no_remoteid_events\"},\"last_event_type\":\"REMOTEID_STALE\",\"last_timestamp_ms\":1772054047097,\"state\":\"DEGRADED\",\"mode\":\"live\",\"capture_active\":false,\"last_error\":\"no_remoteid_events\"},\"vrx\":{\"selected\":null,\"vrx\":[],\"led\":{},\"sys\":{\"status\":\"DISCONNECTED\",\"last_error\":\"[Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'\"},\"scan_state\":\"idle\"},\"fpv\":{\"selected\":null,\"locked_channels\":[],\"rssi_raw\":null,\"scan_state\":\"idle\",\"freq_hz\":null},\"video\":{\"selected\":null,\"status\":\"unknown\"},\"services\":[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":264,\"sub_state\":\"auto-restart\"},{\"active_state\":\"active\",\"name\":\"ndefender-rfscan\",\"restart_count\":112,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"cloudflared\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"gpsd\",\"restart_count\":0,\"sub_state\":\"running\"}],\"network\":{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"},\"audio\":{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"},\"contacts\":[],\"replay\":{\"active\":false,\"source\":\"none\"}}}",
       "envelope_valid": true,
       "error": null
     },
@@ -167,8 +167,8 @@
       "connect_ok": true,
       "msgs_received": 1,
       "first_type": "SYSTEM_UPDATE",
-      "first_200": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772045140904,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772045140904,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":43.55,\"cpu_usage_percent\":40.921649713258226,\"",
-      "first_message": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772045140904,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772045140904,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":43.55,\"cpu_usage_percent\":40.921649713258226,\"load_1m\":4.01318359375,\"load_5m\":4.02392578125,\"load_15m\":3.59521484375,\"ram_used_mb\":1824,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1966,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":45.2,\"hostname\":\"ndefender-pi\",\"storage_free_gb\":46.924686431884766,\"storage_total_gb\":116.6063117980957,\"uptime_seconds\":1967.13,\"version\":\"dev\"},\"power\":{\"pack_voltage_v\":null,\"current_a\":null,\"input_vbus_v\":null,\"input_power_w\":null,\"soc_percent\":null,\"state\":null,\"time_to_empty_s\":null,\"time_to_full_s\":null,\"status\":\"degraded\"},\"rf\":{\"last_event\":null,\"last_event_type\":null,\"last_timestamp_ms\":null,\"scan_active\":null},\"remote_id\":{\"last_event\":null,\"last_event_type\":null,\"last_timestamp_ms\":null,\"state\":null,\"mode\":\"live\",\"capture_active\":null},\"vrx\":{\"selected\":null,\"vrx\":[],\"led\":{},\"sys\":{},\"scan_state\":\"idle\"},\"fpv\":{\"selected\":null,\"locked_channels\":[],\"rssi_raw\":null,\"scan_state\":\"idle\",\"freq_hz\":null},\"video\":{\"selected\":null,\"status\":\"unknown\"},\"services\":[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":613,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-rfscan\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"cloudflared\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"gpsd\",\"restart_count\":0,\"sub_state\":\"running\"}],\"network\":{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"unknown\"},\"audio\":{\"muted\":false,\"volume_percent\":100,\"status\":\"unknown\"},\"contacts\":[],\"replay\":{\"active\":false,\"source\":\"none\"}}}",
+      "first_200": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054059654,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054059654,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.55690233964585,\"lo",
+      "first_message": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054059654,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054059654,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.55690233964585,\"load_1m\":2.5302734375,\"load_5m\":2.09423828125,\"load_15m\":1.48193359375,\"ram_used_mb\":1673,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":997,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":38.05,\"hostname\":\"ndefender-pi\",\"storage_free_gb\":46.81017303466797,\"storage_total_gb\":116.6063117980957,\"uptime_seconds\":999.37,\"version\":\"dev\"},\"power\":{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.178,4.176,4.179]},\"rf\":{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054057105,\"scan_active\":false},\"remote_id\":{\"last_event\":{\"reason\":\"no_remoteid_events\"},\"last_event_type\":\"REMOTEID_STALE\",\"last_timestamp_ms\":1772054057106,\"state\":\"DEGRADED\",\"mode\":\"live\",\"capture_active\":false,\"last_error\":\"no_remoteid_events\"},\"vrx\":{\"selected\":null,\"vrx\":[],\"led\":{},\"sys\":{\"status\":\"DISCONNECTED\",\"last_error\":\"[Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'\"},\"scan_state\":\"idle\"},\"fpv\":{\"selected\":null,\"locked_channels\":[],\"rssi_raw\":null,\"scan_state\":\"idle\",\"freq_hz\":null},\"video\":{\"selected\":null,\"status\":\"unknown\"},\"services\":[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":268,\"sub_state\":\"auto-restart\"},{\"active_state\":\"active\",\"name\":\"ndefender-rfscan\",\"restart_count\":114,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"cloudflared\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"gpsd\",\"restart_count\":0,\"sub_state\":\"running\"}],\"network\":{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"},\"audio\":{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"},\"contacts\":[],\"replay\":{\"active\":false,\"source\":\"none\"}}}",
       "envelope_valid": true,
       "error": null
     }
@@ -216,14 +216,14 @@
       "unit": "ndefender-backend",
       "active": "active",
       "substate": "running",
-      "main_pid": "1061",
+      "main_pid": "1053",
       "error": null
     },
     "cloudflared": {
       "unit": "cloudflared",
       "active": "active",
       "substate": "running",
-      "main_pid": "1059",
+      "main_pid": "2384",
       "error": null
     },
     "ndefender-remoteid-engine": {
@@ -237,14 +237,14 @@
       "unit": "ndefender-rfscan",
       "active": "active",
       "substate": "running",
-      "main_pid": "1064",
+      "main_pid": "31763",
       "error": null
     },
     "gpsd": {
       "unit": "gpsd",
       "active": "active",
       "substate": "running",
-      "main_pid": "1352",
+      "main_pid": "1116",
       "error": null
     }
   },
@@ -271,9 +271,9 @@
         "command": "scan/stop",
         "url": "http://127.0.0.1:8001/api/v1/scan/stop",
         "http_status": 200,
-        "response_snippet": "{\"command\":\"STOP_SCAN\",\"command_id\":\"dea1519f-5452-4e83-bf8b-b4cf340dbbfe\",\"accepted\":false,\"detail\":\"timeout\",\"timestamp_ms\":1772045162623}",
+        "response_snippet": "{\"command\":\"STOP_SCAN\",\"command_id\":\"b720d0c1-bdfa-4830-84f8-eb5fd6b6870b\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772054073468}",
         "accepted": false,
-        "command_id": "dea1519f-5452-4e83-bf8b-b4cf340dbbfe",
+        "command_id": "b720d0c1-bdfa-4830-84f8-eb5fd6b6870b",
         "ack_received": false,
         "ack_match": false,
         "error": null
@@ -282,9 +282,9 @@
         "command": "video/select",
         "url": "http://127.0.0.1:8001/api/v1/video/select",
         "http_status": 200,
-        "response_snippet": "{\"command\":\"VIDEO_SELECT\",\"command_id\":\"b04acefc-3ff6-4f38-9600-a88aebd40974\",\"accepted\":false,\"detail\":\"timeout\",\"timestamp_ms\":1772045166646}",
+        "response_snippet": "{\"command\":\"VIDEO_SELECT\",\"command_id\":\"b2cf1544-a37e-42a9-af85-92ec67352ea1\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772054073474}",
         "accepted": false,
-        "command_id": "b04acefc-3ff6-4f38-9600-a88aebd40974",
+        "command_id": "b2cf1544-a37e-42a9-af85-92ec67352ea1",
         "ack_received": false,
         "ack_match": false,
         "error": null
@@ -295,7 +295,7 @@
     {
       "name": "system_metrics",
       "status": "PASS",
-      "evidence": "cpu_usage=40.90415774992357, temp=41.9"
+      "evidence": "cpu_usage=16.56497753096343, temp=36.4"
     },
     {
       "name": "services_status",
@@ -304,8 +304,8 @@
     },
     {
       "name": "power_ups",
-      "status": "DEGRADED",
-      "evidence": "power fields present but null"
+      "status": "PASS",
+      "evidence": "power fields populated"
     },
     {
       "name": "network",
@@ -315,17 +315,17 @@
     {
       "name": "rf_pipeline",
       "status": "PASS",
-      "evidence": "rf_last=None rf_sensor_state=None"
+      "evidence": "rf_last=1772054072108 rf_sensor_state=None"
     },
     {
       "name": "remoteid",
-      "status": "PASS",
-      "evidence": "state=None capture_active=None"
+      "status": "DEGRADED",
+      "evidence": "state=DEGRADED capture_active=False"
     },
     {
       "name": "esp32_link",
-      "status": "PASS",
-      "evidence": "device=/dev/ndefender-esp32"
+      "status": "FAIL",
+      "evidence": "device not found: /dev/ndefender-esp32"
     },
     {
       "name": "contacts_pipeline",
@@ -337,6 +337,10 @@
   "empty_sections": [],
   "remote_id_stale": false,
   "test_contacts_blocked": true,
+  "power_ok": true,
+  "rf_ok": true,
+  "vrx_ok": true,
+  "remote_id_ok": true,
   "diagnosis": {
     "public_rest_ok": true,
     "local_rest_ok": true,
@@ -344,6 +348,7 @@
     "local_ws_ok": true,
     "status_schema_ok": true,
     "remote_id_fresh": true,
-    "test_contacts_ok": true
+    "test_contacts_ok": true,
+    "subsystems_populated": true
   }
 }
