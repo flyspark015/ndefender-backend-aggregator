@@ -338,6 +338,26 @@ def fetch_status_payload(base: str) -> dict[str, Any]:
         return {}
 
 
+def _normalize_ts(value: Any) -> int | None:
+    try:
+        ts = int(value)
+    except (TypeError, ValueError):
+        return None
+    if ts < 100000000000:
+        return ts * 1000
+    return ts
+
+
+def _contains_test_marker(contact: dict[str, Any]) -> bool:
+    markers = ("testdrone", "warmstart")
+    for value in contact.values():
+        if isinstance(value, str):
+            lowered = value.lower()
+            if any(marker in lowered for marker in markers):
+                return True
+    return False
+
+
 def subsystem_checks(status_payload: dict[str, Any], ws_messages: list[str], services: dict[str, ServiceResult]) -> list[SubsystemResult]:
     results: list[SubsystemResult] = []
 
@@ -452,6 +472,30 @@ def main() -> int:
     if isinstance(status_payload, dict):
         missing_keys = status_key_check(status_payload)
 
+    empty_sections = []
+    if isinstance(status_payload, dict):
+        for key in ("power", "rf", "vrx", "video"):
+            if status_payload.get(key) == {}:
+                empty_sections.append(key)
+
+    replay_active = False
+    if isinstance(status_payload, dict):
+        replay_active = bool((status_payload.get("replay") or {}).get("active"))
+    remote_id_ts = None
+    if isinstance(status_payload, dict):
+        remote_id_ts = _normalize_ts((status_payload.get("remote_id") or {}).get("last_timestamp_ms"))
+    remote_id_stale = False
+    if not replay_active and remote_id_ts is not None:
+        remote_id_stale = int(time.time() * 1000) - remote_id_ts > 15000
+
+    test_contacts = []
+    if isinstance(status_payload, dict) and not replay_active:
+        contacts = status_payload.get("contacts") or []
+        if isinstance(contacts, list):
+            for contact in contacts:
+                if isinstance(contact, dict) and _contains_test_marker(contact):
+                    test_contacts.append(contact.get("id") or "unknown")
+
     def rest_summary(results: list[RestResult]) -> list[dict[str, Any]]:
         out = []
         for r in results:
@@ -488,11 +532,17 @@ def main() -> int:
         },
         "subsystems": [asdict(s) for s in subsystems],
         "missing_status_keys": missing_keys,
+        "empty_sections": empty_sections,
+        "remote_id_stale": remote_id_stale,
+        "test_contacts_blocked": len(test_contacts) == 0,
         "diagnosis": {
             "public_rest_ok": all(r.http_status == 200 for r in public_rest),
             "local_rest_ok": all(r.http_status == 200 for r in local_rest),
             "public_ws_ok": public_ws.connect_ok and public_ws.msgs_received > 0,
             "local_ws_ok": local_ws.connect_ok and local_ws.msgs_received > 0,
+            "status_schema_ok": len(empty_sections) == 0 and len(missing_keys) == 0,
+            "remote_id_fresh": not remote_id_stale,
+            "test_contacts_ok": len(test_contacts) == 0,
         },
     }
 
@@ -586,6 +636,24 @@ def main() -> int:
     lines.append(", ".join(missing_keys) if missing_keys else "none")
 
     lines.append("")
+    lines.append("## Empty /status Sections")
+    lines.append(", ".join(empty_sections) if empty_sections else "none")
+
+    lines.append("")
+    lines.append("## RemoteID Freshness")
+    if replay_active:
+        lines.append("replay.active=true (freshness checks skipped)")
+    else:
+        lines.append(f"remote_id.last_timestamp_ms={remote_id_ts} stale={remote_id_stale}")
+
+    lines.append("")
+    lines.append("## Replay/Test Contacts")
+    if replay_active:
+        lines.append("replay.active=true (test contacts allowed)")
+    else:
+        lines.append("blocked" if len(test_contacts) == 0 else f"found: {', '.join(test_contacts)}")
+
+    lines.append("")
     lines.append("## Log Highlights")
     for unit, (_text, highlights) in journals.items():
         lines.append(f"### {unit}")
@@ -595,7 +663,14 @@ def main() -> int:
             lines.append("(no matching error/exception/traceback/ws/403/cloudflare lines)")
 
     lines.append("")
-    if result_obj["diagnosis"]["public_rest_ok"] and result_obj["diagnosis"]["public_ws_ok"] and all(c.http_status == 200 for c in cors_results):
+    if (
+        result_obj["diagnosis"]["public_rest_ok"]
+        and result_obj["diagnosis"]["public_ws_ok"]
+        and all(c.http_status == 200 for c in cors_results)
+        and result_obj["diagnosis"]["status_schema_ok"]
+        and result_obj["diagnosis"]["remote_id_fresh"]
+        and result_obj["diagnosis"]["test_contacts_ok"]
+    ):
         lines.append("## Conclusion\nGREEN SIGNAL")
     else:
         lines.append("## Conclusion\nRED SIGNAL")
@@ -607,6 +682,12 @@ def main() -> int:
             causes.append("Public WS not receiving messages")
         if not all(c.http_status == 200 for c in cors_results):
             causes.append("CORS preflight failing")
+        if not result_obj["diagnosis"]["status_schema_ok"]:
+            causes.append("Status schema missing keys or empty sections (power/rf/vrx/video)")
+        if not result_obj["diagnosis"]["remote_id_fresh"]:
+            causes.append("RemoteID stale timestamps while replay inactive")
+        if not result_obj["diagnosis"]["test_contacts_ok"]:
+            causes.append("Replay/test contacts present while replay inactive")
         lines.extend([f"- {c}" for c in causes])
         lines.append("\n## Fix Plan")
         lines.append("1. Verify Cloudflare WAF Skip rule for /api/v1/* (Managed Rules, BIC, Bot Fight).")

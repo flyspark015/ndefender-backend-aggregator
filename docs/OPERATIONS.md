@@ -38,6 +38,13 @@ ls -lah /opt/ndefender/logs/
 - Poller marks status as degraded but API remains available.
 - `system`/`power`/`network`/`audio` fields may be stale or empty.
 
+## RemoteID Stale / Replay Detection
+- If `replay.active=false`, RemoteID contacts older than 15s are dropped and test markers (`TestDrone`, `WARMSTART`) are filtered.
+- If you still see stale RemoteID timestamps, confirm RemoteID JSONL is live and not replaying.
+- Logs to check:
+  - `journalctl -u ndefender-remoteid-engine -n 200 --no-pager | grep -i tshark`
+  - Verify monitor interface (`mon0`) is present and captures are fresh.
+
 ## Rate Limit Exceeded Handling
 - Command endpoints return `429` on excessive calls.
 - Wait for cooldown window to expire.

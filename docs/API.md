@@ -19,6 +19,12 @@ Example:
 curl http://127.0.0.1:8001/api/v1/status
 ```
 
+StatusSnapshot contract notes:
+- Always includes stable keys (no empty top-level objects): `system`, `power`, `rf`, `remote_id`, `vrx`, `fpv`, `video`, `services`, `network`, `audio`, `contacts`, `replay`, `overall_ok`, `timestamp_ms`.
+- Nulls are allowed when a subsystem is missing.
+- `timestamp_ms` is epoch milliseconds.
+- `replay.active=false` suppresses replay/test contacts (e.g., `TestDrone`, `WARMSTART`).
+
 ### Contacts & Telemetry
 - `GET /contacts`
 - `GET /system`
@@ -45,6 +51,8 @@ Example response excerpt (contacts):
 - `POST /video/select`
 - `POST /system/reboot` (confirm required + unsafe toggle)
 - `POST /system/shutdown` (confirm required + unsafe toggle)
+
+Note: If command endpoints are disabled in production, they may return `405` and no auth is enforced.
 
 Example:
 ```bash
