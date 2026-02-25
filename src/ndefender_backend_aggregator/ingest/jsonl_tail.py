@@ -16,7 +16,7 @@ class TailStats:
 
 
 class JsonlTailer:
-    def __init__(self, path: str, poll_interval_ms: int) -> None:
+    def __init__(self, path: str, poll_interval_ms: int, start_at_end: bool = True) -> None:
         self._path = Path(path)
         self._poll_interval = poll_interval_ms / 1000
         self._offset = 0
@@ -25,6 +25,7 @@ class JsonlTailer:
         self._ctime_ns: int | None = None
         self._buffer = ""
         self._stats = TailStats()
+        self._start_at_end = start_at_end
 
     @property
     def stats(self) -> TailStats:
@@ -45,11 +46,11 @@ class JsonlTailer:
                 self._inode = stat.st_ino
                 self._mtime_ns = mtime_ns
                 self._ctime_ns = ctime_ns
-                self._offset = 0
+                self._offset = stat.st_size if self._start_at_end else 0
                 self._buffer = ""
                 self._stats.resets += 1
             if stat.st_size < self._offset:
-                self._offset = 0
+                self._offset = stat.st_size if self._start_at_end else 0
                 self._buffer = ""
                 self._stats.resets += 1
             if (
@@ -58,7 +59,7 @@ class JsonlTailer:
                 and (mtime_ns != self._mtime_ns or ctime_ns != self._ctime_ns)
                 and stat.st_size <= self._offset
             ):
-                self._offset = 0
+                self._offset = stat.st_size if self._start_at_end else 0
                 self._buffer = ""
                 self._stats.resets += 1
             self._mtime_ns = mtime_ns
