@@ -54,7 +54,21 @@ COMMAND_PAYLOADS = {
     "video/select": {"payload": {"ch": 1}},
 }
 
-REQUIRED_STATUS_KEYS = ["system", "power", "services", "rf", "network", "audio", "contacts"]
+REQUIRED_STATUS_KEYS = [
+    "system",
+    "power",
+    "rf",
+    "remote_id",
+    "vrx",
+    "fpv",
+    "video",
+    "services",
+    "network",
+    "audio",
+    "contacts",
+    "replay",
+    "overall_ok",
+]
 
 SERVICE_UNITS = [
     "ndefender-backend",
@@ -475,7 +489,7 @@ def main() -> int:
 
     empty_sections = []
     if isinstance(status_payload, dict):
-        for key in ("power", "rf", "vrx", "video"):
+        for key in ("system", "power", "rf", "remote_id", "vrx", "fpv", "video", "network", "audio"):
             if status_payload.get(key) == {}:
                 empty_sections.append(key)
 
