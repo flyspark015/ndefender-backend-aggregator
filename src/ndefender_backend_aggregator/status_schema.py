@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from pathlib import Path
 from typing import Any
 
 
@@ -157,6 +158,9 @@ def fill_status_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
     if filled["audio"].get("status") in (None, "unknown") and filled["audio"].get("muted") is not None:
         filled["audio"]["status"] = "ok"
 
+    _mirror_vrx_to_fpv(filled)
+    _apply_video_health(filled)
+
     if not isinstance(filled.get("services"), list):
         filled["services"] = []
     if not isinstance(filled.get("contacts"), list):
@@ -169,3 +173,34 @@ def fill_status_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
 
     filled["overall_ok"] = _overall_ok(filled)
     return filled
+
+
+def _mirror_vrx_to_fpv(snapshot: dict[str, Any]) -> None:
+    vrx = snapshot.get("vrx")
+    fpv = snapshot.get("fpv")
+    if not isinstance(vrx, dict) or not isinstance(fpv, dict):
+        return
+    selected = vrx.get("selected")
+    if selected is None:
+        return
+    vrx_list = vrx.get("vrx") or []
+    if not isinstance(vrx_list, list):
+        return
+    match = next((item for item in vrx_list if isinstance(item, dict) and item.get("id") == selected), None)
+    if not match:
+        return
+    fpv["selected"] = selected
+    fpv["freq_hz"] = match.get("freq_hz")
+    fpv["rssi_raw"] = match.get("rssi_raw")
+    if vrx.get("scan_state") is not None:
+        fpv["scan_state"] = vrx.get("scan_state")
+
+
+def _apply_video_health(snapshot: dict[str, Any]) -> None:
+    video = snapshot.get("video")
+    if not isinstance(video, dict):
+        return
+    if video.get("status") not in (None, "unknown"):
+        return
+    has_device = any(Path("/dev").glob("video*"))
+    video["status"] = "ok" if has_device else "offline"

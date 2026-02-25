@@ -87,6 +87,12 @@ class ContactStore:
 
     async def update_fpv(self, telemetry: dict[str, Any], timestamp_ms: int) -> None:
         vrx_list = telemetry.get("vrx") or []
+        now_ms = int(time.time() * 1000)
+        last_seen_ts = timestamp_ms
+        last_seen_uptime_ms = None
+        if timestamp_ms < 100000000000:
+            last_seen_uptime_ms = timestamp_ms
+            last_seen_ts = now_ms
         async with self._lock:
             if not vrx_list:
                 self._fpv.clear()
@@ -98,13 +104,15 @@ class ContactStore:
                     "id": contact_id,
                     "type": "FPV",
                     "source": "esp32",
-                    "last_seen_ts": timestamp_ms,
+                    "last_seen_ts": last_seen_ts,
                     "severity": "unknown",
                     "vrx_id": vrx_id,
                     "freq_hz": strongest.get("freq_hz"),
                     "rssi_raw": strongest.get("rssi_raw"),
                     "selected": telemetry.get("sel"),
                 }
+                if last_seen_uptime_ms is not None:
+                    contact["last_seen_uptime_ms"] = last_seen_uptime_ms
                 self._fpv = {contact_id: contact}
             contacts = self._merged_contacts()
             replay = dict(self._replay)
