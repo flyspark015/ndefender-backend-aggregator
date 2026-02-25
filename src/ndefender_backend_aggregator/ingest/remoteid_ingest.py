@@ -37,14 +37,17 @@ class RemoteIdIngestor(Ingestor):
             config.remoteid.tail_poll_interval_ms,
         )
         self._task: asyncio.Task[None] | None = None
+        self._watchdog: asyncio.Task[None] | None = None
         self._running = False
         self._last_error: str | None = None
+        self._last_event_ms: int | None = None
 
     async def start(self) -> None:
         if self._running:
             return
         self._running = True
         self._task = asyncio.create_task(self._run())
+        self._watchdog = asyncio.create_task(self._monitor_staleness())
 
     async def stop(self) -> None:
         if not self._running:
@@ -54,6 +57,10 @@ class RemoteIdIngestor(Ingestor):
             self._task.cancel()
             with suppress(asyncio.CancelledError):
                 await self._task
+        if self._watchdog:
+            self._watchdog.cancel()
+            with suppress(asyncio.CancelledError):
+                await self._watchdog
 
     async def health(self) -> dict[str, str]:
         status = "ok" if self._running else "stopped"
@@ -73,6 +80,14 @@ class RemoteIdIngestor(Ingestor):
                 await self._process_line(line)
             except Exception as exc:
                 self._last_error = str(exc)
+                await self._state_store.update_section(
+                    "remote_id",
+                    {
+                        "state": "DEGRADED",
+                        "capture_active": False,
+                        "last_error": self._last_error,
+                    },
+                )
 
     async def _process_line(self, line: str) -> None:
         payload = json.loads(line)
@@ -90,12 +105,20 @@ class RemoteIdIngestor(Ingestor):
             if not replay_active and self._is_test_contact(data):
                 return
 
+        self._last_event_ms = timestamp_ms
+        remote_state = data.get("state") or data.get("status")
+        remote_mode = data.get("mode")
+        remote_last_ts = data.get("last_ts") or data.get("last_timestamp_ms")
         await self._state_store.update_section(
             "remote_id",
             {
                 "last_event_type": event_type,
                 "last_event": data,
                 "last_timestamp_ms": timestamp_ms,
+                "state": remote_state,
+                "mode": remote_mode or "live",
+                "capture_active": data.get("capture_active"),
+                "last_ts": remote_last_ts,
             },
         )
         if self._contact_store and event_type:
@@ -112,6 +135,34 @@ class RemoteIdIngestor(Ingestor):
             data=data,
         )
         await self._event_bus.publish(envelope)
+
+    async def _monitor_staleness(self) -> None:
+        while self._running:
+            await asyncio.sleep(5)
+            if not self._running:
+                break
+            if self._contact_store and await self._contact_store.replay_active():
+                continue
+            if not self._last_event_ms:
+                await self._state_store.update_section(
+                    "remote_id",
+                    {
+                        "state": "DEGRADED",
+                        "capture_active": False,
+                        "last_error": "no_remoteid_events",
+                    },
+                )
+                continue
+            if self._is_stale(self._last_event_ms):
+                await self._state_store.update_section(
+                    "remote_id",
+                    {
+                        "state": "DEGRADED",
+                        "capture_active": False,
+                        "last_error": "remoteid_stale",
+                        "last_timestamp_ms": self._last_event_ms,
+                    },
+                )
 
     @staticmethod
     def _normalize_ts(value: object) -> int:
