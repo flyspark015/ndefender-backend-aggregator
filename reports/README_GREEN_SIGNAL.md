@@ -1,5 +1,5 @@
 # N-Defender GREEN SIGNAL Report
-Generated: 2026-02-25T21:27:49Z
+Generated: 2026-02-25T21:38:24Z
 Hostname: ndefender-pi
 
 ## Summary
@@ -14,12 +14,12 @@ Hostname: ndefender-pi
 ### Local REST
 | Endpoint | HTTP | JSON | Snippet |
 | --- | --- | --- | --- |
-| health | 200 | True | {"status":"ok","timestamp_ms":1772054815977} |
-| status | 200 | True | {"timestamp_ms":1772054815981,"overall_ok":false,"system":{"cpu_temp_c":46.85,"cpu_usage_percent":32.04228133498624,"loa |
+| health | 200 | True | {"status":"ok","timestamp_ms":1772055450635} |
+| status | 200 | True | {"timestamp_ms":1772055450639,"overall_ok":false,"system":{"cpu_temp_c":46.85,"cpu_usage_percent":40.96278997279734,"loa |
 | contacts | 200 | True | {"contacts":[]} |
-| system | 200 | True | {"cpu_temp_c":46.85,"cpu_usage_percent":32.04228133498624,"load_1m":6.71240234375,"load_5m":5.99951171875,"load_15m":3.9 |
+| system | 200 | True | {"cpu_temp_c":46.85,"cpu_usage_percent":40.96278997279734,"load_1m":6.64208984375,"load_5m":6.17236328125,"load_15m":5.0 |
 | power | 200 | True | {"pack_voltage_v":16.709,"current_a":0.0,"input_vbus_v":0.0,"input_power_w":0.0,"soc_percent":98,"state":"IDLE","time_to |
-| rf | 200 | True | {"last_event":{"center_hz":3370000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":14.675069104690891,"pe |
+| rf | 200 | True | {"last_event":{"center_hz":3366000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":32.96927092178615,"pea |
 | video | 200 | True | {"selected":null,"status":"unknown"} |
 | services | 200 | True | [{"active_state":"active","name":"ndefender-backend","restart_count":0,"sub_state":"running"},{"active_state":"active"," |
 | network | 200 | True | {"connected":true,"ip_v4":"192.168.1.35","ip_v6":"2401:4900:8fef:a440:69de:a6e0:f49b:2f21","ssid":"Airtel_Toybook","stat |
@@ -28,12 +28,12 @@ Hostname: ndefender-pi
 ### Public REST
 | Endpoint | HTTP | JSON | Snippet |
 | --- | --- | --- | --- |
-| health | 200 | True | {"status":"ok","timestamp_ms":1772054816850} |
-| status | 200 | True | {"timestamp_ms":1772054817477,"overall_ok":false,"system":{"cpu_temp_c":46.85,"cpu_usage_percent":32.04228133498624,"loa |
+| health | 200 | True | {"status":"ok","timestamp_ms":1772055451417} |
+| status | 200 | True | {"timestamp_ms":1772055452328,"overall_ok":false,"system":{"cpu_temp_c":46.85,"cpu_usage_percent":40.96278997279734,"loa |
 | contacts | 200 | True | {"contacts":[]} |
-| system | 200 | True | {"cpu_temp_c":46.85,"cpu_usage_percent":32.11071317096088,"load_1m":7.37646484375,"load_5m":6.1494140625,"load_15m":4.02 |
+| system | 200 | True | {"cpu_temp_c":47.95,"cpu_usage_percent":40.99649483660655,"load_1m":6.35009765625,"load_5m":6.11962890625,"load_15m":5.0 |
 | power | 200 | True | {"pack_voltage_v":16.709,"current_a":0.0,"input_vbus_v":0.0,"input_power_w":0.0,"soc_percent":98,"state":"IDLE","time_to |
-| rf | 200 | True | {"last_event":{"center_hz":3410000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":13.609288099578478,"pe |
+| rf | 200 | True | {"last_event":{"center_hz":3406000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":15.18393927204508,"pea |
 | video | 200 | True | {"selected":null,"status":"unknown"} |
 | services | 200 | True | [{"active_state":"active","name":"ndefender-backend","restart_count":0,"sub_state":"running"},{"active_state":"active"," |
 | network | 200 | True | {"connected":true,"ip_v4":"192.168.1.35","ip_v6":"2401:4900:8fef:a440:69de:a6e0:f49b:2f21","ssid":"Airtel_Toybook","stat |
@@ -44,13 +44,13 @@ Hostname: ndefender-pi
 - connect_ok: True
 - msgs_received: 7
 - first_type: HELLO
-- first_200: {"type":"HELLO","timestamp_ms":1772054824648,"source":"aggregator","data":{"timestamp_ms":1772054824648}}
+- first_200: {"type":"HELLO","timestamp_ms":1772055459435,"source":"aggregator","data":{"timestamp_ms":1772055459435}}
 
 ### Public WS
 - connect_ok: True
 - msgs_received: 7
 - first_type: HELLO
-- first_200: {"type":"HELLO","timestamp_ms":1772054835595,"source":"aggregator","data":{"timestamp_ms":1772054835595}}
+- first_200: {"type":"HELLO","timestamp_ms":1772055470117,"source":"aggregator","data":{"timestamp_ms":1772055470117}}
 
 ## CORS
 - https://n.flyspark.in/api/v1/status origin=https://www.figma.com status=200 allow-origin=* allow-methods=GET, POST, OPTIONS allow-headers=Content-Type
@@ -64,26 +64,26 @@ Generic endpoint probe (POST):
 | Command | HTTP | Accepted | Ack | Snippet |
 | --- | --- | --- | --- | --- |
 | ping | None | None | False | no generic endpoint; ping not supported |
-| scan/stop | 200 | False | False | {"command":"STOP_SCAN","command_id":"aa8961a7-a8d2-4d8f-9763-a95cfa683081","accepted":false,"detail":"serial not connect |
-| video/select | 200 | False | False | {"command":"VIDEO_SELECT","command_id":"18f2fed6-e082-4cc9-86ab-519927b6c905","accepted":false,"detail":"serial not conn |
+| scan/stop | 200 | False | False | {"command":"STOP_SCAN","command_id":"0b743efa-a68a-4e40-a8da-1b025b2ec891","accepted":false,"detail":"serial not connect |
+| video/select | 200 | False | False | {"command":"VIDEO_SELECT","command_id":"c4cf6137-482e-45e0-a316-f2cf88d7137e","accepted":false,"detail":"serial not conn |
 
 ## Services
 | Unit | Active | SubState | MainPID | Error |
 | --- | --- | --- | --- | --- |
 | ndefender-backend | active | running | 1053 | None |
 | cloudflared | active | running | 2384 | None |
-| ndefender-remoteid-engine | activating | auto-restart | 0 | None |
+| ndefender-remoteid-engine | active | running | 75502 | None |
 | ndefender-rfscan | active | running | 37903 | None |
 | gpsd | active | running | 1116 | None |
 
 ## Subsystems
 | Name | Status | Evidence |
 | --- | --- | --- |
-| system_metrics | PASS | cpu_usage=33.04594420000031, temp=47.95 |
+| system_metrics | PASS | cpu_usage=41.54593054886564, temp=46.85 |
 | services_status | PASS | services_count=6 |
 | power_ups | PASS | power fields populated |
 | network | PASS | connected=True ssid=Airtel_Toybook |
-| rf_pipeline | PASS | rf_last=1772054869393 rf_sensor_state=None |
+| rf_pipeline | PASS | rf_last=1772055504033 rf_sensor_state=None |
 | remoteid | DEGRADED | state=DEGRADED capture_active=False |
 | esp32_link | FAIL | device not found: /dev/ndefender-esp32 |
 | contacts_pipeline | DEGRADED | no CONTACT_* events observed in WS capture |
@@ -95,7 +95,7 @@ none
 none
 
 ## RemoteID Freshness
-remote_id.last_timestamp_ms=1772054866209 stale=False
+remote_id.last_timestamp_ms=1772055501420 stale=False
 
 ## Replay/Test Contacts
 blocked
@@ -131,36 +131,43 @@ Feb 26 02:29:18 ndefender-pi cloudflared[2384]: 2026-02-25T20:59:18Z INF Startin
 ```
 ### ndefender-remoteid-engine
 ```
-Feb 26 02:56:36 ndefender-pi ndefender-remoteid[54438]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 02:56:40 ndefender-pi ndefender-remoteid[54602]: Traceback (most recent call last):
-Feb 26 02:56:40 ndefender-pi ndefender-remoteid[54602]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 02:56:40 ndefender-pi ndefender-remoteid[54602]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 02:56:44 ndefender-pi ndefender-remoteid[54724]: Traceback (most recent call last):
-Feb 26 02:56:44 ndefender-pi ndefender-remoteid[54724]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 02:56:44 ndefender-pi ndefender-remoteid[54724]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 02:56:48 ndefender-pi ndefender-remoteid[54849]: Traceback (most recent call last):
-Feb 26 02:56:48 ndefender-pi ndefender-remoteid[54849]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 02:56:48 ndefender-pi ndefender-remoteid[54849]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 02:56:52 ndefender-pi ndefender-remoteid[54998]: Traceback (most recent call last):
-Feb 26 02:56:52 ndefender-pi ndefender-remoteid[54998]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 02:56:52 ndefender-pi ndefender-remoteid[54998]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 02:56:56 ndefender-pi ndefender-remoteid[55100]: Traceback (most recent call last):
-Feb 26 02:56:56 ndefender-pi ndefender-remoteid[55100]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 02:56:56 ndefender-pi ndefender-remoteid[55100]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 02:57:00 ndefender-pi ndefender-remoteid[55252]: Traceback (most recent call last):
-Feb 26 02:57:00 ndefender-pi ndefender-remoteid[55252]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
-Feb 26 02:57:00 ndefender-pi ndefender-remoteid[55252]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
-Feb 26 02:57:03 ndefender-pi ndefender-remoteid[55347]: Traceback (most recent call last):
+Feb 26 03:07:09 ndefender-pi ndefender-remoteid[73726]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 03:07:13 ndefender-pi ndefender-remoteid[73839]: Traceback (most recent call last):
+Feb 26 03:07:13 ndefender-pi ndefender-remoteid[73839]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 03:07:13 ndefender-pi ndefender-remoteid[73839]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 03:07:17 ndefender-pi ndefender-remoteid[73978]: Traceback (most recent call last):
+Feb 26 03:07:17 ndefender-pi ndefender-remoteid[73978]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 03:07:17 ndefender-pi ndefender-remoteid[73978]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 03:07:21 ndefender-pi ndefender-remoteid[74103]: Traceback (most recent call last):
+Feb 26 03:07:21 ndefender-pi ndefender-remoteid[74103]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 03:07:21 ndefender-pi ndefender-remoteid[74103]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 03:07:25 ndefender-pi ndefender-remoteid[74244]: Traceback (most recent call last):
+Feb 26 03:07:25 ndefender-pi ndefender-remoteid[74244]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 03:07:25 ndefender-pi ndefender-remoteid[74244]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 03:07:29 ndefender-pi ndefender-remoteid[74373]: Traceback (most recent call last):
+Feb 26 03:07:29 ndefender-pi ndefender-remoteid[74373]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 03:07:29 ndefender-pi ndefender-remoteid[74373]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 03:07:32 ndefender-pi ndefender-remoteid[74515]: Traceback (most recent call last):
+Feb 26 03:07:32 ndefender-pi ndefender-remoteid[74515]:     raise RuntimeError(f"tshark exited with {returncode}: {stderr_output}")
+Feb 26 03:07:32 ndefender-pi ndefender-remoteid[74515]: RuntimeError: tshark exited with 1: Capturing on 'mon0'
+Feb 26 03:07:37 ndefender-pi ndefender-remoteid[74620]: Traceback (most recent call last):
 ```
 ### ndefender-rfscan
 ```
-Feb 26 02:57:28 ndefender-pi python3[37903]: {"t":1772054848.4403684,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3640000000,"peak_freq_hz":3639193733.215332,"snr_db":16.555549026207714,"peak_db":87.14504496925527,"noise_floor_db":70.58949594304755,"bandwidth_class":"narrow"}}
-Feb 26 02:57:28 ndefender-pi python3[37903]: {"t":1772054848.4403684,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3640000000,"peak_freq_hz":3639652191.1621094,"snr_db":14.222235767587193,"peak_db":84.81173171063475,"noise_floor_db":70.58949594304755,"bandwidth_class":"narrow"}}
-Feb 26 02:57:28 ndefender-pi python3[37903]: {"t":1772054848.4403684,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3640000000,"peak_freq_hz":3639999946.5942383,"snr_db":27.5617546197863,"peak_db":98.15125056283385,"noise_floor_db":70.58949594304755,"bandwidth_class":"narrow"}}
-Feb 26 02:57:28 ndefender-pi python3[37903]: {"t":1772054848.4403684,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3640000000,"peak_freq_hz":3640466896.057129,"snr_db":16.67967097355256,"peak_db":87.26916691660011,"noise_floor_db":70.58949594304755,"bandwidth_class":"narrow"}}
-Feb 26 02:57:28 ndefender-pi python3[37903]: {"t":1772054848.4403684,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3640000000,"peak_freq_hz":3640772453.3081055,"snr_db":19.1521913626716,"peak_db":89.74168730571915,"noise_floor_db":70.58949594304755,"bandwidth_class":"narrow"}}
-Feb 26 02:57:29 ndefender-pi python3[37903]: {"t":1772054849.2069166,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3646000000,"peak_freq_hz":3646730804.4433594,"snr_db":19.468594034967182,"peak_db":90.35655681037964,"noise_floor_db":70.88796277541246,"bandwidth_class":"narrow"}}
-Feb 26 02:57:29 ndefender-pi python3[37903]: {"type":"RF_CONTACT_UPDATE","ts_ms":1772054849206,"id":"rf:3646000000","data":{"center_hz":3646000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":19.468594034967182,"peak_db":90.35655681037964}}
+Feb 26 03:08:00 ndefender-pi python3[37903]: {"t":1772055480.1329293,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3612000000,"peak_freq_hz":3611235549.926758,"snr_db":22.263290946808155,"peak_db":92.8751312507366,"noise_floor_db":70.61184030392845,"bandwidth_class":"narrow"}}
+Feb 26 03:08:00 ndefender-pi python3[37903]: {"t":1772055480.1329293,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3612000000,"peak_freq_hz":3611744812.0117188,"snr_db":18.64120091809548,"peak_db":89.25304122202392,"noise_floor_db":70.61184030392845,"bandwidth_class":"narrow"}}
+Feb 26 03:08:00 ndefender-pi python3[37903]: {"t":1772055480.1329293,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3612000000,"peak_freq_hz":3611999969.482422,"snr_db":26.57950219801735,"peak_db":97.1913425019458,"noise_floor_db":70.61184030392845,"bandwidth_class":"narrow"}}
+Feb 26 03:08:00 ndefender-pi python3[37903]: {"t":1772055480.1329293,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3612000000,"peak_freq_hz":3612254081.726074,"snr_db":20.134904990967314,"peak_db":90.74674529489576,"noise_floor_db":70.61184030392845,"bandwidth_class":"narrow"}}
+Feb 26 03:08:00 ndefender-pi python3[37903]: {"t":1772055480.1329293,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3612000000,"peak_freq_hz":3612508712.7685547,"snr_db":16.706585374080532,"peak_db":87.31842567800898,"noise_floor_db":70.61184030392845,"bandwidth_class":"narrow"}}
+Feb 26 03:08:00 ndefender-pi python3[37903]: {"t":1772055480.1329293,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3612000000,"peak_freq_hz":3612763343.811035,"snr_db":21.551505031722584,"peak_db":92.16334533565103,"noise_floor_db":70.61184030392845,"bandwidth_class":"narrow"}}
+Feb 26 03:08:01 ndefender-pi python3[37903]: {"t":1772055481.1738384,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3620000000,"peak_freq_hz":3619180046.081543,"snr_db":44.24311538856526,"peak_db":115.02648809114032,"noise_floor_db":70.78337270257506,"bandwidth_class":"narrow"}}
+Feb 26 03:08:01 ndefender-pi python3[37903]: {"type":"RF_CONTACT_NEW","ts_ms":1772055481173,"id":"rf:3620000000","data":{"center_hz":3620000000,"bandwidth_class":"narrow","family_hint":"unknown","snr_db":44.24311538856526,"peak_db":115.02648809114032}}
+Feb 26 03:08:02 ndefender-pi python3[37903]: {"t":1772055482.2279408,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3628000000,"peak_freq_hz":3627999977.1118164,"snr_db":26.4334178576445,"peak_db":96.88847969403788,"noise_floor_db":70.45506183639338,"bandwidth_class":"narrow"}}
+Feb 26 03:08:02 ndefender-pi python3[37903]: {"t":1772055482.7398894,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3632000000,"peak_freq_hz":3631147712.7075195,"snr_db":18.82214978413981,"peak_db":89.45965418740508,"noise_floor_db":70.63750440326527,"bandwidth_class":"narrow"}}
+Feb 26 03:08:02 ndefender-pi python3[37903]: {"t":1772055482.7398894,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3632000000,"peak_freq_hz":3631555122.3754883,"snr_db":16.39533803429704,"peak_db":87.03284243756231,"noise_floor_db":70.63750440326527,"bandwidth_class":"narrow"}}
+Feb 26 03:08:02 ndefender-pi python3[37903]: {"t":1772055482.7398894,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3632000000,"peak_freq_hz":3632000045.776367,"snr_db":27.86584046211901,"peak_db":98.50334486538428,"noise_floor_db":70.63750440326527,"bandwidth_class":"narrow"}}
+Feb 26 03:08:02 ndefender-pi python3[37903]: {"t":1772055482.7398894,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3632000000,"peak_freq_hz":3632471794.128418,"snr_db":16.10640021169678,"peak_db":86.74390461496205,"noise_floor_db":70.63750440326527,"bandwidth_class":"narrow"}}
+Feb 26 03:08:02 ndefender-pi python3[37903]: {"t":1772055482.7398894,"detector":"peak","type":"PEAK","severity":2,"data":{"center_hz":3632000000,"peak_freq_hz":3632726425.1708984,"snr_db":17.529468485374352,"peak_db":88.16697288863962,"noise_floor_db":70.63750440326527,"bandwidth_class":"narrow"}}
 ```
 ### gpsd
 ```
