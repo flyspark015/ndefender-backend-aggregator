@@ -15,6 +15,12 @@ Why this exists: It is the operator handbook for production deployments, includi
 - [ ] `GET /api/v1/contacts` returns list (may be empty).
 - [ ] WS `/api/v1/ws` streams events.
 
+## Subsystem Feeds (Aggregator)
+- System Controller -> `/api/v1/status` (power/network/audio/system/services).
+- AntSDR -> JSONL tailer at `/opt/ndefender/logs/antsdr_scan.jsonl` (rf + RF contacts).
+- RemoteID -> JSONL tailer at `/opt/ndefender/logs/remoteid_engine.jsonl` (remote_id + contacts).
+- ESP32 -> serial telemetry (vrx/fpv/video). If missing, vrx.sys.status="DISCONNECTED".
+
 ## Log Inspection Commands
 ```bash
 journalctl -u ndefender-backend-aggregator -f

@@ -496,6 +496,20 @@ def main() -> int:
                 if isinstance(contact, dict) and _contains_test_marker(contact):
                     test_contacts.append(contact.get("id") or "unknown")
 
+    power_ok = False
+    rf_ok = False
+    vrx_ok = False
+    remote_id_ok = False
+    if isinstance(status_payload, dict):
+        power = status_payload.get("power") or {}
+        power_ok = power.get("status") is not None
+        rf = status_payload.get("rf") or {}
+        rf_ok = rf.get("last_timestamp_ms") is not None or rf.get("scan_active") is not None
+        vrx = status_payload.get("vrx") or {}
+        vrx_ok = vrx.get("scan_state") is not None
+        remote_id = status_payload.get("remote_id") or {}
+        remote_id_ok = remote_id.get("state") is not None
+
     def rest_summary(results: list[RestResult]) -> list[dict[str, Any]]:
         out = []
         for r in results:
@@ -535,6 +549,10 @@ def main() -> int:
         "empty_sections": empty_sections,
         "remote_id_stale": remote_id_stale,
         "test_contacts_blocked": len(test_contacts) == 0,
+        "power_ok": power_ok,
+        "rf_ok": rf_ok,
+        "vrx_ok": vrx_ok,
+        "remote_id_ok": remote_id_ok,
         "diagnosis": {
             "public_rest_ok": all(r.http_status == 200 for r in public_rest),
             "local_rest_ok": all(r.http_status == 200 for r in local_rest),
@@ -543,6 +561,7 @@ def main() -> int:
             "status_schema_ok": len(empty_sections) == 0 and len(missing_keys) == 0,
             "remote_id_fresh": not remote_id_stale,
             "test_contacts_ok": len(test_contacts) == 0,
+            "subsystems_populated": power_ok and rf_ok and vrx_ok and remote_id_ok,
         },
     }
 
@@ -654,6 +673,10 @@ def main() -> int:
         lines.append("blocked" if len(test_contacts) == 0 else f"found: {', '.join(test_contacts)}")
 
     lines.append("")
+    lines.append("## Subsystem Population Checks")
+    lines.append(f"power_ok={power_ok} rf_ok={rf_ok} vrx_ok={vrx_ok} remote_id_ok={remote_id_ok}")
+
+    lines.append("")
     lines.append("## Log Highlights")
     for unit, (_text, highlights) in journals.items():
         lines.append(f"### {unit}")
@@ -670,6 +693,7 @@ def main() -> int:
         and result_obj["diagnosis"]["status_schema_ok"]
         and result_obj["diagnosis"]["remote_id_fresh"]
         and result_obj["diagnosis"]["test_contacts_ok"]
+        and result_obj["diagnosis"]["subsystems_populated"]
     ):
         lines.append("## Conclusion\nGREEN SIGNAL")
     else:
@@ -688,6 +712,8 @@ def main() -> int:
             causes.append("RemoteID stale timestamps while replay inactive")
         if not result_obj["diagnosis"]["test_contacts_ok"]:
             causes.append("Replay/test contacts present while replay inactive")
+        if not result_obj["diagnosis"]["subsystems_populated"]:
+            causes.append("Subsystems not populating (power/rf/vrx/remote_id)")
         lines.extend([f"- {c}" for c in causes])
         lines.append("\n## Fix Plan")
         lines.append("1. Verify Cloudflare WAF Skip rule for /api/v1/* (Managed Rules, BIC, Bot Fight).")
