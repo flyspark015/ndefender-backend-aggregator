@@ -44,6 +44,8 @@ def _default_rf() -> dict[str, Any]:
         "last_event_type": None,
         "last_timestamp_ms": None,
         "scan_active": None,
+        "status": "unknown",
+        "last_error": None,
     }
 
 

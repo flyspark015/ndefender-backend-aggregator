@@ -4,10 +4,14 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
+import subprocess
 import time
 from contextlib import suppress
 from pathlib import Path
 from typing import Any
+
+import yaml
 
 from ..bus import EventBus
 from ..config import AppConfig
@@ -43,6 +47,8 @@ class AntsdrIngestor(Ingestor):
         self._running = False
         self._last_error: str | None = None
         self._last_event_ms: int | None = None
+        self._last_health_check_ms: int | None = None
+        self._cached_reachable: bool | None = None
 
     async def start(self) -> None:
         if self._running:
@@ -104,6 +110,8 @@ class AntsdrIngestor(Ingestor):
                 "last_event": data,
                 "last_timestamp_ms": timestamp_ms,
                 "scan_active": True,
+                "status": "ok",
+                "last_error": None,
             },
         )
         if self._contact_store and event_type:
@@ -124,8 +132,15 @@ class AntsdrIngestor(Ingestor):
             now_ms = int(time.time() * 1000)
             if not self._last_event_ms:
                 reason = "no_rf_events"
+                status = "degraded"
                 if not Path(self._config.antsdr.jsonl_path).exists():
                     reason = "rf_jsonl_missing"
+                    status = "offline"
+                else:
+                    reachable = await self._antsdr_reachable()
+                    if reachable is False:
+                        reason = "antsdr_unreachable"
+                        status = "offline"
                 await self._state_store.update_section(
                     "rf",
                     {
@@ -133,6 +148,8 @@ class AntsdrIngestor(Ingestor):
                         "last_event": {"reason": reason},
                         "last_timestamp_ms": now_ms,
                         "scan_active": False,
+                        "status": status,
+                        "last_error": reason,
                     },
                 )
                 continue
@@ -147,6 +164,8 @@ class AntsdrIngestor(Ingestor):
                         },
                         "last_timestamp_ms": now_ms,
                         "scan_active": False,
+                        "status": "degraded",
+                        "last_error": "no_recent_rf_events",
                     },
                 )
 
@@ -164,3 +183,62 @@ class AntsdrIngestor(Ingestor):
     @staticmethod
     def _is_stale(timestamp_ms: int, ttl_ms: int = 15000) -> bool:
         return int(time.time() * 1000) - timestamp_ms > ttl_ms
+
+    async def _antsdr_reachable(self) -> bool | None:
+        now_ms = int(time.time() * 1000)
+        if self._last_health_check_ms and (now_ms - self._last_health_check_ms) < 10000:
+            return self._cached_reachable
+
+        def _check() -> bool | None:
+            uri = self._load_antsdr_uri()
+            if not uri:
+                return None
+            host = self._extract_host(uri)
+            if not host:
+                return None
+            try:
+                result = subprocess.run(
+                    ["ping", "-c", "1", "-W", "1", host],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=2,
+                    check=False,
+                )
+                return result.returncode == 0
+            except Exception:
+                return None
+
+        reachable = await asyncio.to_thread(_check)
+        self._last_health_check_ms = now_ms
+        self._cached_reachable = reachable
+        return reachable
+
+    @staticmethod
+    def _extract_host(uri: str) -> str | None:
+        if uri.startswith("ip:"):
+            rest = uri.split(":", 1)[1]
+            return rest.split(":")[0]
+        return None
+
+    @staticmethod
+    def _load_antsdr_uri() -> str | None:
+        env_uri = os.getenv("NDEFENDER_ANTSDR_URI")
+        if env_uri:
+            return env_uri
+        for path in (
+            Path("/home/toybook/antsdr_scan/config.yaml"),
+            Path("/opt/ndefender/antsdr_scan/config.yaml"),
+        ):
+            if not path.exists():
+                continue
+            try:
+                data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            except Exception:
+                continue
+            if isinstance(data, dict):
+                radio = data.get("radio")
+                if isinstance(radio, dict):
+                    uri = radio.get("uri")
+                    if isinstance(uri, str) and uri:
+                        return uri
+        return None
