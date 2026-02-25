@@ -3,6 +3,7 @@ import argparse
 import asyncio
 import json
 import os
+import sys
 import time
 
 import websockets
@@ -29,6 +30,10 @@ async def run(url: str, origin: str | None, seconds: int) -> None:
             print(f"received={len(msgs)}, first_type={first_type}")
         else:
             print("received=0")
+        if len(msgs) < 3:
+            print("FAIL: expected >=3 messages in window")
+            sys.exit(1)
+        print("PASS: received >=3 messages")
 
 
 def main() -> None:

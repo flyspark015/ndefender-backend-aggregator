@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-02-25T21:14:33Z",
+    "generated_at": "2026-02-25T21:27:49Z",
     "hostname": "ndefender-pi",
     "local_base": "http://127.0.0.1:8001/api/v1",
     "public_base": "https://n.flyspark.in/api/v1"
@@ -10,16 +10,16 @@
       {
         "endpoint": "health",
         "status": 200,
-        "latency_ms": 5,
+        "latency_ms": 7,
         "json_ok": true,
-        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772054040708}"
+        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772054815977}"
       },
       {
         "endpoint": "status",
         "status": 200,
-        "latency_ms": 2,
+        "latency_ms": 5,
         "json_ok": true,
-        "snippet": "{\"timestamp_ms\":1772054040710,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":36.95,\"cpu_usage_percent\":16.542836803184613,\"load_1m\":2.7060546875,\"load_5m\":2.1005859375,\"load_15m\":1.470703125,\"ram_used_mb\":1672,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":977,\"throttled_flags\":0,\""
+        "snippet": "{\"timestamp_ms\":1772054815981,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":46.85,\"cpu_usage_percent\":32.04228133498624,\"load_1m\":6.71240234375,\"load_5m\":5.99951171875,\"load_15m\":3.97021484375,\"ram_used_mb\":2289,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1755,\"throttled_flags\""
       },
       {
         "endpoint": "contacts",
@@ -31,28 +31,28 @@
       {
         "endpoint": "system",
         "status": 200,
-        "latency_ms": 3,
+        "latency_ms": 1,
         "json_ok": true,
-        "snippet": "{\"cpu_temp_c\":36.95,\"cpu_usage_percent\":16.542836803184613,\"load_1m\":2.7060546875,\"load_5m\":2.1005859375,\"load_15m\":1.470703125,\"ram_used_mb\":1672,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":977,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":37.5,\"hostname\":\"nde"
+        "snippet": "{\"cpu_temp_c\":46.85,\"cpu_usage_percent\":32.04228133498624,\"load_1m\":6.71240234375,\"load_5m\":5.99951171875,\"load_15m\":3.97021484375,\"ram_used_mb\":2289,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1755,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":47.95,\"hostname\""
       },
       {
         "endpoint": "power",
         "status": 200,
-        "latency_ms": 4,
+        "latency_ms": 1,
         "json_ok": true,
-        "snippet": "{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.178,4.176,4.179]}"
+        "snippet": "{\"pack_voltage_v\":16.709,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.177,4.176,4.179]}"
       },
       {
         "endpoint": "rf",
         "status": 200,
-        "latency_ms": 7,
+        "latency_ms": 1,
         "json_ok": true,
-        "snippet": "{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054037096,\"scan_active\":false}"
+        "snippet": "{\"last_event\":{\"center_hz\":3370000000,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\",\"snr_db\":14.675069104690891,\"peak_db\":85.19608011102059},\"last_event_type\":\"RF_CONTACT_LOST\",\"last_timestamp_ms\":1772054815775,\"scan_active\":true}"
       },
       {
         "endpoint": "video",
         "status": 200,
-        "latency_ms": 5,
+        "latency_ms": 2,
         "json_ok": true,
         "snippet": "{\"selected\":null,\"status\":\"unknown\"}"
       },
@@ -61,7 +61,7 @@
         "status": 200,
         "latency_ms": 2,
         "json_ok": true,
-        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":262,\"sub_state\":\"running\"},{\"active_sta"
+        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":468,\"sub_state\":\"auto-restart\"},{\"a"
       },
       {
         "endpoint": "network",
@@ -73,7 +73,7 @@
       {
         "endpoint": "audio",
         "status": 200,
-        "latency_ms": 1,
+        "latency_ms": 5,
         "json_ok": true,
         "snippet": "{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"}"
       }
@@ -82,70 +82,70 @@
       {
         "endpoint": "health",
         "status": 200,
-        "latency_ms": 716,
+        "latency_ms": 1009,
         "json_ok": true,
-        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772054041322}"
+        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772054816850}"
       },
       {
         "endpoint": "status",
         "status": 200,
-        "latency_ms": 959,
+        "latency_ms": 573,
         "json_ok": true,
-        "snippet": "{\"timestamp_ms\":1772054042246,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":36.4,\"cpu_usage_percent\":16.53056081020403,\"load_1m\":2.7060546875,\"load_5m\":2.1005859375,\"load_15m\":1.470703125,\"ram_used_mb\":1604,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":980,\"throttled_flags\":0,\"st"
+        "snippet": "{\"timestamp_ms\":1772054817477,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":46.85,\"cpu_usage_percent\":32.04228133498624,\"load_1m\":6.71240234375,\"load_5m\":5.99951171875,\"load_15m\":3.97021484375,\"ram_used_mb\":2289,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1755,\"throttled_flags\""
       },
       {
         "endpoint": "contacts",
         "status": 200,
-        "latency_ms": 872,
+        "latency_ms": 677,
         "json_ok": true,
         "snippet": "{\"contacts\":[]}"
       },
       {
         "endpoint": "system",
         "status": 200,
-        "latency_ms": 672,
+        "latency_ms": 1040,
         "json_ok": true,
-        "snippet": "{\"cpu_temp_c\":36.4,\"cpu_usage_percent\":16.550913559140934,\"load_1m\":2.6494140625,\"load_5m\":2.0986328125,\"load_15m\":1.4736328125,\"ram_used_mb\":1635,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":983,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":36.95,\"hostname\":\"nd"
+        "snippet": "{\"cpu_temp_c\":46.85,\"cpu_usage_percent\":32.11071317096088,\"load_1m\":7.37646484375,\"load_5m\":6.1494140625,\"load_15m\":4.02978515625,\"ram_used_mb\":2311,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":1758,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":47.4,\"hostname\":\""
       },
       {
         "endpoint": "power",
         "status": 200,
-        "latency_ms": 732,
+        "latency_ms": 948,
         "json_ok": true,
-        "snippet": "{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.179,4.175,4.179]}"
+        "snippet": "{\"pack_voltage_v\":16.709,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.177,4.175,4.179]}"
       },
       {
         "endpoint": "rf",
         "status": 200,
-        "latency_ms": 924,
+        "latency_ms": 1133,
         "json_ok": true,
-        "snippet": "{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054042096,\"scan_active\":false}"
+        "snippet": "{\"last_event\":{\"center_hz\":3410000000,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\",\"snr_db\":13.609288099578478,\"peak_db\":92.99985776387561},\"last_event_type\":\"RF_CONTACT_LOST\",\"last_timestamp_ms\":1772054820910,\"scan_active\":true}"
       },
       {
         "endpoint": "video",
         "status": 200,
-        "latency_ms": 594,
+        "latency_ms": 598,
         "json_ok": true,
         "snippet": "{\"selected\":null,\"status\":\"unknown\"}"
       },
       {
         "endpoint": "services",
         "status": 200,
-        "latency_ms": 889,
+        "latency_ms": 749,
         "json_ok": true,
-        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":264,\"sub_state\":\"auto-restart\"},{\"a"
+        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":470,\"sub_state\":\"auto-restart\"},{\"a"
       },
       {
         "endpoint": "network",
         "status": 200,
-        "latency_ms": 706,
+        "latency_ms": 1028,
         "json_ok": true,
         "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"}"
       },
       {
         "endpoint": "audio",
         "status": 200,
-        "latency_ms": 1063,
+        "latency_ms": 834,
         "json_ok": true,
         "snippet": "{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"}"
       }
@@ -155,20 +155,20 @@
     "local": {
       "url": "ws://127.0.0.1:8001/api/v1/ws",
       "connect_ok": true,
-      "msgs_received": 1,
-      "first_type": "SYSTEM_UPDATE",
-      "first_200": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054048895,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054048895,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.555986246061867,\"l",
-      "first_message": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054048895,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054048895,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.555986246061867,\"load_1m\":2.43701171875,\"load_5m\":2.0634765625,\"load_15m\":1.46533203125,\"ram_used_mb\":1692,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":986,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":37.5,\"hostname\":\"ndefender-pi\",\"storage_free_gb\":46.810184478759766,\"storage_total_gb\":116.6063117980957,\"uptime_seconds\":987.06,\"version\":\"dev\"},\"power\":{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.178,4.178,4.175,4.179]},\"rf\":{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054047097,\"scan_active\":false},\"remote_id\":{\"last_event\":{\"reason\":\"no_remoteid_events\"},\"last_event_type\":\"REMOTEID_STALE\",\"last_timestamp_ms\":1772054047097,\"state\":\"DEGRADED\",\"mode\":\"live\",\"capture_active\":false,\"last_error\":\"no_remoteid_events\"},\"vrx\":{\"selected\":null,\"vrx\":[],\"led\":{},\"sys\":{\"status\":\"DISCONNECTED\",\"last_error\":\"[Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'\"},\"scan_state\":\"idle\"},\"fpv\":{\"selected\":null,\"locked_channels\":[],\"rssi_raw\":null,\"scan_state\":\"idle\",\"freq_hz\":null},\"video\":{\"selected\":null,\"status\":\"unknown\"},\"services\":[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":264,\"sub_state\":\"auto-restart\"},{\"active_state\":\"active\",\"name\":\"ndefender-rfscan\",\"restart_count\":112,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"cloudflared\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"gpsd\",\"restart_count\":0,\"sub_state\":\"running\"}],\"network\":{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"},\"audio\":{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"},\"contacts\":[],\"replay\":{\"active\":false,\"source\":\"none\"}}}",
+      "msgs_received": 7,
+      "first_type": "HELLO",
+      "first_200": "{\"type\":\"HELLO\",\"timestamp_ms\":1772054824648,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054824648}}",
+      "first_message": "{\"type\":\"HELLO\",\"timestamp_ms\":1772054824648,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054824648}}",
       "envelope_valid": true,
       "error": null
     },
     "public": {
       "url": "wss://n.flyspark.in/api/v1/ws",
       "connect_ok": true,
-      "msgs_received": 1,
-      "first_type": "SYSTEM_UPDATE",
-      "first_200": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054059654,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054059654,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.55690233964585,\"lo",
-      "first_message": "{\"type\":\"SYSTEM_UPDATE\",\"timestamp_ms\":1772054059654,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054059654,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":37.5,\"cpu_usage_percent\":16.55690233964585,\"load_1m\":2.5302734375,\"load_5m\":2.09423828125,\"load_15m\":1.48193359375,\"ram_used_mb\":1673,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":997,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":38.05,\"hostname\":\"ndefender-pi\",\"storage_free_gb\":46.81017303466797,\"storage_total_gb\":116.6063117980957,\"uptime_seconds\":999.37,\"version\":\"dev\"},\"power\":{\"pack_voltage_v\":16.71,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.178,4.176,4.179]},\"rf\":{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772054057105,\"scan_active\":false},\"remote_id\":{\"last_event\":{\"reason\":\"no_remoteid_events\"},\"last_event_type\":\"REMOTEID_STALE\",\"last_timestamp_ms\":1772054057106,\"state\":\"DEGRADED\",\"mode\":\"live\",\"capture_active\":false,\"last_error\":\"no_remoteid_events\"},\"vrx\":{\"selected\":null,\"vrx\":[],\"led\":{},\"sys\":{\"status\":\"DISCONNECTED\",\"last_error\":\"[Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'\"},\"scan_state\":\"idle\"},\"fpv\":{\"selected\":null,\"locked_channels\":[],\"rssi_raw\":null,\"scan_state\":\"idle\",\"freq_hz\":null},\"video\":{\"selected\":null,\"status\":\"unknown\"},\"services\":[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":268,\"sub_state\":\"auto-restart\"},{\"active_state\":\"active\",\"name\":\"ndefender-rfscan\",\"restart_count\":114,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"cloudflared\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"gpsd\",\"restart_count\":0,\"sub_state\":\"running\"}],\"network\":{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"},\"audio\":{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"},\"contacts\":[],\"replay\":{\"active\":false,\"source\":\"none\"}}}",
+      "msgs_received": 7,
+      "first_type": "HELLO",
+      "first_200": "{\"type\":\"HELLO\",\"timestamp_ms\":1772054835595,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054835595}}",
+      "first_message": "{\"type\":\"HELLO\",\"timestamp_ms\":1772054835595,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772054835595}}",
       "envelope_valid": true,
       "error": null
     }
@@ -178,36 +178,36 @@
       "url": "https://n.flyspark.in/api/v1/status",
       "origin": "https://www.figma.com",
       "http_status": 200,
-      "allow_origin": null,
-      "allow_methods": null,
-      "allow_headers": null,
+      "allow_origin": "*",
+      "allow_methods": "GET, POST, OPTIONS",
+      "allow_headers": "Content-Type",
       "error": null
     },
     {
       "url": "https://n.flyspark.in/api/v1/status",
       "origin": "http://127.0.0.1",
       "http_status": 200,
-      "allow_origin": null,
-      "allow_methods": null,
-      "allow_headers": null,
+      "allow_origin": "*",
+      "allow_methods": "GET, POST, OPTIONS",
+      "allow_headers": "Content-Type",
       "error": null
     },
     {
       "url": "https://n.flyspark.in/api/v1/ws",
       "origin": "https://www.figma.com",
       "http_status": 200,
-      "allow_origin": null,
-      "allow_methods": null,
-      "allow_headers": null,
+      "allow_origin": "*",
+      "allow_methods": "GET, POST, OPTIONS",
+      "allow_headers": "Content-Type",
       "error": null
     },
     {
       "url": "https://n.flyspark.in/api/v1/ws",
       "origin": "http://127.0.0.1",
       "http_status": 200,
-      "allow_origin": null,
-      "allow_methods": null,
-      "allow_headers": null,
+      "allow_origin": "*",
+      "allow_methods": "GET, POST, OPTIONS",
+      "allow_headers": "Content-Type",
       "error": null
     }
   ],
@@ -237,7 +237,7 @@
       "unit": "ndefender-rfscan",
       "active": "active",
       "substate": "running",
-      "main_pid": "31763",
+      "main_pid": "37903",
       "error": null
     },
     "gpsd": {
@@ -271,9 +271,9 @@
         "command": "scan/stop",
         "url": "http://127.0.0.1:8001/api/v1/scan/stop",
         "http_status": 200,
-        "response_snippet": "{\"command\":\"STOP_SCAN\",\"command_id\":\"b720d0c1-bdfa-4830-84f8-eb5fd6b6870b\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772054073468}",
+        "response_snippet": "{\"command\":\"STOP_SCAN\",\"command_id\":\"aa8961a7-a8d2-4d8f-9763-a95cfa683081\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772054849599}",
         "accepted": false,
-        "command_id": "b720d0c1-bdfa-4830-84f8-eb5fd6b6870b",
+        "command_id": "aa8961a7-a8d2-4d8f-9763-a95cfa683081",
         "ack_received": false,
         "ack_match": false,
         "error": null
@@ -282,9 +282,9 @@
         "command": "video/select",
         "url": "http://127.0.0.1:8001/api/v1/video/select",
         "http_status": 200,
-        "response_snippet": "{\"command\":\"VIDEO_SELECT\",\"command_id\":\"b2cf1544-a37e-42a9-af85-92ec67352ea1\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772054073474}",
+        "response_snippet": "{\"command\":\"VIDEO_SELECT\",\"command_id\":\"18f2fed6-e082-4cc9-86ab-519927b6c905\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772054859631}",
         "accepted": false,
-        "command_id": "b2cf1544-a37e-42a9-af85-92ec67352ea1",
+        "command_id": "18f2fed6-e082-4cc9-86ab-519927b6c905",
         "ack_received": false,
         "ack_match": false,
         "error": null
@@ -295,7 +295,7 @@
     {
       "name": "system_metrics",
       "status": "PASS",
-      "evidence": "cpu_usage=16.56497753096343, temp=36.4"
+      "evidence": "cpu_usage=33.04594420000031, temp=47.95"
     },
     {
       "name": "services_status",
@@ -315,7 +315,7 @@
     {
       "name": "rf_pipeline",
       "status": "PASS",
-      "evidence": "rf_last=1772054072108 rf_sensor_state=None"
+      "evidence": "rf_last=1772054869393 rf_sensor_state=None"
     },
     {
       "name": "remoteid",
@@ -349,6 +349,7 @@
     "status_schema_ok": true,
     "remote_id_fresh": true,
     "test_contacts_ok": true,
-    "subsystems_populated": true
+    "subsystems_populated": true,
+    "cors_headers_ok": true
   }
 }

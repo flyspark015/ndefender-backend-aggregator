@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import asyncio
 import re
 import time
 import uuid
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from typing import Any
 
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, Response, WebSocket, WebSocketDisconnect
@@ -18,7 +19,7 @@ from .config import get_config
 from .contacts import ContactStore
 from .integrations.esp32_serial import Esp32Ingestor
 from .logging import configure_logging
-from .models import StatusSnapshot
+from .models import EventEnvelope, StatusSnapshot
 from .rate_limit import command_rate_limit, dangerous_rate_limit
 from .runtime import build_default_orchestrator
 from .state import StateStore
@@ -202,8 +203,11 @@ def _register_ws_routes(app: FastAPI, ws_manager: WebSocketManager) -> None:
         if config.cors.allow_origin_regex
         else None
     )
+    allow_all = "*" in allowed_origins
 
     def origin_allowed(origin: str | None) -> bool:
+        if allow_all:
+            return True
         if not origin:
             return False
         if origin in allowed_origins:
@@ -220,11 +224,40 @@ def _register_ws_routes(app: FastAPI, ws_manager: WebSocketManager) -> None:
             await websocket.close(code=1008)
             return
         await ws_manager.connect(websocket)
+        heartbeat_task: asyncio.Task[None] | None = None
         try:
+            now_ms = int(time.time() * 1000)
+            hello = EventEnvelope(
+                type="HELLO",
+                timestamp_ms=now_ms,
+                source="aggregator",
+                data={"timestamp_ms": now_ms},
+            )
+            await websocket.send_json(hello.model_dump())
             await ws_manager.send_system_update(websocket)
+
+            async def heartbeat_loop() -> None:
+                while True:
+                    ts = int(time.time() * 1000)
+                    envelope = EventEnvelope(
+                        type="HEARTBEAT",
+                        timestamp_ms=ts,
+                        source="aggregator",
+                        data={"timestamp_ms": ts},
+                    )
+                    await websocket.send_json(envelope.model_dump())
+                    await asyncio.sleep(2)
+
+            heartbeat_task = asyncio.create_task(heartbeat_loop())
             while True:
                 await websocket.receive_text()
         except WebSocketDisconnect:
+            pass
+        finally:
+            if heartbeat_task:
+                heartbeat_task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await heartbeat_task
             await ws_manager.disconnect(websocket)
 
 
@@ -272,11 +305,11 @@ def create_app() -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=config.cors.allow_origins,
-        allow_origin_regex=config.cors.allow_origin_regex,
-        allow_credentials=config.cors.allow_credentials,
-        allow_methods=config.cors.allow_methods,
-        allow_headers=config.cors.allow_headers,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["*"],
+        expose_headers=["*"],
         max_age=config.cors.max_age,
     )
 

@@ -690,3 +690,31 @@ Reports:
 - `reports/GREEN_SIGNAL_LIVE_DATA.md`
 - `reports/README_GREEN_SIGNAL.md`
 - `reports/green_signal.json`
+
+## Step 7 Verification (CORS+WS Fixes) (2026-02-26)
+Commands:
+```
+python3 -m compileall -q src
+sudo systemctl restart ndefender-backend-aggregator
+sleep 2
+curl -i -X OPTIONS https://n.flyspark.in/api/v1/status \
+  -H "Origin: https://www.figma.com" \
+  -H "Access-Control-Request-Method: GET" \
+  -H "Access-Control-Request-Headers: Content-Type" | sed -n '1,40p'
+python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10
+python3 tools/diagnostics/run_green_signal.py --local http://127.0.0.1:8001/api/v1 --public https://n.flyspark.in/api/v1
+```
+
+Short outputs:
+- CORS preflight:
+  - `access-control-allow-origin: *`
+  - `access-control-allow-methods: GET, POST, OPTIONS`
+- Public WS:
+  - `connected`
+  - `received=7, first_type=HELLO`
+- GREEN SIGNAL report now passes CORS + WS thresholds.
+
+Reports:
+- `reports/GREEN_SIGNAL_LIVE_DATA_2.md`
+- `reports/README_GREEN_SIGNAL.md`
+- `reports/green_signal.json`

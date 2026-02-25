@@ -207,9 +207,10 @@ def probe_cors(url: str, origin: str) -> CorsResult:
         "Access-Control-Request-Headers": "Content-Type",
     }
     status, resp_headers, _body, error, _lat = http_request("OPTIONS", url, headers=headers)
-    allow_origin = resp_headers.get("Access-Control-Allow-Origin") if resp_headers else None
-    allow_methods = resp_headers.get("Access-Control-Allow-Methods") if resp_headers else None
-    allow_headers = resp_headers.get("Access-Control-Allow-Headers") if resp_headers else None
+    lowered = {k.lower(): v for k, v in (resp_headers or {}).items()}
+    allow_origin = lowered.get("access-control-allow-origin") or resp_headers.get("Access-Control-Allow-Origin") if resp_headers else None
+    allow_methods = lowered.get("access-control-allow-methods") or resp_headers.get("Access-Control-Allow-Methods") if resp_headers else None
+    allow_headers = lowered.get("access-control-allow-headers") or resp_headers.get("Access-Control-Allow-Headers") if resp_headers else None
     return CorsResult(url, origin, status, allow_origin, allow_methods, allow_headers, error)
 
 
@@ -522,6 +523,13 @@ def main() -> int:
             })
         return out
 
+    cors_headers_ok = all(
+        c.http_status == 200 and (c.allow_origin or "") and (c.allow_methods or "")
+        for c in cors_results
+    )
+    public_ws_ok = public_ws.connect_ok and public_ws.msgs_received >= 3
+    local_ws_ok = local_ws.connect_ok and local_ws.msgs_received >= 3
+
     result_obj = {
         "meta": {
             "generated_at": now_utc(),
@@ -556,12 +564,13 @@ def main() -> int:
         "diagnosis": {
             "public_rest_ok": all(r.http_status == 200 for r in public_rest),
             "local_rest_ok": all(r.http_status == 200 for r in local_rest),
-            "public_ws_ok": public_ws.connect_ok and public_ws.msgs_received > 0,
-            "local_ws_ok": local_ws.connect_ok and local_ws.msgs_received > 0,
+            "public_ws_ok": public_ws_ok,
+            "local_ws_ok": local_ws_ok,
             "status_schema_ok": len(empty_sections) == 0 and len(missing_keys) == 0,
             "remote_id_fresh": not remote_id_stale,
             "test_contacts_ok": len(test_contacts) == 0,
             "subsystems_populated": power_ok and rf_ok and vrx_ok and remote_id_ok,
+            "cors_headers_ok": cors_headers_ok,
         },
     }
 
@@ -593,9 +602,9 @@ def main() -> int:
 
     comp_row("Local REST", all(r.http_status == 200 for r in local_rest), "see REST tables")
     comp_row("Public REST", all(r.http_status == 200 for r in public_rest), "see REST tables")
-    comp_row("Local WS", local_ws.connect_ok and local_ws.msgs_received > 0, f"msgs={local_ws.msgs_received}")
-    comp_row("Public WS", public_ws.connect_ok and public_ws.msgs_received > 0, f"msgs={public_ws.msgs_received}")
-    comp_row("CORS", all(c.http_status == 200 for c in cors_results), "OPTIONS /status,/ws")
+    comp_row("Local WS", local_ws_ok, f"msgs={local_ws.msgs_received}")
+    comp_row("Public WS", public_ws_ok, f"msgs={public_ws.msgs_received}")
+    comp_row("CORS", cors_headers_ok, "OPTIONS /status,/ws (allow-origin+methods)")
 
     now = now_utc()
     lines = [
@@ -689,7 +698,7 @@ def main() -> int:
     if (
         result_obj["diagnosis"]["public_rest_ok"]
         and result_obj["diagnosis"]["public_ws_ok"]
-        and all(c.http_status == 200 for c in cors_results)
+        and result_obj["diagnosis"]["cors_headers_ok"]
         and result_obj["diagnosis"]["status_schema_ok"]
         and result_obj["diagnosis"]["remote_id_fresh"]
         and result_obj["diagnosis"]["test_contacts_ok"]
@@ -704,8 +713,8 @@ def main() -> int:
             causes.append("Public REST failing (likely Cloudflare 403 for non-browser clients)")
         if not result_obj["diagnosis"]["public_ws_ok"]:
             causes.append("Public WS not receiving messages")
-        if not all(c.http_status == 200 for c in cors_results):
-            causes.append("CORS preflight failing")
+        if not result_obj["diagnosis"]["cors_headers_ok"]:
+            causes.append("CORS preflight missing allow-origin/allow-methods")
         if not result_obj["diagnosis"]["status_schema_ok"]:
             causes.append("Status schema missing keys or empty sections (power/rf/vrx/video)")
         if not result_obj["diagnosis"]["remote_id_fresh"]:
