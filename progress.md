@@ -824,3 +824,35 @@ connected
 received=7, first_type=HELLO
 PASS: received >=3 messages
 ```
+
+## RF restart storm mitigation + ops docs (2026-02-26)
+- Updated systemd unit: RestartSec=5, StartLimitIntervalSec=60, StartLimitBurst=6.
+- Added RF/RemoteID troubleshooting + overall_ok semantics in docs.
+
+Commands:
+1) `systemctl cat ndefender-rfscan`
+```
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=6
+```
+
+2) `sudo systemctl daemon-reload`
+3) `sudo systemctl restart ndefender-rfscan`
+
+4) `systemctl status ndefender-rfscan --no-pager | sed -n '1,30p'`
+```
+● ndefender-rfscan.service - N-Defender RF Scan Service
+```
+
+5) `journalctl -u ndefender-rfscan -n 80 --no-pager`
+```
+TimeoutError: [Errno 110] Connection timed out
+Exception: No device found
+```
+
+6) `curl -sS https://n.flyspark.in/api/v1/status | jq '.rf'`
+```
+{"status":"offline","last_error":"antsdr_unreachable"}
+```

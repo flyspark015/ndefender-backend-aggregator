@@ -87,6 +87,56 @@ ls -lah /opt/ndefender/logs/
   - `mon0_missing` / `mon0_down`: monitor interface not ready.
   - `remoteid_service_inactive`: engine not running.
 
+## RF Scan (AntSDR) — Offline / Restart Storm
+### Meaning of `rf.status` + `last_error`
+- `antsdr_unreachable`: AntSDR IP not reachable (radio not powered, wrong IP, or link down).
+- `rf_jsonl_missing`: JSONL file missing or not writable.
+- `no_recent_rf_events`: JSONL exists but no new events within TTL.
+
+### Diagnostics (copy/paste)
+```bash
+journalctl -u ndefender-rfscan -n 200 --no-pager
+ip a
+ping -c 1 -W 1 192.168.10.2 || true
+tail -n 3 /opt/ndefender/logs/antsdr_scan.jsonl || true
+```
+
+### What “No device found” means
+- AntSDR is not powered.
+- AntSDR is on a different IP/subnet than configured.
+- Ethernet is not connected to the AntSDR network.
+
+### Recovery checklist
+1. Verify AntSDR power and link LEDs.
+2. Confirm you are on the AntSDR subnet (e.g., `192.168.10.x`).
+3. Update AntSDR IP in `/home/toybook/antsdr_scan/config.yaml` if needed.
+4. Restart rfscan (after fixing connectivity):
+   ```bash
+   sudo systemctl restart ndefender-rfscan
+   ```
+
+### Restart storm control
+- The service uses backoff via systemd to avoid rapid restarts:
+  - `RestartSec=5`
+  - `StartLimitIntervalSec=60`
+  - `StartLimitBurst=6`
+
+## RemoteID — capture_active vs decoded frames
+- `capture_active=true` means tshark is running and `mon0` exists.
+- `last_error=no_odid_frames` means no OpenDroneID frames observed yet.
+- You will not see RemoteID unless a nearby drone is broadcasting ODID.
+
+### Minimum verification commands
+```bash
+ip link show mon0 || true
+sudo tshark -i mon0 -a duration:5 -c 20
+sudo tshark -i mon0 -a duration:8 -Y opendroneid -T fields -e OpenDroneID.basicID_id_asc 2>/dev/null | head
+```
+
+## overall_ok Semantics
+- `overall_ok` stays `false` if any subsystem is `DEGRADED` or `OFFLINE`.
+- In lab conditions, it is acceptable for `rf` or `remote_id` to be degraded if hardware is absent.
+
 ## RemoteID Engine Bring-Up
 - RemoteID capture requires a monitor-mode interface (`mon0`).
 - If `tshark` reports `There is no device named "mon0"`:
