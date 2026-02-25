@@ -718,3 +718,15 @@ Reports:
 - `reports/GREEN_SIGNAL_LIVE_DATA_2.md`
 - `reports/README_GREEN_SIGNAL.md`
 - `reports/green_signal.json`
+
+## Release v0.1.2 (2026-02-26)
+- Tag: `v0.1.2-aggregator-live-data-green`
+- Commit: `4e1095ea400f328f10dd83d6ffb7f77342f4c627`
+
+Final checks (short):
+- `curl https://n.flyspark.in/api/v1/status | jq '.power.status,.rf.last_event_type,.remote_id.state,.vrx.sys.status'`
+  - `"ok" "RF_CONTACT_LOST" "DEGRADED" "DISCONNECTED"`
+- `python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10`
+  - `received=8, first_type=HELLO`
+- `python3 tools/diagnostics/run_green_signal.py ...`
+  - `Conclusion: GREEN SIGNAL`
