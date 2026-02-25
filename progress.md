@@ -730,3 +730,35 @@ Final checks (short):
   - `received=8, first_type=HELLO`
 - `python3 tools/diagnostics/run_green_signal.py ...`
   - `Conclusion: GREEN SIGNAL`
+
+## RemoteID + FPV + Video Data Quality (2026-02-26)
+Commands:
+```
+journalctl -u ndefender-remoteid-engine -n 300 --no-pager
+ip link show
+iw dev
+iw list | sed -n '1,140p'
+# monitor interface creation
+sudo iw phy phy1 interface add mon0 type monitor
+sudo ip link set mon0 up
+sudo tshark -i mon0 -c 1 -a duration:3
+sudo systemctl restart ndefender-remoteid-engine
+sudo systemctl restart ndefender-backend-aggregator
+curl -sS https://n.flyspark.in/api/v1/status | jq '.overall_ok,.remote_id,.fpv,.video,.contacts[0]'
+python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10
+python3 tools/diagnostics/run_green_signal.py --local http://127.0.0.1:8001/api/v1 --public https://n.flyspark.in/api/v1
+```
+
+Short outputs:
+- `iw phy phy1 interface add mon0 type monitor` -> OK
+- `tshark -i mon0 -c 1 -a duration:3` -> `1 packet captured`
+- public `/status`:
+  - `remote_id.state=DEGRADED last_error=no_remoteid_events`
+  - `fpv.selected=1 freq_hz=5740000000 rssi_raw=596`
+  - `video.status=ok`
+  - `contacts[0].last_seen_ts` epoch + `last_seen_uptime_ms` present
+- WS public: `received=7, first_type=HELLO`
+- GREEN SIGNAL: `Conclusion GREEN SIGNAL`
+
+Report:
+- `reports/GREEN_SIGNAL_REMOTEID_FPV_VIDEO.md`

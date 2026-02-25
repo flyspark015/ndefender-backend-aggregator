@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-02-25T21:38:24Z",
+    "generated_at": "2026-02-25T22:11:02Z",
     "hostname": "ndefender-pi",
     "local_base": "http://127.0.0.1:8001/api/v1",
     "public_base": "https://n.flyspark.in/api/v1"
@@ -10,58 +10,58 @@
       {
         "endpoint": "health",
         "status": 200,
-        "latency_ms": 6,
+        "latency_ms": 8,
         "json_ok": true,
-        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772055450635}"
+        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772057402109}"
       },
       {
         "endpoint": "status",
         "status": 200,
-        "latency_ms": 2,
+        "latency_ms": 5,
         "json_ok": true,
-        "snippet": "{\"timestamp_ms\":1772055450639,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":46.85,\"cpu_usage_percent\":40.96278997279734,\"load_1m\":6.64208984375,\"load_5m\":6.17236328125,\"load_15m\":5.04150390625,\"ram_used_mb\":2537,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":2390,\"throttled_flags\""
+        "snippet": "{\"timestamp_ms\":1772057402112,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":38.6,\"cpu_usage_percent\":21.403768343499003,\"load_1m\":2.5068359375,\"load_5m\":2.87109375,\"load_15m\":1.91162109375,\"ram_used_mb\":1705,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":747,\"throttled_flags\":0,\"s"
       },
       {
         "endpoint": "contacts",
         "status": 200,
-        "latency_ms": 1,
+        "latency_ms": 2,
         "json_ok": true,
-        "snippet": "{\"contacts\":[]}"
+        "snippet": "{\"contacts\":[{\"id\":\"fpv:1\",\"type\":\"FPV\",\"source\":\"esp32\",\"last_seen_ts\":1772057402042,\"severity\":\"unknown\",\"vrx_id\":1,\"freq_hz\":5740000000,\"rssi_raw\":596,\"selected\":1,\"last_seen_uptime_ms\":764359}]}"
       },
       {
         "endpoint": "system",
         "status": 200,
         "latency_ms": 1,
         "json_ok": true,
-        "snippet": "{\"cpu_temp_c\":46.85,\"cpu_usage_percent\":40.96278997279734,\"load_1m\":6.64208984375,\"load_5m\":6.17236328125,\"load_15m\":5.04150390625,\"ram_used_mb\":2537,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":2390,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":46.85,\"hostname\""
+        "snippet": "{\"cpu_temp_c\":38.6,\"cpu_usage_percent\":21.403768343499003,\"load_1m\":2.5068359375,\"load_5m\":2.87109375,\"load_15m\":1.91162109375,\"ram_used_mb\":1705,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":747,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":39.15,\"hostname\":\"nde"
       },
       {
         "endpoint": "power",
         "status": 200,
-        "latency_ms": 1,
+        "latency_ms": 2,
         "json_ok": true,
-        "snippet": "{\"pack_voltage_v\":16.709,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.177,4.176,4.179]}"
+        "snippet": "{\"pack_voltage_v\":16.641,\"current_a\":-0.009,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":1870380,\"time_to_full_s\":null,\"status\":\"ok\",\"per_cell_v\":[4.16,4.16,4.158,4.162]}"
       },
       {
         "endpoint": "rf",
         "status": 200,
-        "latency_ms": 1,
+        "latency_ms": 2,
         "json_ok": true,
-        "snippet": "{\"last_event\":{\"center_hz\":3366000000,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\",\"snr_db\":32.96927092178615,\"peak_db\":103.21747150707813},\"last_event_type\":\"RF_CONTACT_LOST\",\"last_timestamp_ms\":1772055450514,\"scan_active\":true}"
+        "snippet": "{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772057400168,\"scan_active\":false}"
       },
       {
         "endpoint": "video",
         "status": 200,
-        "latency_ms": 2,
+        "latency_ms": 1,
         "json_ok": true,
-        "snippet": "{\"selected\":null,\"status\":\"unknown\"}"
+        "snippet": "{\"selected\":1,\"status\":\"ok\"}"
       },
       {
         "endpoint": "services",
         "status": 200,
-        "latency_ms": 3,
+        "latency_ms": 1,
         "json_ok": true,
-        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":630,\"sub_state\":\"auto-restart\"},{\"a"
+        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state"
       },
       {
         "endpoint": "network",
@@ -82,70 +82,70 @@
       {
         "endpoint": "health",
         "status": 200,
-        "latency_ms": 915,
+        "latency_ms": 1290,
         "json_ok": true,
-        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772055451417}"
+        "snippet": "{\"status\":\"ok\",\"timestamp_ms\":1772057403269}"
       },
       {
         "endpoint": "status",
         "status": 200,
-        "latency_ms": 921,
+        "latency_ms": 1280,
         "json_ok": true,
-        "snippet": "{\"timestamp_ms\":1772055452328,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":46.85,\"cpu_usage_percent\":40.96278997279734,\"load_1m\":6.64208984375,\"load_5m\":6.17236328125,\"load_15m\":5.04150390625,\"ram_used_mb\":2537,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":2390,\"throttled_flags\""
+        "snippet": "{\"timestamp_ms\":1772057404544,\"overall_ok\":false,\"system\":{\"cpu_temp_c\":39.7,\"cpu_usage_percent\":21.385291805671,\"load_1m\":2.5068359375,\"load_5m\":2.87109375,\"load_15m\":1.91162109375,\"ram_used_mb\":1714,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":749,\"throttled_flags\":0,\"stat"
       },
       {
         "endpoint": "contacts",
         "status": 200,
-        "latency_ms": 1222,
+        "latency_ms": 1314,
         "json_ok": true,
-        "snippet": "{\"contacts\":[]}"
+        "snippet": "{\"contacts\":[{\"id\":\"fpv:1\",\"type\":\"FPV\",\"source\":\"esp32\",\"last_seen_ts\":1772057404998,\"severity\":\"unknown\",\"vrx_id\":1,\"freq_hz\":5740000000,\"rssi_raw\":592,\"selected\":1,\"last_seen_uptime_ms\":767359}]}"
       },
       {
         "endpoint": "system",
         "status": 200,
-        "latency_ms": 1001,
+        "latency_ms": 1288,
         "json_ok": true,
-        "snippet": "{\"cpu_temp_c\":47.95,\"cpu_usage_percent\":40.99649483660655,\"load_1m\":6.35009765625,\"load_5m\":6.11962890625,\"load_15m\":5.0302734375,\"ram_used_mb\":2621,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":2393,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":48.5,\"hostname\":\""
+        "snippet": "{\"cpu_temp_c\":39.15,\"cpu_usage_percent\":21.36787378316884,\"load_1m\":2.4658203125,\"load_5m\":2.8564453125,\"load_15m\":1.912109375,\"ram_used_mb\":1703,\"ram_total_mb\":16215,\"disk_used_gb\":70,\"disk_total_gb\":117,\"uptime_s\":752,\"throttled_flags\":0,\"status\":\"degraded\",\"cpu_temp_celsius\":39.7,\"hostname\":\"ndef"
       },
       {
         "endpoint": "power",
         "status": 200,
-        "latency_ms": 587,
+        "latency_ms": 1269,
         "json_ok": true,
-        "snippet": "{\"pack_voltage_v\":16.709,\"current_a\":0.0,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":null,\"time_to_full_s\":3932100,\"status\":\"ok\",\"per_cell_v\":[4.177,4.177,4.176,4.179]}"
+        "snippet": "{\"pack_voltage_v\":16.642,\"current_a\":-0.009,\"input_vbus_v\":0.0,\"input_power_w\":0.0,\"soc_percent\":98,\"state\":\"IDLE\",\"time_to_empty_s\":1870380,\"time_to_full_s\":null,\"status\":\"ok\",\"per_cell_v\":[4.161,4.161,4.159,4.162]}"
       },
       {
         "endpoint": "rf",
         "status": 200,
-        "latency_ms": 1088,
+        "latency_ms": 1271,
         "json_ok": true,
-        "snippet": "{\"last_event\":{\"center_hz\":3406000000,\"bandwidth_class\":\"narrow\",\"family_hint\":\"unknown\",\"snr_db\":15.18393927204508,\"peak_db\":85.53823632025785},\"last_event_type\":\"RF_CONTACT_LOST\",\"last_timestamp_ms\":1772055455753,\"scan_active\":true}"
+        "snippet": "{\"last_event\":{\"reason\":\"no_rf_events\"},\"last_event_type\":\"RF_SCAN_OFFLINE\",\"last_timestamp_ms\":1772057405168,\"scan_active\":false}"
       },
       {
         "endpoint": "video",
         "status": 200,
-        "latency_ms": 921,
+        "latency_ms": 1264,
         "json_ok": true,
-        "snippet": "{\"selected\":null,\"status\":\"unknown\"}"
+        "snippet": "{\"selected\":1,\"status\":\"ok\"}"
       },
       {
         "endpoint": "services",
         "status": 200,
-        "latency_ms": 589,
+        "latency_ms": 1047,
         "json_ok": true,
-        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"activating\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":632,\"sub_state\":\"auto-restart\"},{\"a"
+        "snippet": "[{\"active_state\":\"active\",\"name\":\"ndefender-backend\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-kiosk\",\"restart_count\":1,\"sub_state\":\"running\"},{\"active_state\":\"active\",\"name\":\"ndefender-remoteid-engine\",\"restart_count\":0,\"sub_state\":\"running\"},{\"active_state"
       },
       {
         "endpoint": "network",
         "status": 200,
-        "latency_ms": 743,
+        "latency_ms": 809,
         "json_ok": true,
         "snippet": "{\"connected\":true,\"ip_v4\":\"192.168.1.35\",\"ip_v6\":\"2401:4900:8fef:a440:69de:a6e0:f49b:2f21\",\"ssid\":\"Airtel_Toybook\",\"status\":\"ok\"}"
       },
       {
         "endpoint": "audio",
         "status": 200,
-        "latency_ms": 755,
+        "latency_ms": 1222,
         "json_ok": true,
         "snippet": "{\"muted\":false,\"volume_percent\":100,\"status\":\"ok\"}"
       }
@@ -157,18 +157,18 @@
       "connect_ok": true,
       "msgs_received": 7,
       "first_type": "HELLO",
-      "first_200": "{\"type\":\"HELLO\",\"timestamp_ms\":1772055459435,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772055459435}}",
-      "first_message": "{\"type\":\"HELLO\",\"timestamp_ms\":1772055459435,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772055459435}}",
+      "first_200": "{\"type\":\"HELLO\",\"timestamp_ms\":1772057414212,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772057414212}}",
+      "first_message": "{\"type\":\"HELLO\",\"timestamp_ms\":1772057414212,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772057414212}}",
       "envelope_valid": true,
       "error": null
     },
     "public": {
       "url": "wss://n.flyspark.in/api/v1/ws",
       "connect_ok": true,
-      "msgs_received": 7,
+      "msgs_received": 8,
       "first_type": "HELLO",
-      "first_200": "{\"type\":\"HELLO\",\"timestamp_ms\":1772055470117,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772055470117}}",
-      "first_message": "{\"type\":\"HELLO\",\"timestamp_ms\":1772055470117,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772055470117}}",
+      "first_200": "{\"type\":\"HELLO\",\"timestamp_ms\":1772057425252,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772057425252}}",
+      "first_message": "{\"type\":\"HELLO\",\"timestamp_ms\":1772057425252,\"source\":\"aggregator\",\"data\":{\"timestamp_ms\":1772057425252}}",
       "envelope_valid": true,
       "error": null
     }
@@ -216,35 +216,35 @@
       "unit": "ndefender-backend",
       "active": "active",
       "substate": "running",
-      "main_pid": "1053",
+      "main_pid": "1151",
       "error": null
     },
     "cloudflared": {
       "unit": "cloudflared",
       "active": "active",
       "substate": "running",
-      "main_pid": "2384",
+      "main_pid": "1145",
       "error": null
     },
     "ndefender-remoteid-engine": {
       "unit": "ndefender-remoteid-engine",
       "active": "active",
       "substate": "running",
-      "main_pid": "75502",
+      "main_pid": "18571",
       "error": null
     },
     "ndefender-rfscan": {
       "unit": "ndefender-rfscan",
       "active": "active",
       "substate": "running",
-      "main_pid": "37903",
+      "main_pid": "24331",
       "error": null
     },
     "gpsd": {
       "unit": "gpsd",
       "active": "active",
       "substate": "running",
-      "main_pid": "1116",
+      "main_pid": "1205",
       "error": null
     }
   },
@@ -271,9 +271,9 @@
         "command": "scan/stop",
         "url": "http://127.0.0.1:8001/api/v1/scan/stop",
         "http_status": 200,
-        "response_snippet": "{\"command\":\"STOP_SCAN\",\"command_id\":\"0b743efa-a68a-4e40-a8da-1b025b2ec891\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772055484214}",
-        "accepted": false,
-        "command_id": "0b743efa-a68a-4e40-a8da-1b025b2ec891",
+        "response_snippet": "{\"command\":\"STOP_SCAN\",\"command_id\":\"7edb4758-58fb-4acb-b960-3265bb15dd04\",\"accepted\":true,\"detail\":null,\"timestamp_ms\":1772057442213}",
+        "accepted": true,
+        "command_id": "7edb4758-58fb-4acb-b960-3265bb15dd04",
         "ack_received": false,
         "ack_match": false,
         "error": null
@@ -282,9 +282,9 @@
         "command": "video/select",
         "url": "http://127.0.0.1:8001/api/v1/video/select",
         "http_status": 200,
-        "response_snippet": "{\"command\":\"VIDEO_SELECT\",\"command_id\":\"c4cf6137-482e-45e0-a316-f2cf88d7137e\",\"accepted\":false,\"detail\":\"serial not connected\",\"timestamp_ms\":1772055494240}",
-        "accepted": false,
-        "command_id": "c4cf6137-482e-45e0-a316-f2cf88d7137e",
+        "response_snippet": "{\"command\":\"VIDEO_SELECT\",\"command_id\":\"a56d3030-82de-476f-8183-c6e3d8202af9\",\"accepted\":true,\"detail\":null,\"timestamp_ms\":1772057452398}",
+        "accepted": true,
+        "command_id": "a56d3030-82de-476f-8183-c6e3d8202af9",
         "ack_received": false,
         "ack_match": false,
         "error": null
@@ -295,7 +295,7 @@
     {
       "name": "system_metrics",
       "status": "PASS",
-      "evidence": "cpu_usage=41.54593054886564, temp=46.85"
+      "evidence": "cpu_usage=21.060715828190087, temp=38.05"
     },
     {
       "name": "services_status",
@@ -315,7 +315,7 @@
     {
       "name": "rf_pipeline",
       "status": "PASS",
-      "evidence": "rf_last=1772055504033 rf_sensor_state=None"
+      "evidence": "rf_last=1772057460178 rf_sensor_state=None"
     },
     {
       "name": "remoteid",
