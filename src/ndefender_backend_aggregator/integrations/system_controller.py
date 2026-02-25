@@ -75,6 +75,7 @@ class SystemControllerIngestor(Ingestor):
                 raise
             except Exception as exc:
                 self._last_error = str(exc)
+                await self._mark_offline(self._last_error)
             await asyncio.sleep(interval_s)
 
     async def _poll_status(self) -> None:
@@ -84,7 +85,7 @@ class SystemControllerIngestor(Ingestor):
         response.raise_for_status()
         payload = response.json() or {}
         await self._state_store.update_section("system", payload.get("system") or {})
-        await self._state_store.update_section("power", payload.get("ups") or {})
+        await self._state_store.update_section("power", payload.get("power") or payload.get("ups") or {})
         await self._state_store.update_section("services", payload.get("services") or [])
         await self._state_store.update_section("network", payload.get("network") or {})
         await self._state_store.update_section("audio", payload.get("audio") or {})
@@ -99,3 +100,10 @@ class SystemControllerIngestor(Ingestor):
             data=payload,
         )
         await self._event_bus.publish(envelope)
+
+    async def _mark_offline(self, error: str) -> None:
+        offline = {"status": "offline", "last_error": error}
+        await self._state_store.update_section("system", offline)
+        await self._state_store.update_section("power", offline)
+        await self._state_store.update_section("network", offline)
+        await self._state_store.update_section("audio", offline)
