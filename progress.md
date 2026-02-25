@@ -614,3 +614,36 @@ null
 $ python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10
 websockets.exceptions.InvalidStatusCode: server rejected WebSocket connection: HTTP 404
 ```
+
+## Status Schema + RemoteID Staleness Fix (2026-02-25)
+Commands:
+```
+# restart aggregator
+sudo systemctl restart ndefender-backend-aggregator
+
+# local status (port 8001)
+curl -sS http://127.0.0.1:8001/api/v1/status | head -c 200
+
+# ws checks
+python3 tools/ws_local_test.py --seconds 10
+python3 tools/ws_public_test.py --url wss://n.flyspark.in/api/v1/ws --seconds 10
+
+# green signal
+python3 tools/diagnostics/run_green_signal.py --local http://127.0.0.1:8001/api/v1 --public https://n.flyspark.in/api/v1 --out-md reports/README_GREEN_SIGNAL.md --out-json reports/green_signal.json
+```
+
+Evidence:
+- `reports/README_GREEN_SIGNAL.md`
+- `reports/green_signal.json`
+- `reports/GREEN_SIGNAL_20260225_183659.md`
+
+Key outcomes:
+- /api/v1/status now returns filled sections (no {} for power/rf/vrx/video).
+- Replay inactive suppresses TestDrone/WARMSTART contacts.
+- RemoteID stale events filtered (TTL 15s when replay inactive).
+- WebSocket works on 8001 and public wss with allowed Origin.
+
+## GREEN SIGNAL Report (2026-02-25 18:39 UTC)
+- `reports/README_GREEN_SIGNAL.md`
+- `reports/green_signal.json`
+- `reports/GREEN_SIGNAL_20260225_183929.md`
