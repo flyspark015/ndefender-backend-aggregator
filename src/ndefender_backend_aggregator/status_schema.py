@@ -62,7 +62,7 @@ def _default_vrx() -> dict[str, Any]:
         "selected": None,
         "vrx": [],
         "led": {},
-        "sys": {},
+        "sys": {"status": "DISCONNECTED"},
         "scan_state": "idle",
     }
 
@@ -106,6 +106,13 @@ def _merge_section(section: Any, defaults: dict[str, Any]) -> dict[str, Any]:
     return merged
 
 
+def _infer_ok(section: dict[str, Any], fields: list[str]) -> bool:
+    for key in fields:
+        if section.get(key) is not None:
+            return True
+    return False
+
+
 def _overall_ok(snapshot: dict[str, Any]) -> bool:
     for key in ("system", "power", "network", "audio"):
         section = snapshot.get(key)
@@ -133,6 +140,22 @@ def fill_status_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
     filled["video"] = _merge_section(filled.get("video"), _default_video())
     filled["network"] = _merge_section(filled.get("network"), _default_network())
     filled["audio"] = _merge_section(filled.get("audio"), _default_audio())
+
+    if filled["system"].get("status") in (None, "unknown") and _infer_ok(
+        filled["system"], ["cpu_temp_c", "cpu_usage_percent", "ram_used_mb", "disk_used_gb"]
+    ):
+        filled["system"]["status"] = "ok"
+
+    if filled["power"].get("status") in (None, "unknown", "degraded") and _infer_ok(
+        filled["power"], ["pack_voltage_v", "current_a", "soc_percent", "input_vbus_v"]
+    ):
+        filled["power"]["status"] = "ok"
+
+    if filled["network"].get("status") in (None, "unknown") and filled["network"].get("connected") is True:
+        filled["network"]["status"] = "ok"
+
+    if filled["audio"].get("status") in (None, "unknown") and filled["audio"].get("muted") is not None:
+        filled["audio"]["status"] = "ok"
 
     if not isinstance(filled.get("services"), list):
         filled["services"] = []
