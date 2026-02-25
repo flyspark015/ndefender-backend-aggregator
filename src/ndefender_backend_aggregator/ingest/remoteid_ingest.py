@@ -79,10 +79,16 @@ class RemoteIdIngestor(Ingestor):
         if not isinstance(payload, dict):
             return
         event_type = payload.get("type")
-        timestamp_ms = int(
-            payload.get("timestamp") or payload.get("timestamp_ms") or time.time() * 1000
-        )
+        timestamp_raw = payload.get("timestamp") or payload.get("timestamp_ms") or time.time() * 1000
+        timestamp_ms = self._normalize_ts(timestamp_raw)
         data = payload.get("data") or {}
+
+        if self._contact_store:
+            replay_active = await self._contact_store.replay_active()
+            if not replay_active and self._is_stale(timestamp_ms):
+                return
+            if not replay_active and self._is_test_contact(data):
+                return
 
         await self._state_store.update_section(
             "remote_id",
@@ -106,3 +112,27 @@ class RemoteIdIngestor(Ingestor):
             data=data,
         )
         await self._event_bus.publish(envelope)
+
+    @staticmethod
+    def _normalize_ts(value: object) -> int:
+        try:
+            ts = int(value)  # type: ignore[arg-type]
+        except (TypeError, ValueError):
+            return int(time.time() * 1000)
+        if ts < 100000000000:
+            return ts * 1000
+        return ts
+
+    @staticmethod
+    def _is_stale(timestamp_ms: int, ttl_ms: int = 15000) -> bool:
+        return int(time.time() * 1000) - timestamp_ms > ttl_ms
+
+    @staticmethod
+    def _is_test_contact(data: dict[str, object]) -> bool:
+        markers = ("testdrone", "warmstart")
+        for value in data.values():
+            if isinstance(value, str):
+                lowered = value.lower()
+                if any(marker in lowered for marker in markers):
+                    return True
+        return False

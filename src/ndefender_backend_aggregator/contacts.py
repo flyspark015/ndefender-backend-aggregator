@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import time
 from typing import Any
 
 from .state import StateStore
@@ -16,6 +17,7 @@ class ContactStore:
         self._rf: dict[str, dict[str, Any]] = {}
         self._fpv: dict[str, dict[str, Any]] = {}
         self._replay: dict[str, Any] = {"active": False, "source": "none"}
+        self._remoteid_ttl_ms = 15000
 
     HIGH_CONFIDENCE = 0.8
     MEDIUM_CONFIDENCE = 0.5
@@ -29,6 +31,21 @@ class ContactStore:
         contact_id = data.get("id")
         if not contact_id:
             return
+        now_ms = int(time.time() * 1000)
+        last_seen_ts = self._normalize_ts(data.get("last_seen_ts") or timestamp_ms)
+        async with self._lock:
+            replay_active = bool(self._replay.get("active"))
+        if not replay_active:
+            if self._is_test_contact(data):
+                return
+            if now_ms - last_seen_ts > self._remoteid_ttl_ms:
+                async with self._lock:
+                    self._remoteid.pop(contact_id, None)
+                    contacts = self._merged_contacts()
+                    replay = dict(self._replay)
+                await self._state_store.update_section("contacts", contacts)
+                await self._state_store.update_section("replay", replay)
+                return
         async with self._lock:
             if event_type == "CONTACT_LOST":
                 self._remoteid.pop(contact_id, None)
@@ -38,7 +55,7 @@ class ContactStore:
                     contact_id,
                     contact_type="REMOTE_ID",
                     source="remoteid",
-                    last_seen_ts=int(data.get("last_seen_ts") or timestamp_ms),
+                    last_seen_ts=last_seen_ts,
                     severity="unknown",
                 )
                 self._remoteid[contact_id] = contact
@@ -104,8 +121,21 @@ class ContactStore:
         await self._state_store.update_section("contacts", contacts)
         await self._state_store.update_section("replay", replay)
 
+    async def replay_active(self) -> bool:
+        async with self._lock:
+            return bool(self._replay.get("active"))
+
     def _merged_contacts(self) -> list[dict[str, Any]]:
         merged = [*self._remoteid.values(), *self._rf.values(), *self._fpv.values()]
+        if not self._replay.get("active"):
+            merged = [c for c in merged if not self._is_test_contact(c)]
+            now_ms = int(time.time() * 1000)
+            merged = [
+                c
+                for c in merged
+                if c.get("type") != "REMOTE_ID"
+                or now_ms - self._normalize_ts(c.get("last_seen_ts") or 0) <= self._remoteid_ttl_ms
+            ]
         merged.sort(key=self._sort_key)
         return merged
 
@@ -143,6 +173,26 @@ class ContactStore:
         if value >= ContactStore.MEDIUM_CONFIDENCE:
             return "medium"
         return "low"
+
+    @staticmethod
+    def _normalize_ts(value: Any) -> int:
+        try:
+            ts = int(value)
+        except (TypeError, ValueError):
+            return int(time.time() * 1000)
+        if ts < 100000000000:  # seconds -> ms
+            return ts * 1000
+        return ts
+
+    @staticmethod
+    def _is_test_contact(data: dict[str, Any]) -> bool:
+        markers = ("testdrone", "warmstart")
+        for value in data.values():
+            if isinstance(value, str):
+                lowered = value.lower()
+                if any(marker in lowered for marker in markers):
+                    return True
+        return False
 
     @staticmethod
     def _sort_key(contact: dict[str, Any]) -> tuple[int, float, int]:
