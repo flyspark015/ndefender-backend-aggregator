@@ -80,13 +80,22 @@ class AntsdrIngestor(Ingestor):
         if not isinstance(payload, dict):
             return
         event_type = payload.get("type")
-        timestamp_ms = int(
-            payload.get("timestamp") or payload.get("timestamp_ms") or time.time() * 1000
-        )
+        raw_ts = payload.get("ts_ms") or payload.get("timestamp") or payload.get("timestamp_ms") or time.time() * 1000
+        try:
+            timestamp_ms = int(raw_ts)
+        except (TypeError, ValueError):
+            timestamp_ms = int(time.time() * 1000)
+        if timestamp_ms < 100000000000:
+            timestamp_ms *= 1000
         data = payload.get("data") or {}
         await self._state_store.update_section(
             "rf",
-            {"last_event_type": event_type, "last_event": data, "last_timestamp_ms": timestamp_ms},
+            {
+                "last_event_type": event_type,
+                "last_event": data,
+                "last_timestamp_ms": timestamp_ms,
+                "scan_active": True,
+            },
         )
         if self._contact_store and event_type:
             await self._contact_store.update_rf(str(event_type), data, timestamp_ms)

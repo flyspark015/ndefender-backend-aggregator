@@ -12,7 +12,7 @@ esp32:
   command_retries: 1
 
 antsdr:
-  jsonl_path: "/opt/ndefender/logs/antsdr_engine.jsonl"
+  jsonl_path: "/opt/ndefender/logs/antsdr_scan.jsonl"
   tail_poll_interval_ms: 200
 
 remoteid:
