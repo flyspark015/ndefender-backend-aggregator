@@ -13,6 +13,7 @@ from ..config import AppConfig
 from ..ingest import Ingestor, IngestorMetadata
 from ..models import EventEnvelope
 from ..state import StateStore
+from .ups_hat_e import UpsHatEReader
 
 
 class SystemControllerIngestor(Ingestor):
@@ -29,6 +30,8 @@ class SystemControllerIngestor(Ingestor):
         self._running = False
         self._last_success_ms: int | None = None
         self._last_error: str | None = None
+        self._ups_reader = UpsHatEReader()
+        self._last_ups_error: str | None = None
 
     async def start(self) -> None:
         if self._running:
@@ -85,7 +88,14 @@ class SystemControllerIngestor(Ingestor):
         response.raise_for_status()
         payload = response.json() or {}
         await self._state_store.update_section("system", payload.get("system") or {})
-        await self._state_store.update_section("power", payload.get("power") or payload.get("ups") or {})
+        power_payload = payload.get("power") or payload.get("ups") or {}
+        if not self._power_has_data(power_payload):
+            local_ups = await self._read_local_ups()
+            if local_ups:
+                power_payload = local_ups
+            elif not power_payload:
+                power_payload = {"status": "offline", "last_error": self._last_ups_error or "ups_unavailable"}
+        await self._state_store.update_section("power", power_payload)
         await self._state_store.update_section("services", payload.get("services") or [])
         await self._state_store.update_section("network", payload.get("network") or {})
         await self._state_store.update_section("audio", payload.get("audio") or {})
@@ -104,6 +114,25 @@ class SystemControllerIngestor(Ingestor):
     async def _mark_offline(self, error: str) -> None:
         offline = {"status": "offline", "last_error": error}
         await self._state_store.update_section("system", offline)
-        await self._state_store.update_section("power", offline)
+        power_payload = await self._read_local_ups()
+        if power_payload is None:
+            power_payload = {"status": "offline", "last_error": self._last_ups_error or error}
+        await self._state_store.update_section("power", power_payload)
         await self._state_store.update_section("network", offline)
         await self._state_store.update_section("audio", offline)
+
+    def _power_has_data(self, payload: dict[str, object]) -> bool:
+        for key in ("pack_voltage_v", "current_a", "input_vbus_v", "input_power_w", "soc_percent"):
+            if payload.get(key) is not None:
+                return True
+        return False
+
+    async def _read_local_ups(self) -> dict[str, object] | None:
+        if not self._ups_reader:
+            return None
+        data = await asyncio.to_thread(self._ups_reader.read_status)
+        if data:
+            self._last_ups_error = None
+            return data
+        self._last_ups_error = self._ups_reader.last_error or "ups_read_failed"
+        return None
