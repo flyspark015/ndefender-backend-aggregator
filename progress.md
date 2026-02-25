@@ -652,3 +652,7 @@ Key outcomes:
 - `reports/README_GREEN_SIGNAL.md`
 - `reports/green_signal.json`
 - `reports/GREEN_SIGNAL_20260225_184622.md`
+
+## Merge + Tag (2026-02-25)
+- Merged branch `fix/status-schema-and-remoteid-staleness` -> `main` (fast-forward)
+- Tag: `v0.1.1-aggregator-status-fix-green`
