@@ -41,6 +41,21 @@ ls -lah /opt/ndefender/logs/
 - Serial loop auto-reconnects every `reconnect_delay_seconds`.
 - If no telemetry appears, verify USB cable and `/dev/serial/by-id`.
 
+## FPV Field Semantics
+- `fpv` is mirrored from the selected VRX entry when available:
+  - `fpv.selected` = `vrx.selected`
+  - `fpv.freq_hz` / `fpv.rssi_raw` from the matching `vrx` entry.
+- If no VRX selection exists, `fpv` remains default/idle.
+
+## Video Health Probe
+- `video.status` is inferred by device presence:
+  - `ok` if `/dev/video*` exists.
+  - `offline` if no video device present.
+
+## Contact Timestamp Semantics
+- `contacts[].last_seen_ts` is epoch milliseconds.
+- For ESP32 FPV contacts, if device reports uptime-based timestamps, they are stored in `last_seen_uptime_ms` and `last_seen_ts` is converted to epoch.
+
 ## System Controller Unreachable Behavior
 - Poller marks status as degraded but API remains available.
 - `system`/`power`/`network`/`audio` fields may be stale or empty.
@@ -62,6 +77,15 @@ ls -lah /opt/ndefender/logs/
 - Logs to check:
   - `journalctl -u ndefender-remoteid-engine -n 200 --no-pager | grep -i tshark`
   - Verify monitor interface (`mon0`) is present and captures are fresh.
+
+## RemoteID Engine Bring-Up
+- RemoteID capture requires a monitor-mode interface (`mon0`).
+- If `tshark` reports `There is no device named "mon0"`:
+  - Create monitor interface on a phy that supports monitor (example for `wlan0` / phy1):
+    - `sudo iw phy phy1 interface add mon0 type monitor`
+    - `sudo ip link set mon0 up`
+  - Verify `tshark` can capture: `sudo tshark -i mon0 -c 1 -a duration:3`
+  - Restart service: `sudo systemctl restart ndefender-remoteid-engine`
 
 ## RF Scan Offline Detection
 - If AntSDR is disconnected or its IP is unreachable, RF scan will restart and the JSONL file will not update.
