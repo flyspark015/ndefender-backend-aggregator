@@ -52,6 +52,8 @@ class Esp32Ingestor(Ingestor):
         self._connected = False
         self._last_telemetry_ms: int | None = None
         self._last_error: str | None = None
+        self._reported_status: str | None = None
+        self._reported_error: str | None = None
 
     async def start(self) -> None:
         if self._running:
@@ -150,14 +152,17 @@ class Esp32Ingestor(Ingestor):
             if not self._serial:
                 port = self._resolve_port()
                 if not port:
+                    await self._report_disconnected("serial_port_not_found")
                     await asyncio.sleep(self._config.esp32.reconnect_delay_seconds)
                     continue
                 try:
                     await asyncio.to_thread(self._open_serial, port)
                     self._connected = True
+                    await self._report_connected()
                     LOGGER.info("ESP32 connected on %s", port)
                 except Exception as exc:
                     self._last_error = str(exc)
+                    await self._report_disconnected(self._last_error)
                     await asyncio.sleep(self._config.esp32.reconnect_delay_seconds)
                     continue
             try:
@@ -166,6 +171,7 @@ class Esp32Ingestor(Ingestor):
                 raise
             except Exception as exc:
                 self._last_error = str(exc)
+                await self._report_disconnected(self._last_error)
                 await self._close_serial()
                 await asyncio.sleep(self._config.esp32.reconnect_delay_seconds)
 
@@ -203,17 +209,24 @@ class Esp32Ingestor(Ingestor):
         msg_type = payload.get("type")
         timestamp_ms = int(payload.get("timestamp_ms") or time.time() * 1000)
         if msg_type == "telemetry":
+            sys_payload = payload.get("sys")
+            if not isinstance(sys_payload, dict):
+                sys_payload = {}
+            sys_payload.setdefault("status", "CONNECTED")
+            sys_payload.pop("last_error", None)
             await self._state_store.update_section(
                 "vrx",
                 {
                     "selected": payload.get("sel"),
                     "vrx": payload.get("vrx", []),
                     "led": payload.get("led", {}),
-                    "sys": payload.get("sys", {}),
+                    "sys": sys_payload,
                 },
             )
             await self._state_store.update_section("video", payload.get("video", {}))
             self._last_telemetry_ms = timestamp_ms
+            self._reported_status = "CONNECTED"
+            self._reported_error = None
             if self._contact_store:
                 await self._contact_store.update_fpv(payload, timestamp_ms)
             await self._event_bus.publish(
@@ -270,6 +283,33 @@ class Esp32Ingestor(Ingestor):
             await asyncio.to_thread(self._serial.close)
         self._serial = None
         self._connected = False
+
+    async def _report_connected(self) -> None:
+        if self._reported_status == "CONNECTED":
+            return
+        self._reported_status = "CONNECTED"
+        self._reported_error = None
+        await self._update_vrx_sys("CONNECTED", None)
+
+    async def _report_disconnected(self, error: str | None) -> None:
+        if self._reported_status == "DISCONNECTED" and self._reported_error == error:
+            return
+        self._reported_status = "DISCONNECTED"
+        self._reported_error = error
+        await self._update_vrx_sys("DISCONNECTED", error)
+
+    async def _update_vrx_sys(self, status: str, error: str | None) -> None:
+        snapshot = await self._state_store.snapshot()
+        current = snapshot.model_dump()
+        vrx = dict(current.get("vrx") or {})
+        sys_payload = dict(vrx.get("sys") or {})
+        sys_payload["status"] = status
+        if error:
+            sys_payload["last_error"] = error
+        elif "last_error" in sys_payload:
+            sys_payload.pop("last_error", None)
+        vrx["sys"] = sys_payload
+        await self._state_store.update_section("vrx", vrx)
 
     async def _write_json(self, payload: dict[str, Any]) -> None:
         if not self._serial:
