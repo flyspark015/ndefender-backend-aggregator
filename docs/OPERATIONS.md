@@ -17,9 +17,10 @@ Why this exists: It is the operator handbook for production deployments, includi
 
 ## Subsystem Feeds (Aggregator)
 - System Controller -> `/api/v1/status` (power/network/audio/system/services).
+- UPS HAT E (local fallback) -> I2C bus 1 addr 0x2d (power section if controller data is empty).
 - AntSDR -> JSONL tailer at `/opt/ndefender/logs/antsdr_scan.jsonl` (rf + RF contacts).
 - RemoteID -> JSONL tailer at `/opt/ndefender/logs/remoteid_engine.jsonl` (remote_id + contacts).
-- ESP32 -> serial telemetry (vrx/fpv/video). If missing, vrx.sys.status="DISCONNECTED".
+- ESP32 -> serial telemetry (vrx/fpv/video). If missing, vrx.sys.status="DISCONNECTED" and last_error is populated.
 
 ## Log Inspection Commands
 ```bash
@@ -43,6 +44,7 @@ ls -lah /opt/ndefender/logs/
 ## System Controller Unreachable Behavior
 - Poller marks status as degraded but API remains available.
 - `system`/`power`/`network`/`audio` fields may be stale or empty.
+  - UPS fallback still attempts to read local I2C telemetry even if controller is offline.
 
 ## RemoteID Stale / Replay Detection
 - If `replay.active=false`, RemoteID contacts older than 15s are dropped and test markers (`TestDrone`, `WARMSTART`) are filtered.
@@ -50,6 +52,13 @@ ls -lah /opt/ndefender/logs/
 - Logs to check:
   - `journalctl -u ndefender-remoteid-engine -n 200 --no-pager | grep -i tshark`
   - Verify monitor interface (`mon0`) is present and captures are fresh.
+
+## RF Scan Offline Detection
+- If AntSDR is disconnected or its IP is unreachable, RF scan will restart and the JSONL file will not update.
+- Aggregator marks RF as offline/stale when no new JSONL events arrive.
+- Logs to check:
+  - `journalctl -u ndefender-rfscan -n 200 --no-pager | grep -i \"no device\"`
+  - `ping -c 1 192.168.10.2` (AntSDR default IP).
 
 ## Rate Limit Exceeded Handling
 - Command endpoints return `429` on excessive calls.
