@@ -441,8 +441,8 @@ def main() -> int:
     local_ws_url = base_local.replace("http://", "ws://") + "/ws"
     public_ws_url = base_public.replace("https://", "wss://") + "/ws"
 
-    local_ws = asyncio.run(probe_ws(local_ws_url))
-    public_ws = asyncio.run(probe_ws(public_ws_url))
+    local_ws = asyncio.run(probe_ws(local_ws_url, origin="https://www.figma.com"))
+    public_ws = asyncio.run(probe_ws(public_ws_url, origin="https://www.figma.com"))
 
     cors_targets = [f"{base_public}/status", f"{base_public}/ws"]
     cors_results = []

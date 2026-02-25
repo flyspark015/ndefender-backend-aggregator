@@ -8,7 +8,7 @@ import uuid
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import Body, Depends, FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
+from fastapi import Body, Depends, FastAPI, HTTPException, Request, Response, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -209,6 +209,10 @@ def _register_ws_routes(app: FastAPI, ws_manager: WebSocketManager) -> None:
         if origin in allowed_origins:
             return True
         return bool(origin_pattern and origin_pattern.match(origin))
+
+    @app.options("/api/v1/ws")
+    async def ws_preflight() -> Response:
+        return Response(status_code=200)
 
     @app.websocket("/api/v1/ws")
     async def ws_endpoint(websocket: WebSocket) -> None:
