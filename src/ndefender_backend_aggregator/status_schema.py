@@ -57,6 +57,7 @@ def _default_remote_id() -> dict[str, Any]:
         "state": None,
         "mode": "live",
         "capture_active": None,
+        "last_error": None,
     }
 
 

@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import asyncio
 import json
+import subprocess
 import time
 from contextlib import suppress
+from pathlib import Path
 
 from ..bus import EventBus
 from ..config import AppConfig
@@ -109,6 +111,9 @@ class RemoteIdIngestor(Ingestor):
         remote_state = data.get("state") or data.get("status")
         remote_mode = data.get("mode")
         remote_last_ts = data.get("last_ts") or data.get("last_timestamp_ms")
+        capture_active = data.get("capture_active")
+        if capture_active is None:
+            capture_active = True
         await self._state_store.update_section(
             "remote_id",
             {
@@ -117,8 +122,9 @@ class RemoteIdIngestor(Ingestor):
                 "last_timestamp_ms": timestamp_ms,
                 "state": remote_state,
                 "mode": remote_mode or "live",
-                "capture_active": data.get("capture_active"),
+                "capture_active": capture_active,
                 "last_ts": remote_last_ts,
+                "last_error": None,
             },
         )
         if self._contact_store and event_type:
@@ -145,28 +151,30 @@ class RemoteIdIngestor(Ingestor):
                 continue
             if not self._last_event_ms:
                 now_ms = int(time.time() * 1000)
+                capture_active, last_error = await self._capture_state()
                 await self._state_store.update_section(
                     "remote_id",
                     {
                         "state": "DEGRADED",
-                        "capture_active": False,
-                        "last_error": "no_remoteid_events",
+                        "capture_active": capture_active,
+                        "last_error": last_error or "no_remoteid_events",
                         "last_event_type": "REMOTEID_STALE",
-                        "last_event": {"reason": "no_remoteid_events"},
+                        "last_event": {"reason": last_error or "no_remoteid_events"},
                         "last_timestamp_ms": now_ms,
                     },
                 )
                 continue
             if self._is_stale(self._last_event_ms):
                 now_ms = int(time.time() * 1000)
+                capture_active, last_error = await self._capture_state()
                 await self._state_store.update_section(
                     "remote_id",
                     {
                         "state": "DEGRADED",
-                        "capture_active": False,
-                        "last_error": "remoteid_stale",
+                        "capture_active": capture_active,
+                        "last_error": last_error or "remoteid_stale",
                         "last_event_type": "REMOTEID_STALE",
-                        "last_event": {"reason": "remoteid_stale", "last_seen_ms": self._last_event_ms},
+                        "last_event": {"reason": last_error or "remoteid_stale", "last_seen_ms": self._last_event_ms},
                         "last_timestamp_ms": now_ms,
                     },
                 )
@@ -194,3 +202,31 @@ class RemoteIdIngestor(Ingestor):
                 if any(marker in lowered for marker in markers):
                     return True
         return False
+
+    async def _capture_state(self) -> tuple[bool, str | None]:
+        def _check() -> tuple[bool, str | None]:
+            try:
+                result = subprocess.run(
+                    ["systemctl", "is-active", "ndefender-remoteid-engine"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2,
+                    check=False,
+                )
+            except Exception:
+                return False, "remoteid_service_unknown"
+            if result.returncode != 0 or result.stdout.strip() != "active":
+                return False, "remoteid_service_inactive"
+
+            operstate = Path("/sys/class/net/mon0/operstate")
+            if not operstate.exists():
+                return False, "mon0_missing"
+            try:
+                state = operstate.read_text(encoding="utf-8").strip().lower()
+            except Exception:
+                return False, "mon0_state_unknown"
+            if state not in {"up", "unknown"}:
+                return False, "mon0_down"
+            return True, "no_odid_frames"
+
+        return await asyncio.to_thread(_check)
