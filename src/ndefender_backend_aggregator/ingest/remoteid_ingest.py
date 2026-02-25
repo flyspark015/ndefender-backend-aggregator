@@ -144,23 +144,30 @@ class RemoteIdIngestor(Ingestor):
             if self._contact_store and await self._contact_store.replay_active():
                 continue
             if not self._last_event_ms:
+                now_ms = int(time.time() * 1000)
                 await self._state_store.update_section(
                     "remote_id",
                     {
                         "state": "DEGRADED",
                         "capture_active": False,
                         "last_error": "no_remoteid_events",
+                        "last_event_type": "REMOTEID_STALE",
+                        "last_event": {"reason": "no_remoteid_events"},
+                        "last_timestamp_ms": now_ms,
                     },
                 )
                 continue
             if self._is_stale(self._last_event_ms):
+                now_ms = int(time.time() * 1000)
                 await self._state_store.update_section(
                     "remote_id",
                     {
                         "state": "DEGRADED",
                         "capture_active": False,
                         "last_error": "remoteid_stale",
-                        "last_timestamp_ms": self._last_event_ms,
+                        "last_event_type": "REMOTEID_STALE",
+                        "last_event": {"reason": "remoteid_stale", "last_seen_ms": self._last_event_ms},
+                        "last_timestamp_ms": now_ms,
                     },
                 )
 
