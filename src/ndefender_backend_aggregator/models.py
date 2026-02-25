@@ -11,11 +11,13 @@ class StatusSnapshot(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     timestamp_ms: int = Field(ge=0)
+    overall_ok: bool = True
     system: dict[str, Any] = Field(default_factory=dict)
     power: dict[str, Any] = Field(default_factory=dict)
     rf: dict[str, Any] = Field(default_factory=dict)
     remote_id: dict[str, Any] = Field(default_factory=dict)
     vrx: dict[str, Any] = Field(default_factory=dict)
+    fpv: dict[str, Any] = Field(default_factory=dict)
     video: dict[str, Any] = Field(default_factory=dict)
     services: list[dict[str, Any]] = Field(default_factory=list)
     network: dict[str, Any] = Field(default_factory=dict)
