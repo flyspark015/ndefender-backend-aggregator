@@ -57,6 +57,8 @@ def _default_remote_id() -> dict[str, Any]:
         "state": None,
         "mode": "live",
         "capture_active": None,
+        "contacts_active": None,
+        "last_update_ms": None,
         "last_error": None,
     }
 
@@ -91,12 +93,56 @@ def _default_network() -> dict[str, Any]:
         "ip_v4": None,
         "ip_v6": None,
         "ssid": None,
-        "status": "unknown",
+        "wifi": None,
+        "bluetooth": None,
     }
 
 
 def _default_audio() -> dict[str, Any]:
     return {"muted": None, "volume_percent": None, "status": "unknown"}
+
+
+def _default_gps() -> dict[str, Any]:
+    return {
+        "timestamp_ms": None,
+        "fix": None,
+        "satellites": None,
+        "hdop": None,
+        "vdop": None,
+        "pdop": None,
+        "latitude": None,
+        "longitude": None,
+        "altitude_m": None,
+        "speed_m_s": None,
+        "heading_deg": None,
+        "last_update_ms": None,
+        "age_ms": None,
+        "source": None,
+        "last_error": None,
+    }
+
+
+def _default_esp32() -> dict[str, Any]:
+    return {
+        "timestamp_ms": None,
+        "connected": None,
+        "last_seen_ms": None,
+        "rtt_ms": None,
+        "fw_version": None,
+        "heartbeat": None,
+        "capabilities": None,
+        "last_error": None,
+    }
+
+
+def _default_antsdr() -> dict[str, Any]:
+    return {
+        "timestamp_ms": None,
+        "connected": None,
+        "uri": None,
+        "temperature_c": None,
+        "last_error": None,
+    }
 
 
 def _default_replay() -> dict[str, Any]:
@@ -118,16 +164,16 @@ def _infer_ok(section: dict[str, Any], fields: list[str]) -> bool:
 
 
 def _overall_ok(snapshot: dict[str, Any]) -> bool:
-    for key in ("system", "power", "network", "audio"):
+    for key in ("system", "power", "audio"):
         section = snapshot.get(key)
         if isinstance(section, dict):
             status = str(section.get("status") or "").lower()
-            if status in {"degraded", "error", "stopped"}:
+            if status in {"degraded", "error", "stopped", "offline"}:
                 return False
     remote = snapshot.get("remote_id")
     if isinstance(remote, dict):
         state = str(remote.get("state") or "").lower()
-        if state in {"degraded", "error", "stopped"}:
+        if state in {"degraded", "error", "stopped", "offline"}:
             return False
     return True
 
@@ -139,6 +185,9 @@ def fill_status_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
     filled["power"] = _merge_section(filled.get("power"), _default_power())
     filled["rf"] = _merge_section(filled.get("rf"), _default_rf())
     filled["remote_id"] = _merge_section(filled.get("remote_id"), _default_remote_id())
+    filled["gps"] = _merge_section(filled.get("gps"), _default_gps())
+    filled["esp32"] = _merge_section(filled.get("esp32"), _default_esp32())
+    filled["antsdr"] = _merge_section(filled.get("antsdr"), _default_antsdr())
     filled["vrx"] = _merge_section(filled.get("vrx"), _default_vrx())
     filled["fpv"] = _merge_section(filled.get("fpv"), _default_fpv())
     filled["video"] = _merge_section(filled.get("video"), _default_video())
@@ -154,9 +203,6 @@ def fill_status_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
         filled["power"], ["pack_voltage_v", "current_a", "soc_percent", "input_vbus_v"]
     ):
         filled["power"]["status"] = "ok"
-
-    if filled["network"].get("status") in (None, "unknown") and filled["network"].get("connected") is True:
-        filled["network"]["status"] = "ok"
 
     if filled["audio"].get("status") in (None, "unknown") and filled["audio"].get("muted") is not None:
         filled["audio"]["status"] = "ok"

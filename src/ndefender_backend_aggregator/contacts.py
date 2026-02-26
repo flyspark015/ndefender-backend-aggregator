@@ -133,6 +133,10 @@ class ContactStore:
         async with self._lock:
             return bool(self._replay.get("active"))
 
+    async def remoteid_count(self) -> int:
+        async with self._lock:
+            return len(self._remoteid)
+
     def _merged_contacts(self) -> list[dict[str, Any]]:
         merged = [*self._remoteid.values(), *self._rf.values(), *self._fpv.values()]
         if not self._replay.get("active"):

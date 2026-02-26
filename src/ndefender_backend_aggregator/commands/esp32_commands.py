@@ -18,6 +18,10 @@ class Esp32CommandHandler(CommandHandler):
             "scan/start",
             "scan/stop",
             "video/select",
+            "esp32/buzzer",
+            "esp32/leds",
+            "esp32/buttons/simulate",
+            "esp32/config",
         }
 
     async def handle(self, request: CommandRequest) -> CommandResult:
@@ -26,6 +30,10 @@ class Esp32CommandHandler(CommandHandler):
             "scan/start": ("START_SCAN", request.payload or {}),
             "scan/stop": ("STOP_SCAN", request.payload or {}),
             "video/select": ("VIDEO_SELECT", request.payload or {}),
+            "esp32/buzzer": ("SET_BUZZER", request.payload or {}),
+            "esp32/leds": ("SET_LEDS", request.payload or {}),
+            "esp32/buttons/simulate": ("SIMULATE_BUTTON", request.payload or {}),
+            "esp32/config": ("SET_CONFIG", request.payload or {}),
         }
         esp_cmd, args = mapping[request.command]
         return await self._ingestor.send_command(esp_cmd, args)

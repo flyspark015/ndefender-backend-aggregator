@@ -119,6 +119,16 @@ class AntsdrIngestor(Ingestor):
                 "last_error": None,
             },
         )
+        await self._state_store.update_section(
+            "antsdr",
+            {
+                "timestamp_ms": timestamp_ms,
+                "connected": True,
+                "uri": self._load_antsdr_uri(),
+                "temperature_c": data.get("temperature_c"),
+                "last_error": None,
+            },
+        )
         if self._contact_store and event_type:
             await self._contact_store.update_rf(str(event_type), data, timestamp_ms)
         envelope = EventEnvelope(
@@ -157,6 +167,16 @@ class AntsdrIngestor(Ingestor):
                         "last_error": reason,
                     },
                 )
+                await self._state_store.update_section(
+                    "antsdr",
+                    {
+                        "timestamp_ms": now_ms,
+                        "connected": False,
+                        "uri": self._load_antsdr_uri(),
+                        "temperature_c": None,
+                        "last_error": reason,
+                    },
+                )
                 continue
             if self._is_stale(self._last_event_ms):
                 await self._state_store.update_section(
@@ -170,6 +190,16 @@ class AntsdrIngestor(Ingestor):
                         "last_timestamp_ms": now_ms,
                         "scan_active": False,
                         "status": "degraded",
+                        "last_error": "no_recent_rf_events",
+                    },
+                )
+                await self._state_store.update_section(
+                    "antsdr",
+                    {
+                        "timestamp_ms": now_ms,
+                        "connected": False,
+                        "uri": self._load_antsdr_uri(),
+                        "temperature_c": None,
                         "last_error": "no_recent_rf_events",
                     },
                 )

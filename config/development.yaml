@@ -1,5 +1,18 @@
 system_controller:
   base_url: "http://127.0.0.1:8000"
+  timeout_seconds: 5
+
+antsdr:
+  base_url: "http://127.0.0.1:8890"
+  timeout_seconds: 5
+  jsonl_path: "/opt/ndefender/logs/antsdr_scan.jsonl"
+  tail_poll_interval_ms: 200
+
+remoteid:
+  base_url: "http://127.0.0.1:9001"
+  timeout_seconds: 5
+  jsonl_path: "/opt/ndefender/logs/remoteid_engine.jsonl"
+  tail_poll_interval_ms: 200
 
 logging:
   level: "DEBUG"

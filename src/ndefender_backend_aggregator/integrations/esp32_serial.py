@@ -225,9 +225,36 @@ class Esp32Ingestor(Ingestor):
                 },
             )
             await self._state_store.update_section("video", payload.get("video", {}))
+            interval_ms = None
+            if self._last_telemetry_ms:
+                interval_ms = max(0, event_ts_ms - self._last_telemetry_ms)
             self._last_telemetry_ms = event_ts_ms
             self._reported_status = "CONNECTED"
             self._reported_error = None
+            await self._state_store.update_section(
+                "esp32",
+                {
+                    "timestamp_ms": event_ts_ms,
+                    "connected": True,
+                    "last_seen_ms": event_ts_ms,
+                    "rtt_ms": None,
+                    "fw_version": payload.get("fw_version"),
+                    "heartbeat": {
+                        "ok": True,
+                        "interval_ms": interval_ms,
+                        "last_heartbeat_ms": event_ts_ms,
+                    },
+                    "capabilities": {
+                        "buttons": False,
+                        "leds": True,
+                        "buzzer": False,
+                        "vrx": True,
+                        "video_switch": True,
+                        "config": False,
+                    },
+                    "last_error": None,
+                },
+            )
             if self._contact_store:
                 await self._contact_store.update_fpv(payload, payload_ts_ms)
             await self._event_bus.publish(
@@ -291,6 +318,19 @@ class Esp32Ingestor(Ingestor):
         self._reported_status = "CONNECTED"
         self._reported_error = None
         await self._update_vrx_sys("CONNECTED", None)
+        await self._state_store.update_section(
+            "esp32",
+            {
+                "timestamp_ms": int(time.time() * 1000),
+                "connected": True,
+                "last_seen_ms": self._last_telemetry_ms,
+                "rtt_ms": None,
+                "fw_version": None,
+                "heartbeat": None,
+                "capabilities": None,
+                "last_error": None,
+            },
+        )
 
     async def _report_disconnected(self, error: str | None) -> None:
         if self._reported_status == "DISCONNECTED" and self._reported_error == error:
@@ -298,6 +338,19 @@ class Esp32Ingestor(Ingestor):
         self._reported_status = "DISCONNECTED"
         self._reported_error = error
         await self._update_vrx_sys("DISCONNECTED", error)
+        await self._state_store.update_section(
+            "esp32",
+            {
+                "timestamp_ms": int(time.time() * 1000),
+                "connected": False,
+                "last_seen_ms": self._last_telemetry_ms,
+                "rtt_ms": None,
+                "fw_version": None,
+                "heartbeat": None,
+                "capabilities": None,
+                "last_error": error,
+            },
+        )
 
     async def _update_vrx_sys(self, status: str, error: str | None) -> None:
         snapshot = await self._state_store.snapshot()

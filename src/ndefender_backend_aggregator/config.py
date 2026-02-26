@@ -33,6 +33,8 @@ class Esp32Config(BaseModel):
 class AntsdrConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    base_url: str
+    timeout_seconds: int = Field(ge=1)
     jsonl_path: str
     tail_poll_interval_ms: int = Field(ge=1)
 
@@ -40,6 +42,8 @@ class AntsdrConfig(BaseModel):
 class RemoteIdConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    base_url: str
+    timeout_seconds: int = Field(ge=1)
     jsonl_path: str
     tail_poll_interval_ms: int = Field(ge=1)
 

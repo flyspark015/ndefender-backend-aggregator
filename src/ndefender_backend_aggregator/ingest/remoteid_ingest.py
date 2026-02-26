@@ -111,9 +111,13 @@ class RemoteIdIngestor(Ingestor):
         remote_state = data.get("state") or data.get("status")
         remote_mode = data.get("mode")
         remote_last_ts = data.get("last_ts") or data.get("last_timestamp_ms")
+        remote_last_update_ms = self._normalize_ts(remote_last_ts) if remote_last_ts else timestamp_ms
         capture_active = data.get("capture_active")
         if capture_active is None:
             capture_active = True
+        contacts_active = data.get("contacts_active")
+        if contacts_active is None and self._contact_store:
+            contacts_active = await self._contact_store.remoteid_count()
         await self._state_store.update_section(
             "remote_id",
             {
@@ -123,7 +127,8 @@ class RemoteIdIngestor(Ingestor):
                 "state": remote_state,
                 "mode": remote_mode or "live",
                 "capture_active": capture_active,
-                "last_ts": remote_last_ts,
+                "contacts_active": contacts_active,
+                "last_update_ms": remote_last_update_ms,
                 "last_error": None,
             },
         )
@@ -152,11 +157,16 @@ class RemoteIdIngestor(Ingestor):
             if not self._last_event_ms:
                 now_ms = int(time.time() * 1000)
                 capture_active, last_error = await self._capture_state()
+                contacts_active = None
+                if self._contact_store:
+                    contacts_active = await self._contact_store.remoteid_count()
                 await self._state_store.update_section(
                     "remote_id",
                     {
                         "state": "DEGRADED",
                         "capture_active": capture_active,
+                        "contacts_active": contacts_active,
+                        "last_update_ms": now_ms,
                         "last_error": last_error or "no_remoteid_events",
                         "last_event_type": "REMOTEID_STALE",
                         "last_event": {"reason": last_error or "no_remoteid_events"},
@@ -167,11 +177,16 @@ class RemoteIdIngestor(Ingestor):
             if self._is_stale(self._last_event_ms):
                 now_ms = int(time.time() * 1000)
                 capture_active, last_error = await self._capture_state()
+                contacts_active = None
+                if self._contact_store:
+                    contacts_active = await self._contact_store.remoteid_count()
                 await self._state_store.update_section(
                     "remote_id",
                     {
                         "state": "DEGRADED",
                         "capture_active": capture_active,
+                        "contacts_active": contacts_active,
+                        "last_update_ms": now_ms,
                         "last_error": last_error or "remoteid_stale",
                         "last_event_type": "REMOTEID_STALE",
                         "last_event": {"reason": last_error or "remoteid_stale", "last_seen_ms": self._last_event_ms},

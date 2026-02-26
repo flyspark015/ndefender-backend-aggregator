@@ -22,10 +22,14 @@ Why this exists: This document defines every configuration section so deployment
 - `command_retries`: Number of retries for command delivery.
 
 ### antsdr
+- `base_url`: Base URL for AntSDR scan API.
+- `timeout_seconds`: Per-request timeout in seconds.
 - `jsonl_path`: Path to AntSDR JSONL ground-truth log.
 - `tail_poll_interval_ms`: Poll interval for tailer.
 
 ### remoteid
+- `base_url`: Base URL for RemoteID engine API.
+- `timeout_seconds`: Per-request timeout in seconds.
 - `jsonl_path`: Path to RemoteID JSONL ground-truth log.
 - `tail_poll_interval_ms`: Poll interval for tailer.
 

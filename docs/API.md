@@ -20,7 +20,7 @@ curl http://127.0.0.1:8001/api/v1/status
 ```
 
 StatusSnapshot contract notes:
-- Always includes stable keys (no empty top-level objects): `system`, `power`, `rf`, `remote_id`, `vrx`, `fpv`, `video`, `services`, `network`, `audio`, `contacts`, `replay`, `overall_ok`, `timestamp_ms`.
+- Always includes stable keys (no empty top-level objects): `system`, `power`, `rf`, `remote_id`, `gps`, `esp32`, `antsdr`, `vrx`, `fpv`, `video`, `services`, `network`, `audio`, `contacts`, `replay`, `overall_ok`, `timestamp_ms`.
 - Nulls are allowed when a subsystem is missing.
 - `timestamp_ms` is epoch milliseconds.
 - `replay.active=false` suppresses replay/test contacts (e.g., `TestDrone`, `WARMSTART`).
@@ -33,6 +33,9 @@ StatusSnapshot contract notes:
 - `GET /video`
 - `GET /services`
 - `GET /network`
+- `GET /gps`
+- `GET /esp32`
+- `GET /antsdr`
 - `GET /audio`
 
 Example response excerpt (contacts):
@@ -49,8 +52,51 @@ Example response excerpt (contacts):
 - `POST /scan/start`
 - `POST /scan/stop`
 - `POST /video/select`
+- `POST /esp32/buzzer`
+- `POST /esp32/leds`
+- `POST /esp32/buttons/simulate` (local-only)
+- `POST /esp32/config`
 - `POST /system/reboot` (confirm required + unsafe toggle)
 - `POST /system/shutdown` (confirm required + unsafe toggle)
+
+### Proxy Controls (System Controller)
+- `POST /services/{name}/restart`
+- `GET /network/wifi/state`
+- `GET /network/wifi/scan`
+- `POST /network/wifi/enable`
+- `POST /network/wifi/connect`
+- `POST /network/wifi/disconnect`
+- `GET /network/bluetooth/state`
+- `GET /network/bluetooth/devices`
+- `POST /network/bluetooth/enable`
+- `POST /network/bluetooth/scan/start`
+- `POST /network/bluetooth/scan/stop`
+- `POST /network/bluetooth/pair`
+- `POST /network/bluetooth/unpair`
+- `POST /gps/restart`
+- `POST /audio/mute`
+- `POST /audio/volume`
+
+### Proxy Controls (AntSDR)
+- `GET /antsdr/device`
+- `GET /antsdr/sweep/state`
+- `GET /antsdr/gain`
+- `GET /antsdr/stats`
+- `POST /antsdr/sweep/start`
+- `POST /antsdr/sweep/stop`
+- `POST /antsdr/gain/set`
+- `POST /antsdr/device/reset` (confirm required)
+- `POST /antsdr/device/calibrate` (confirm required)
+
+### Proxy Controls (RemoteID)
+- `GET /remote_id/status`
+- `GET /remote_id/contacts`
+- `GET /remote_id/stats`
+- `POST /remote_id/monitor/start`
+- `POST /remote_id/monitor/stop`
+- `GET /remote_id/replay/state`
+- `POST /remote_id/replay/start`
+- `POST /remote_id/replay/stop`
 
 Note: If command endpoints are disabled in production, they may return `405` and no auth is enforced.
 

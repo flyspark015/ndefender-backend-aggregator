@@ -98,6 +98,7 @@ class SystemControllerIngestor(Ingestor):
         await self._state_store.update_section("power", power_payload)
         await self._state_store.update_section("services", payload.get("services") or [])
         await self._state_store.update_section("network", payload.get("network") or {})
+        await self._state_store.update_section("gps", payload.get("gps") or {})
         await self._state_store.update_section("audio", payload.get("audio") or {})
 
         now_ms = int(time.time() * 1000)
@@ -118,7 +119,15 @@ class SystemControllerIngestor(Ingestor):
         if power_payload is None:
             power_payload = {"status": "offline", "last_error": self._last_ups_error or error}
         await self._state_store.update_section("power", power_payload)
-        await self._state_store.update_section("network", offline)
+        await self._state_store.update_section("network", {"connected": False})
+        await self._state_store.update_section(
+            "gps",
+            {
+                "timestamp_ms": int(time.time() * 1000),
+                "fix": "NO_FIX",
+                "last_error": error,
+            },
+        )
         await self._state_store.update_section("audio", offline)
 
     def _power_has_data(self, payload: dict[str, object]) -> bool:
