@@ -75,6 +75,10 @@ The repository is GREEN, tested, and release-locked. Runtime logic is frozen for
 - `docs/OPERATIONS.md` — Operator handbook
 - `docs/CONFIGURATION.md` — Full config reference
 
+## 📜 Canonical Contract
+- Repo: `https://github.com/flyspark015/ndefender-api-contracts`
+- Commit: `72469d6983aaf8ff0c1dd8df9f9c3fee2fc8cdf7`
+
 ## 🏷 Release
 - Version: v0.1.0
 - Status: GREEN

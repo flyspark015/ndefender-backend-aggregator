@@ -438,7 +438,7 @@ def check_websocket(base_api: str, timeout_s: float = 6.0) -> WsResult:
     if messages:
         try:
             payload = json.loads(messages[0])
-            expected = ["type", "timestamp", "source", "data"]
+            expected = ["type", "timestamp_ms", "source", "data"]
             present, missing = _present_keys(payload, expected)
             missing_keys = missing
             envelope_ok = not missing

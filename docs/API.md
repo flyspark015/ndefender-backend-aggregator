@@ -57,24 +57,24 @@ Note: If command endpoints are disabled in production, they may return `405` and
 Example:
 ```bash
 curl -X POST http://127.0.0.1:8001/api/v1/vrx/tune \
-  -d '{"payload":{"vrx_id":1,"freq_hz":5740000000}}'
+  -d '{"payload":{"vrx_id":1,"freq_hz":5740000000},"confirm":false}'
 ```
 
 Example (unsafe):
 ```bash
 curl -X POST http://127.0.0.1:8001/api/v1/system/reboot \
-  -d '{"confirm":true}'
+  -d '{"payload":{},"confirm":true}'
 ```
 
 ## WebSocket
-- `WS /ws`
+- `WS /api/v1/ws`
 
 ### Envelope
 ```json
 {
   "type": "EVENT_TYPE",
   "timestamp_ms": 1700000000000,
-  "source": "backend",
+  "source": "aggregator",
   "data": {}
 }
 ```

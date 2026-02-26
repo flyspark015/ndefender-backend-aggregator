@@ -207,7 +207,8 @@ class Esp32Ingestor(Ingestor):
 
     async def _handle_message(self, payload: dict[str, Any]) -> None:
         msg_type = payload.get("type")
-        timestamp_ms = int(payload.get("timestamp_ms") or time.time() * 1000)
+        event_ts_ms = int(time.time() * 1000)
+        payload_ts_ms = int(payload.get("timestamp_ms") or event_ts_ms)
         if msg_type == "telemetry":
             sys_payload = payload.get("sys")
             if not isinstance(sys_payload, dict):
@@ -224,15 +225,15 @@ class Esp32Ingestor(Ingestor):
                 },
             )
             await self._state_store.update_section("video", payload.get("video", {}))
-            self._last_telemetry_ms = timestamp_ms
+            self._last_telemetry_ms = event_ts_ms
             self._reported_status = "CONNECTED"
             self._reported_error = None
             if self._contact_store:
-                await self._contact_store.update_fpv(payload, timestamp_ms)
+                await self._contact_store.update_fpv(payload, payload_ts_ms)
             await self._event_bus.publish(
                 EventEnvelope(
                     type="ESP32_TELEMETRY",
-                    timestamp_ms=timestamp_ms,
+                    timestamp_ms=event_ts_ms,
                     source="esp32",
                     data=payload,
                 )
@@ -247,7 +248,7 @@ class Esp32Ingestor(Ingestor):
             await self._event_bus.publish(
                 EventEnvelope(
                     type="COMMAND_ACK",
-                    timestamp_ms=timestamp_ms,
+                    timestamp_ms=event_ts_ms,
                     source="esp32",
                     data=payload,
                 )
@@ -257,7 +258,7 @@ class Esp32Ingestor(Ingestor):
             await self._event_bus.publish(
                 EventEnvelope(
                     type="LOG_EVENT",
-                    timestamp_ms=timestamp_ms,
+                    timestamp_ms=event_ts_ms,
                     source="esp32",
                     data=payload,
                 )

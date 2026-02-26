@@ -96,7 +96,7 @@ class RemoteIdIngestor(Ingestor):
         if not isinstance(payload, dict):
             return
         event_type = payload.get("type")
-        timestamp_raw = payload.get("timestamp") or payload.get("timestamp_ms") or time.time() * 1000
+        timestamp_raw = payload.get("timestamp_ms") or payload.get("timestamp") or time.time() * 1000
         timestamp_ms = self._normalize_ts(timestamp_raw)
         data = payload.get("data") or {}
 

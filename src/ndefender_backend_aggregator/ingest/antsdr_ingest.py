@@ -94,7 +94,12 @@ class AntsdrIngestor(Ingestor):
         if not isinstance(payload, dict):
             return
         event_type = payload.get("type")
-        raw_ts = payload.get("ts_ms") or payload.get("timestamp") or payload.get("timestamp_ms") or time.time() * 1000
+        raw_ts = (
+            payload.get("ts_ms")
+            or payload.get("timestamp_ms")
+            or payload.get("timestamp")
+            or time.time() * 1000
+        )
         try:
             timestamp_ms = int(raw_ts)
         except (TypeError, ValueError):

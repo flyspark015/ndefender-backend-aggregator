@@ -54,7 +54,7 @@ COMMAND_BODY = Body(default_factory=CommandBody)
 
 def require_confirm(body: CommandBody) -> None:
     if not body.confirm:
-        raise HTTPException(status_code=400, detail="confirm=true required")
+        raise HTTPException(status_code=400, detail="confirm_required")
 
 
 def _register_read_routes(app: FastAPI, state_store: StateStore) -> None:
@@ -175,7 +175,7 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
     ) -> dict[str, Any]:
         require_confirm(body)
         if not config.safety.allow_unsafe_operations:
-            raise HTTPException(status_code=403, detail="Unsafe operations disabled")
+            raise HTTPException(status_code=403, detail="unsafe_disabled")
         return await dispatch_command("system/reboot", body, request)
 
     @app.post(
@@ -191,7 +191,7 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
     ) -> dict[str, Any]:
         require_confirm(body)
         if not config.safety.allow_unsafe_operations:
-            raise HTTPException(status_code=403, detail="Unsafe operations disabled")
+            raise HTTPException(status_code=403, detail="unsafe_disabled")
         return await dispatch_command("system/shutdown", body, request)
 
 

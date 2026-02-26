@@ -32,23 +32,23 @@ class SystemCommandHandler(CommandHandler):
 
     async def _handle_power(self, request: CommandRequest) -> CommandResult:
         if not request.confirm:
-            return self._result(request.command, False, "confirm required")
+            return self._result(request.command, False, "confirm_required")
         if not self._config.safety.allow_unsafe_operations:
-            return self._result(request.command, False, "unsafe operations disabled")
+            return self._result(request.command, False, "unsafe_disabled")
         endpoint = (
             "/api/v1/system/reboot"
             if request.command.endswith("reboot")
             else "/api/v1/system/shutdown"
         )
-        payload = {"confirm": True}
+        payload = {"payload": {}, "confirm": True}
         return await self._post(endpoint, payload, request.command)
 
     async def _handle_service_restart(self, request: CommandRequest) -> CommandResult:
         service = request.payload.get("service")
         if not service:
-            return self._result(request.command, False, "service required")
+            return self._result(request.command, False, "service_required")
         endpoint = f"/api/v1/services/{service}/restart"
-        return await self._post(endpoint, {}, request.command)
+        return await self._post(endpoint, {"payload": {}, "confirm": True}, request.command)
 
     async def _post(
         self,

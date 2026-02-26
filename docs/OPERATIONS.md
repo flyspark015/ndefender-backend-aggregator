@@ -11,7 +11,7 @@ Why this exists: It is the operator handbook for production deployments, includi
 
 ## Health Validation Checklist
 - [ ] `GET /api/v1/health` returns ok.
-- [ ] `GET /api/v1/status` returns snapshot with timestamp.
+- [ ] `GET /api/v1/status` returns snapshot with `timestamp_ms`.
 - [ ] `GET /api/v1/contacts` returns list (may be empty).
 - [ ] WS `/api/v1/ws` streams events.
 
