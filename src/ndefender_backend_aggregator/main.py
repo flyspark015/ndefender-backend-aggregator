@@ -470,6 +470,10 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
             return snapshot.remote_id
         return await _proxy_get(client, "/api/v1/status")
 
+    @app.get("/api/v1/remote_id")
+    async def remoteid_status_alias(request: Request) -> dict[str, Any]:
+        return await remoteid_status(request)
+
     @app.get("/api/v1/remote_id/contacts")
     async def remoteid_contacts(request: Request) -> dict[str, Any]:
         client = _get_client(request, "remoteid")
