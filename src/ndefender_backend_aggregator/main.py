@@ -331,6 +331,13 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
             raise HTTPException(status_code=500, detail="system_controller_unavailable")
         return await _proxy_post(client, "/api/v1/network/wifi/enable", body.model_dump())
 
+    @app.post("/api/v1/network/wifi/disable", dependencies=[Depends(command_rate_limit)])
+    async def wifi_disable(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
+        client = _get_client(request, "system")
+        if not client:
+            raise HTTPException(status_code=500, detail="system_controller_unavailable")
+        return await _proxy_post(client, "/api/v1/network/wifi/disable", body.model_dump())
+
     @app.post("/api/v1/network/wifi/connect", dependencies=[Depends(command_rate_limit)])
     async def wifi_connect(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
         client = _get_client(request, "system")
@@ -351,6 +358,13 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         if not client:
             raise HTTPException(status_code=500, detail="system_controller_unavailable")
         return await _proxy_post(client, "/api/v1/network/bluetooth/enable", body.model_dump())
+
+    @app.post("/api/v1/network/bluetooth/disable", dependencies=[Depends(command_rate_limit)])
+    async def bluetooth_disable(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
+        client = _get_client(request, "system")
+        if not client:
+            raise HTTPException(status_code=500, detail="system_controller_unavailable")
+        return await _proxy_post(client, "/api/v1/network/bluetooth/disable", body.model_dump())
 
     @app.post("/api/v1/network/bluetooth/scan/start", dependencies=[Depends(command_rate_limit)])
     async def bluetooth_scan_start(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
