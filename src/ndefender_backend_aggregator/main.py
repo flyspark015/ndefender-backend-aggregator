@@ -216,34 +216,26 @@ def _register_command_routes(app: FastAPI, config, command_router: CommandRouter
     ) -> dict[str, Any]:
         return await dispatch_command("video/select", body, request)
 
-    @app.post(
-        "/api/v1/system/reboot",
-        dependencies=[
-            Depends(command_rate_limit),
-            Depends(dangerous_rate_limit),
-        ],
-    )
+    @app.post("/api/v1/system/reboot")
     async def system_reboot(
         request: Request,
         body: CommandBody = COMMAND_BODY,
     ) -> dict[str, Any]:
         require_confirm(body)
+        await command_rate_limit(request)
+        await dangerous_rate_limit(request)
         if not config.safety.allow_unsafe_operations:
             raise HTTPException(status_code=403, detail="unsafe_disabled")
         return await dispatch_command("system/reboot", body, request)
 
-    @app.post(
-        "/api/v1/system/shutdown",
-        dependencies=[
-            Depends(command_rate_limit),
-            Depends(dangerous_rate_limit),
-        ],
-    )
+    @app.post("/api/v1/system/shutdown")
     async def system_shutdown(
         request: Request,
         body: CommandBody = COMMAND_BODY,
     ) -> dict[str, Any]:
         require_confirm(body)
+        await command_rate_limit(request)
+        await dangerous_rate_limit(request)
         if not config.safety.allow_unsafe_operations:
             raise HTTPException(status_code=403, detail="unsafe_disabled")
         return await dispatch_command("system/shutdown", body, request)
@@ -267,7 +259,21 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
                 "last_update_ms": now_ms,
                 "last_error": "system_controller_unavailable",
             }
-        return await _proxy_get(client, "/api/v1/network/wifi/state")
+        try:
+            return await _proxy_get(client, "/api/v1/network/wifi/state")
+        except Exception:
+            return {
+                "timestamp_ms": now_ms,
+                "enabled": None,
+                "connected": False,
+                "ssid": None,
+                "bssid": None,
+                "ip": None,
+                "rssi_dbm": None,
+                "link_quality": None,
+                "last_update_ms": now_ms,
+                "last_error": "system_controller_unavailable",
+            }
 
     @app.get("/api/v1/network/wifi/scan")
     async def wifi_scan(request: Request) -> dict[str, Any]:
@@ -275,7 +281,10 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         now_ms = int(time.time() * 1000)
         if not client:
             return {"timestamp_ms": now_ms, "networks": []}
-        return await _proxy_get(client, "/api/v1/network/wifi/scan")
+        try:
+            return await _proxy_get(client, "/api/v1/network/wifi/scan")
+        except Exception:
+            return {"timestamp_ms": now_ms, "networks": [], "last_error": "system_controller_unavailable"}
 
     @app.get("/api/v1/network/bluetooth/state")
     async def bluetooth_state(request: Request) -> dict[str, Any]:
@@ -291,7 +300,18 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
                 "last_update_ms": now_ms,
                 "last_error": "system_controller_unavailable",
             }
-        return await _proxy_get(client, "/api/v1/network/bluetooth/state")
+        try:
+            return await _proxy_get(client, "/api/v1/network/bluetooth/state")
+        except Exception:
+            return {
+                "timestamp_ms": now_ms,
+                "enabled": None,
+                "scanning": None,
+                "paired_count": 0,
+                "connected_devices": [],
+                "last_update_ms": now_ms,
+                "last_error": "system_controller_unavailable",
+            }
 
     @app.get("/api/v1/network/bluetooth/devices")
     async def bluetooth_devices(request: Request) -> dict[str, Any]:
@@ -299,7 +319,10 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         now_ms = int(time.time() * 1000)
         if not client:
             return {"timestamp_ms": now_ms, "devices": []}
-        return await _proxy_get(client, "/api/v1/network/bluetooth/devices")
+        try:
+            return await _proxy_get(client, "/api/v1/network/bluetooth/devices")
+        except Exception:
+            return {"timestamp_ms": now_ms, "devices": [], "last_error": "system_controller_unavailable"}
 
     @app.post("/api/v1/network/wifi/enable", dependencies=[Depends(command_rate_limit)])
     async def wifi_enable(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
@@ -357,17 +380,20 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
             raise HTTPException(status_code=500, detail="system_controller_unavailable")
         return await _proxy_post(client, "/api/v1/network/bluetooth/unpair", body.model_dump())
 
-    @app.post("/api/v1/services/{name}/restart", dependencies=[Depends(command_rate_limit)])
+    @app.post("/api/v1/services/{name}/restart")
     async def services_restart(name: str, request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
         require_confirm(body)
+        await command_rate_limit(request)
         client = _get_client(request, "system")
         if not client:
             raise HTTPException(status_code=500, detail="system_controller_unavailable")
         return await _proxy_post(client, f"/api/v1/services/{name}/restart", body.model_dump())
 
-    @app.post("/api/v1/gps/restart", dependencies=[Depends(command_rate_limit), Depends(dangerous_rate_limit)])
+    @app.post("/api/v1/gps/restart")
     async def gps_restart(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
         require_confirm(body)
+        await command_rate_limit(request)
+        await dangerous_rate_limit(request)
         client = _get_client(request, "system")
         if not client:
             raise HTTPException(status_code=500, detail="system_controller_unavailable")
@@ -399,7 +425,16 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
                 "temperature_c": None,
                 "last_error": "antsdr_unavailable",
             }
-        return await _proxy_get(client, "/api/v1/device")
+        try:
+            return await _proxy_get(client, "/api/v1/device")
+        except Exception:
+            return {
+                "timestamp_ms": now_ms,
+                "connected": False,
+                "uri": None,
+                "temperature_c": None,
+                "last_error": "antsdr_unavailable",
+            }
 
     @app.get("/api/v1/antsdr/sweep/state")
     async def antsdr_sweep_state(request: Request) -> dict[str, Any]:
@@ -407,7 +442,16 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         now_ms = int(time.time() * 1000)
         if not client:
             return {"timestamp_ms": now_ms, "running": False, "plans": [], "last_update_ms": now_ms, "last_error": "antsdr_unavailable"}
-        return await _proxy_get(client, "/api/v1/sweep/state")
+        try:
+            return await _proxy_get(client, "/api/v1/sweep/state")
+        except Exception:
+            return {
+                "timestamp_ms": now_ms,
+                "running": False,
+                "plans": [],
+                "last_update_ms": now_ms,
+                "last_error": "antsdr_unavailable",
+            }
 
     @app.get("/api/v1/antsdr/gain")
     async def antsdr_gain(request: Request) -> dict[str, Any]:
@@ -415,7 +459,10 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         now_ms = int(time.time() * 1000)
         if not client:
             return {"timestamp_ms": now_ms, "mode": "auto", "gain_db": None}
-        return await _proxy_get(client, "/api/v1/gain")
+        try:
+            return await _proxy_get(client, "/api/v1/gain")
+        except Exception:
+            return {"timestamp_ms": now_ms, "mode": "auto", "gain_db": None}
 
     @app.get("/api/v1/antsdr/stats")
     async def antsdr_stats(request: Request) -> dict[str, Any]:
@@ -423,7 +470,10 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         now_ms = int(time.time() * 1000)
         if not client:
             return {"timestamp_ms": now_ms, "frames_processed": 0, "events_emitted": 0}
-        return await _proxy_get(client, "/api/v1/stats")
+        try:
+            return await _proxy_get(client, "/api/v1/stats")
+        except Exception:
+            return {"timestamp_ms": now_ms, "frames_processed": 0, "events_emitted": 0}
 
     @app.post("/api/v1/antsdr/sweep/start", dependencies=[Depends(command_rate_limit)])
     async def antsdr_sweep_start(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
@@ -446,17 +496,21 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
             raise HTTPException(status_code=500, detail="antsdr_unavailable")
         return await _proxy_post(client, "/api/v1/gain/set", body.model_dump())
 
-    @app.post("/api/v1/antsdr/device/reset", dependencies=[Depends(command_rate_limit), Depends(dangerous_rate_limit)])
+    @app.post("/api/v1/antsdr/device/reset")
     async def antsdr_device_reset(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
         require_confirm(body)
+        await command_rate_limit(request)
+        await dangerous_rate_limit(request)
         client = _get_client(request, "antsdr")
         if not client:
             raise HTTPException(status_code=500, detail="antsdr_unavailable")
         return await _proxy_post(client, "/api/v1/device/reset", body.model_dump())
 
-    @app.post("/api/v1/antsdr/device/calibrate", dependencies=[Depends(command_rate_limit), Depends(dangerous_rate_limit)])
+    @app.post("/api/v1/antsdr/device/calibrate")
     async def antsdr_device_calibrate(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
         require_confirm(body)
+        await command_rate_limit(request)
+        await dangerous_rate_limit(request)
         client = _get_client(request, "antsdr")
         if not client:
             raise HTTPException(status_code=500, detail="antsdr_unavailable")
@@ -468,7 +522,13 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         if not client:
             snapshot = await state_store.snapshot()
             return snapshot.remote_id
-        return await _proxy_get(client, "/api/v1/status")
+        try:
+            return await _proxy_get(client, "/api/v1/status")
+        except Exception:
+            snapshot = await state_store.snapshot()
+            if "timestamp_ms" not in snapshot.remote_id:
+                snapshot.remote_id["timestamp_ms"] = int(time.time() * 1000)
+            return snapshot.remote_id
 
     @app.get("/api/v1/remote_id")
     async def remoteid_status_alias(request: Request) -> dict[str, Any]:
@@ -477,17 +537,26 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
     @app.get("/api/v1/remote_id/contacts")
     async def remoteid_contacts(request: Request) -> dict[str, Any]:
         client = _get_client(request, "remoteid")
+        now_ms = int(time.time() * 1000)
         if not client:
             snapshot = await state_store.snapshot()
-            return {"timestamp_ms": int(time.time() * 1000), "contacts": snapshot.contacts}
-        return await _proxy_get(client, "/api/v1/contacts")
+            return {"timestamp_ms": now_ms, "contacts": snapshot.contacts}
+        try:
+            return await _proxy_get(client, "/api/v1/contacts")
+        except Exception:
+            snapshot = await state_store.snapshot()
+            return {"timestamp_ms": now_ms, "contacts": snapshot.contacts}
 
     @app.get("/api/v1/remote_id/stats")
     async def remoteid_stats(request: Request) -> dict[str, Any]:
         client = _get_client(request, "remoteid")
+        now_ms = int(time.time() * 1000)
         if not client:
-            return {"timestamp_ms": int(time.time() * 1000), "frames": 0, "decoded": 0}
-        return await _proxy_get(client, "/api/v1/stats")
+            return {"timestamp_ms": now_ms, "frames": 0, "decoded": 0}
+        try:
+            return await _proxy_get(client, "/api/v1/stats")
+        except Exception:
+            return {"timestamp_ms": now_ms, "frames": 0, "decoded": 0}
 
     @app.post("/api/v1/remote_id/monitor/start", dependencies=[Depends(command_rate_limit)])
     async def remoteid_monitor_start(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
@@ -506,9 +575,13 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
     @app.get("/api/v1/remote_id/replay/state")
     async def remoteid_replay_state(request: Request) -> dict[str, Any]:
         client = _get_client(request, "remoteid")
+        now_ms = int(time.time() * 1000)
         if not client:
-            return {"timestamp_ms": int(time.time() * 1000), "active": False, "source": "none"}
-        return await _proxy_get(client, "/api/v1/replay/state")
+            return {"timestamp_ms": now_ms, "active": False, "source": "none"}
+        try:
+            return await _proxy_get(client, "/api/v1/replay/state")
+        except Exception:
+            return {"timestamp_ms": now_ms, "active": False, "source": "none"}
 
     @app.post("/api/v1/remote_id/replay/start", dependencies=[Depends(command_rate_limit)])
     async def remoteid_replay_start(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
