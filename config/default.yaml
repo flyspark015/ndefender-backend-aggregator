@@ -1,5 +1,5 @@
 system_controller:
-  base_url: "http://127.0.0.1:8000"
+  base_url: "http://127.0.0.1:8002"
   timeout_seconds: 5
 
 esp32:
