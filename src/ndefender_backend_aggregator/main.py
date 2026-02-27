@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import re
 import time
 import uuid
 from contextlib import asynccontextmanager, suppress
 from typing import Any
 
+import httpcore
 import httpx
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, Response, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,6 +27,8 @@ from .rate_limit import command_rate_limit, dangerous_rate_limit
 from .runtime import build_default_orchestrator
 from .state import StateStore
 from .ws import WebSocketManager
+
+logger = logging.getLogger("ndefender-backend-aggregator")
 
 
 class CommandAck:
@@ -577,14 +581,22 @@ def _register_proxy_routes(app: FastAPI, state_store: StateStore) -> None:
         client = _get_client(request, "remoteid")
         if not client:
             raise HTTPException(status_code=500, detail="remoteid_unavailable")
-        return await _proxy_post(client, "/api/v1/monitor/start", body.model_dump())
+        try:
+            return await _proxy_post(client, "/api/v1/monitor/start", body.model_dump())
+        except (httpx.ConnectError, httpcore.ConnectError):
+            logger.error("remoteid upstream unreachable %s", client.base_url)
+            raise HTTPException(status_code=502, detail="remoteid_service_unreachable")
 
     @app.post("/api/v1/remote_id/monitor/stop", dependencies=[Depends(command_rate_limit)])
     async def remoteid_monitor_stop(request: Request, body: CommandBody = COMMAND_BODY) -> dict[str, Any]:
         client = _get_client(request, "remoteid")
         if not client:
             raise HTTPException(status_code=500, detail="remoteid_unavailable")
-        return await _proxy_post(client, "/api/v1/monitor/stop", body.model_dump())
+        try:
+            return await _proxy_post(client, "/api/v1/monitor/stop", body.model_dump())
+        except (httpx.ConnectError, httpcore.ConnectError):
+            logger.error("remoteid upstream unreachable %s", client.base_url)
+            raise HTTPException(status_code=502, detail="remoteid_service_unreachable")
 
     @app.get("/api/v1/remote_id/replay/state")
     async def remoteid_replay_state(request: Request) -> dict[str, Any]:
